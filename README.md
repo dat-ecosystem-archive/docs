@@ -6,12 +6,8 @@ Documentation resources for upcoming [dat](https://github.com/maxogden/dat) 1.0 
 
 #### [hyperdrive](https://github.com/mafintosh/hyperdrive)
 
-The file sharing network dat uses to distribute files and data.
+The file sharing network dat uses to distribute files and data. A technical specification / discussion on how hyperdrive works is [available here](https://github.com/mafintosh/hyperdrive/blob/master/SPECIFICATION.md)
 
 #### [discovery-channel](https://github.com/maxogden/discovery-channel)
 
 This is the module dat uses to find peers on the local network or the internet who are sharing the same files and data that you are.
-
-## Technical specifications / whitepapers
-
-* [hyperdrive](https://github.com/mafintosh/hyperdrive/blob/master/SPECIFICATION.md)

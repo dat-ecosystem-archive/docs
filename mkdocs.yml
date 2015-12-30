@@ -1,7 +1,7 @@
 site_name: Dat project
 theme: readthedocs
 pages:
-- Home: 'index.md'
+- Home: 'README.md'
 - Technical Guide: 'technical.md'
 - Meta:
   - 'Changelog': 'meta/changelog.md'

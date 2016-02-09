@@ -5,7 +5,7 @@ Documentation resources for [dat](https://github.com/maxogden/dat) 1.0 release c
 ## Installation
 
 ```
-npm install -g dat@next
+npm install -g dat
 ```
 
 ## Sharing data

@@ -1,0 +1,31 @@
+# How Dat Works
+
+Note this is about Dat 1.0 and later. For historical info about earlier incarnations of Dat (Alpha, Beta) check out [this post](http://dat-data.com/blog/2016-01-19-brief-history-of-dat).
+
+When someone starts downloading data with Dat, here's what happens:
+
+## Phase one: Source discovery
+
+Dat links look like this: `dat://c3fcbcdcf03360529b47df32ccfb9bc1d7f64aaaa41cca43ca9ac7f6778db8da`. The link itself is a fingerprint of the data that is being shared. The first thing that happens when you go to download data using one of these links is you ask various **discovery networks** if they can tell you where to find sources that have a copy of the data you need.
+
+The discovery step itself is a simple query: you supply a Dat link, and receive back the IP and port of all the known data sources online that have a copy of that data you are looking for. You can then connect to them and begin exchanging data. By introducing this discovery phase we are able to create a network where data can be discovered even if the original data source disappears.
+
+The discovery protocols we use are [DNS name servers](https://en.wikipedia.org/wiki/Name_server), [Multicast DNS](https://en.wikipedia.org/wiki/Multicast_DNS) and the [Kademlia Mainline Distributed Hash Table](https://en.wikipedia.org/wiki/Mainline_DHT) (DHT). Each one has pros and cons, so we combine all three to increase the speed and reliability of discovering data sources.
+
+We run a DNS name server at `discovery.publicbits.org` on port 22 that Dat clients can use (in addition to specifying their own if they need to), and are able to re-use existing DHT bootstrap servers on the Internet (but are planning on running our own for added redundancy). These discovery servers are the only centralized infrastructure we need for Dat to work over the Internet, and they are redundant, interchangeable and anyone can run their own. Every data source that has a copy of the data also advertises themselves across these discovery networks.
+
+The discovery logic itself is handled by a module that we wrote called [discovery-channel](http://npmjs.org/discovery-channel), which wraps other modules we wrote to implement DNS and DHT logic into a single interface. We can give the Dat link we want to download to discovery-channel and we will get back all the sources it finds across the various discovery networks.
+
+## Phase two: Source connections
+
+Up until this point we have just done searches to find who has the data we need. Now that we know who should talk to, we have to connect to them. We currently use TCP sockets are our primary transport protocol, and layer on our own file sharing protocol on top. We also have experimental support for [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) which is designed to *not* take up all available bandwidth on a network (e.g. so that other people sharing your wifi can still use the Internet). We also are working on WebRTC support so we can incorporate Browser and Electron clients for some really open web use cases.
+
+When we get the IP and port for a potential source we try to connect using all available protocols (currently TCP and sometimes UTP) and hope one works. If one connects first, we abort the other ones. If none connect, we try again until we decide that source is offline or unavailable to use and we stop trying to connect to them. Sources we are able to connect to go into a list of known good source, so that if our Internet connection goes down we can use that list to reconnect to our good sources again quickly.
+
+If we get a lot of potential sources we pick a handful at random to try and connect to and keep the rest around as additional sources to use later in case we decide we need more sources. A lot of these are parameters that we can tune for different scenarios later, but have started with some best guesses as defaults.
+
+The connection logic is implemented in a module called [discovery-swarm](https://www.npmjs.com/package/discovery-swarm). This builds on discovery-channel and adds connection establishment, management and statistics. You can see stats like how many sources are currently connected, how many good and bad behaving sources you've talked to, and it automatically handles connecting and reconnecting to sources for you. Our experimental UTP support is implemented in the module [utp-native](https://www.npmjs.com/package/utp-native), which you can manually install if you want to try it out with Dat.
+
+## Phase three: Data exchange
+
+So now we have found data sources, have connected to them, but we havent yet figured out if they *actually* have the data we need. This is where our file tranfser protocol [hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in. You can read a much longer description of how hyperdrive works in the [Hyperdrive Specification](https://github.com/mafintosh/hyperdrive/blob/master/SPECIFICATION.md).

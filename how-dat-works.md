@@ -6,13 +6,13 @@ When someone starts downloading data with Dat, here's what happens:
 
 ## Phase one: Source discovery
 
-Dat links look like this: `dat://c3fcbcdcf03360529b47df32ccfb9bc1d7f64aaaa41cca43ca9ac7f6778db8da`. The link itself is a fingerprint of the data that is being shared. The first thing that happens when you go to download data using one of these links is you ask various **discovery networks** if they can tell you where to find sources that have a copy of the data you need.
+Dat links look like this: `dat://c3fcbcdcf03360529b47df32ccfb9bc1d7f64aaaa41cca43ca9ac7f6778db8da`. The link itself is a fingerprint of the data that is being shared. The first thing that happens when you go to download data using one of these links is you ask various discovery networks if they can tell you where to find sources that have a copy of the data you need.
 
 The discovery step itself is a simple query: you supply a Dat link, and receive back the IP and port of all the known data sources online that have a copy of that data you are looking for. You can then connect to them and begin exchanging data. By introducing this discovery phase we are able to create a network where data can be discovered even if the original data source disappears.
 
 The discovery protocols we use are [DNS name servers](https://en.wikipedia.org/wiki/Name_server), [Multicast DNS](https://en.wikipedia.org/wiki/Multicast_DNS) and the [Kademlia Mainline Distributed Hash Table](https://en.wikipedia.org/wiki/Mainline_DHT) (DHT). Each one has pros and cons, so we combine all three to increase the speed and reliability of discovering data sources.
 
-We run a DNS name server at `discovery.publicbits.org` on port 22 that Dat clients can use (in addition to specifying their own if they need to), and are able to re-use existing DHT bootstrap servers on the Internet (but are planning on running our own for added redundancy). These discovery servers are the only centralized infrastructure we need for Dat to work over the Internet, and they are redundant, interchangeable and anyone can run their own. Every data source that has a copy of the data also advertises themselves across these discovery networks.
+We run a DNS name server at `discovery.publicbits.org` on port 53 that Dat clients can use (in addition to specifying their own if they need to), and are able to re-use existing DHT bootstrap servers on the Internet (but are planning on running our own for added redundancy). These discovery servers are the only centralized infrastructure we need for Dat to work over the Internet, and they are redundant, interchangeable and anyone can run their own. Every data source that has a copy of the data also advertises themselves across these discovery networks.
 
 The discovery logic itself is handled by a module that we wrote called [discovery-channel](http://npmjs.org/discovery-channel), which wraps other modules we wrote to implement DNS and DHT logic into a single interface. We can give the Dat link we want to download to discovery-channel and we will get back all the sources it finds across the various discovery networks.
 
@@ -28,4 +28,12 @@ The connection logic is implemented in a module called [discovery-swarm](https:/
 
 ## Phase three: Data exchange
 
-So now we have found data sources, have connected to them, but we havent yet figured out if they *actually* have the data we need. This is where our file tranfser protocol [hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in. You can read a much longer description of how hyperdrive works in the [Hyperdrive Specification](https://github.com/mafintosh/hyperdrive/blob/master/SPECIFICATION.md).
+So now we have found data sources, have connected to them, but we havent yet figured out if they *actually* have the data we need. This is where our file transfer protocol [Hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in. You can read a much longer description of how hyperdrive works in the [Hyperdrive Specification](https://github.com/mafintosh/hyperdrive/blob/master/SPECIFICATION.md).
+
+The short version of how Hyperdrive works is that it breaks file contents up in to pieces, hashes each piece and then constructs a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) out of all of the pieces. This ultimately gives us the Dat link, which is the top level hash of the Merkle tree.
+
+We use a technique called Rabin fingerprinting to break files up into pieces. Rabin fingerprints are a specific strategy for what is called Content Defined Chunking. Here's an example:
+
+![meta/cdc.png]
+
+When two peers connect to each other and begin speaking the Hyperdrive protocol they can efficiently determine if they have chunks the other one wants, and begin exchanging those chunks directly. Hyperdrive gives us the flexibility to have random access to any portion of a file while still verifying the other side isnt sending us bad data. We can also download different sections of files in parallel across all of the sources simultaneously, which increases overall download speed dramatically.

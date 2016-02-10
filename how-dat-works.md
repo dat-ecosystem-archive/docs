@@ -34,6 +34,6 @@ The short version of how Hyperdrive works is that it breaks file contents up in 
 
 We use a technique called Rabin fingerprinting to break files up into pieces. Rabin fingerprints are a specific strategy for what is called Content Defined Chunking. Here's an example:
 
-![meta/cdc.png]
+![cdc diagram](meta/cdc.png)
 
 When two peers connect to each other and begin speaking the Hyperdrive protocol they can efficiently determine if they have chunks the other one wants, and begin exchanging those chunks directly. Hyperdrive gives us the flexibility to have random access to any portion of a file while still verifying the other side isnt sending us bad data. We can also download different sections of files in parallel across all of the sources simultaneously, which increases overall download speed dramatically.

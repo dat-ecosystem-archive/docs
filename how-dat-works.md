@@ -4,7 +4,7 @@ Note this is about Dat 1.0 and later. For historical info about earlier incarnat
 
 When someone starts downloading data with the [Dat command-line tool](https://github.com/maxogden/dat), here's what happens:
 
-## Phase one: Source discovery
+## Phase 1: Source discovery
 
 Dat links look like this: `dat://c3fcbcdcf03360529b47df32ccfb9bc1d7f64aaaa41cca43ca9ac7f6778db8da`. The link itself is a fingerprint of the data that is being shared. The first thing that happens when you go to download data using one of these links is you ask various discovery networks if they can tell you where to find sources that have a copy of the data you need.
 
@@ -16,7 +16,7 @@ We run a DNS name server at `discovery.publicbits.org` on port 53 that Dat clien
 
 The discovery logic itself is handled by a module that we wrote called [discovery-channel](http://npmjs.org/discovery-channel), which wraps other modules we wrote to implement DNS and DHT logic into a single interface. We can give the Dat link we want to download to discovery-channel and we will get back all the sources it finds across the various discovery networks.
 
-## Phase two: Source connections
+## Phase 2: Source connections
 
 Up until this point we have just done searches to find who has the data we need. Now that we know who should talk to, we have to connect to them. We currently use TCP sockets are our primary transport protocol, and layer on our own file sharing protocol on top. We also have experimental support for [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) which is designed to *not* take up all available bandwidth on a network (e.g. so that other people sharing your wifi can still use the Internet). We also are working on WebRTC support so we can incorporate Browser and Electron clients for some really open web use cases.
 
@@ -26,7 +26,7 @@ If we get a lot of potential sources we pick a handful at random to try and conn
 
 The connection logic is implemented in a module called [discovery-swarm](https://www.npmjs.com/package/discovery-swarm). This builds on discovery-channel and adds connection establishment, management and statistics. You can see stats like how many sources are currently connected, how many good and bad behaving sources you've talked to, and it automatically handles connecting and reconnecting to sources for you. Our experimental UTP support is implemented in the module [utp-native](https://www.npmjs.com/package/utp-native), which you can manually install if you want to try it out with Dat.
 
-## Phase three: Data exchange
+## Phase 3: Data exchange
 
 So now we have found data sources, have connected to them, but we havent yet figured out if they *actually* have the data we need. This is where our file transfer protocol [Hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in. You can read a much longer description of how hyperdrive works in the [Hyperdrive Specification](https://github.com/mafintosh/hyperdrive/blob/master/SPECIFICATION.md).
 

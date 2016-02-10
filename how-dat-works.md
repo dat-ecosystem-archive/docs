@@ -2,7 +2,7 @@
 
 Note this is about Dat 1.0 and later. For historical info about earlier incarnations of Dat (Alpha, Beta) check out [this post](http://dat-data.com/blog/2016-01-19-brief-history-of-dat).
 
-When someone starts downloading data with Dat, here's what happens:
+When someone starts downloading data with the [Dat command-line tool](https://github.com/maxogden/dat), here's what happens:
 
 ## Phase one: Source discovery
 
@@ -37,3 +37,30 @@ We use a technique called Rabin fingerprinting to break files up into pieces. Ra
 ![cdc diagram](meta/cdc.png)
 
 When two peers connect to each other and begin speaking the Hyperdrive protocol they can efficiently determine if they have chunks the other one wants, and begin exchanging those chunks directly. Hyperdrive gives us the flexibility to have random access to any portion of a file while still verifying the other side isnt sending us bad data. We can also download different sections of files in parallel across all of the sources simultaneously, which increases overall download speed dramatically.
+
+## Phase 4: Data archiving
+
+So now that you've discovered, connected, and downloaded a copy of some data you can stick around for a while and serve up copies of the data to other who come along and want to download it.
+
+The first phase, source discovery, is actually an ongoing process. When you first search for data sources you only get the sources available at the time you did your search, so we make sure to perform discovery searches as often is practically possible to make sure new sources can be found and connected to.
+
+Every user of Dat is a source as long as they have 1 or more chunks of data. Just like with other decentralized file sharing protocols you will notice Dat may start uploading data before it finishes downloading.
+
+If the original source who shared the data goes offline it's OK, as long as other sources are available. As part of mission as a not-for-profit we will be working with various institutions to ensure there are always sources available to accept new copies of data and stay online to serve those copies for important datasets such as scientific research data, open government data etc.
+
+Because Dat is built on a foundation of strong cryptographic data integrity and content addressable storage it gives us the possibility of implementing some really interesting version control techniques in the future. In that scenario archival data sources could choose to offer more disk space and archive every version of a Dat repository, whereas normal Dat users might only download and share one version that they happen to be interested in.
+
+## Implementations
+
+This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), here you go:
+
+- [dat](https://www.npmjs.com/package/dat) - the main command line tool that uses all of the below
+- [discovery-channel](https://www.npmjs.com/package/discovery-channel) - discover data sources
+- [discovery-swarm](https://www.npmjs.com/package/discovery-swarm) - discover and connect to sources
+- [hyperdrive](https://www.npmjs.com/package/hyperdrive) - exchange sets of files with many sources
+- [hypercore](https://www.npmjs.com/package/hypercore) - exchange lwo level binary blocks with many sources
+- [bittorrent-dht](https://www.npmjs.com/package/bittorrent-dht) - use the Kademlia Mainline DHT to discover sources
+- [dns-discovery](https://www.npmjs.com/package/dns-discovery) - use DNS name servers and Multicast DNS to discover sources
+- [utp-native](https://www.npmjs.com/package/utp-native) - UTP protocol implementation
+- [rabin](https://www.npmjs.com/package/rabin) - Rabin fingerprinter stream
+- [merkle-tree-stream](https://www.npmjs.com/package/merkle-tree-stream) - Used to construct Merkle trees from chunks

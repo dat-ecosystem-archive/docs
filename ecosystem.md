@@ -1,5 +1,3 @@
-## Implementations
-
 If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), here you go:
 
 - [dat](https://www.npmjs.com/package/dat) - the main command line tool that uses all of the below

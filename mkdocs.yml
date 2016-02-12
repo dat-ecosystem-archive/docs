@@ -1,7 +1,7 @@
 site_name: Dat project
 theme: readthedocs
 pages:
-- Home: 'index.md'
+- Introduction: 'index.md'
 - 'How Dat Works': 'how-dat-works.md'
 - 'Dependencies': 'ecosystem.md'
 - Meta:

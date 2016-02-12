@@ -3,6 +3,7 @@ theme: readthedocs
 pages:
 - Home: 'index.md'
 - 'How Dat Works': 'how-dat-works.md'
+- 'Depenencies and Implementations': 'ecosystem.md'
 - Meta:
   - 'Changelog': 'meta/changelog.md'
   - 'Collaborators': 'meta/collaborators.md'

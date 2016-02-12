@@ -46,7 +46,7 @@ The first phase, source discovery, is actually an ongoing process. When you firs
 
 Every user of Dat is a source as long as they have 1 or more chunks of data. Just like with other decentralized file sharing protocols you will notice Dat may start uploading data before it finishes downloading.
 
-If the original source who shared the data goes offline it's OK, as long as other sources are available. As part of mission as a not-for-profit we will be working with various institutions to ensure there are always sources available to accept new copies of data and stay online to serve those copies for important datasets such as scientific research data, open government data etc.
+If the original source who shared the data goes offline it's OK, as long as other sources are available. As part of the mission as a not-for-profit we will be working with various institutions to ensure there are always sources available to accept new copies of data and stay online to serve those copies for important datasets such as scientific research data, open government data etc.
 
 Because Dat is built on a foundation of strong cryptographic data integrity and content addressable storage it gives us the possibility of implementing some really interesting version control techniques in the future. In that scenario archival data sources could choose to offer more disk space and archive every version of a Dat repository, whereas normal Dat users might only download and share one version that they happen to be interested in.
 

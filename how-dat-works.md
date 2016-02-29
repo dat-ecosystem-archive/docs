@@ -52,4 +52,4 @@ Because Dat is built on a foundation of strong cryptographic data integrity and 
 
 ## Implementations
 
-This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), go to the [Dependencies](dependencies.md) page
+This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), go to the [Dependencies](ecosystem.md) page

@@ -2,7 +2,7 @@
 
 This document shows how to write your own compatible `dat` client using node modules.
 
-The three essential node modules are called [hyperdrive](https://npmjs.org/hyperdrive), [discovery-swarm](https://npmjs.org/discovery-swarm) and [level](https://npmjs.org/level). Hyperdrive does file synchronization and versioning, discovery-swarm does peer discovery over local networks and the Internet, and level provides a local LevelDB for storing metadata. More details are available in [How Dat Works](how-dat-works.md). The [dat](https://npmjs.org/dat) module itself is just some code that combines these two modules and wraps them in a command-line API.
+The three essential node modules are called [hyperdrive](https://npmjs.org/hyperdrive), [discovery-swarm](https://npmjs.org/discovery-swarm) and [level](https://npmjs.org/level). Hyperdrive does file synchronization and versioning, discovery-swarm does peer discovery over local networks and the Internet, and level provides a local LevelDB for storing metadata. More details are available in [How Dat Works](how-dat-works.md). The [dat](https://npmjs.org/dat) module itself is just some code that combines these modules and wraps them in a command-line API.
 
 Here's the minimal code needed to download data from a dat:
 

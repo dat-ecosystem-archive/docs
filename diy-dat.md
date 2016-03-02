@@ -48,7 +48,7 @@ var swarm = Swarm({
 swarm.once('listening', function () {
   console.log('joining', link)
   // join the swarm
-  swarm.join(link)
+  swarm.join(new Buffer(link, 'hex'))
   // tell hyperdrive to start downloading/uploading in ./data
   var archive = drive.get(link, process.cwd() + '/data')
   archive.ready(function (err) {

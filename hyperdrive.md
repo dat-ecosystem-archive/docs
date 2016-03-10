@@ -208,7 +208,7 @@ When asking for a block of data we want to reduce the amount of duplicate hashes
 In the merkle tree example for from earlier we ended up sending two hashes `(2, 5)` to verify block `0`.
 
 ```
-// If we trust 3, 2 and 5 are needed to verify 0
+// If we trust 3 then 2 and 5 are needed to verify 0
 
 0
   1
@@ -225,11 +225,11 @@ If we only use non-signed merkle trees the other person can easily calculate whi
 
 This however isn't always possible if we use a signed merkle tree since the roots are changing. In general it also useful to be able to communicate that you have some hashes already without disclosing all the blocks you have.
 
-To communicate which hashes we have just have to communicate two things. Which uncles we have and weather or not we any parent node that can verify the tree.
+To communicate which hashes we have just have to communicate two things: which uncles we have and whether or not we have any parent node that can verify the tree.
 
-Looking at the above tree that means we want to fetch block `0` we need to communicate wheather of not we already have the uncles `(2, 5)` and the following parent `3`. This information can be compressed into very small bit vector using the following scheme.
+Looking at the above tree that means if we want to fetch block `0` we need to communicate whether of not we already have the uncles `(2, 5)` and the parent `3`. This information can be compressed into very small bit vector using the following scheme.
 
-Let the trailing bit donate whether or not the leading bit is a parent and not a uncle. Let the previous trailing bits donate donate wheather or not we have the next uncle.
+Let the trailing bit donate whether or not the leading bit is a parent and not a uncle. Let the previous trailing bits denote wheather or not we have the next uncle.
 
 For example for block `0` the following bit vector `1011` is decoded the following way
 
@@ -242,8 +242,8 @@ For example for block `0` the following bit vector `1011` is decoded the followi
 (1)000 <-- the final bit so this is parent. we have the next parent, 3
 ```
 
-So using this digest the person can easily figure out that they only need to send us one hash, `5` for us to verify block `0`.
+So using this digest the person can easily figure out that they only need to send us one hash, `5`, for us to verify block `0`.
 
 The bit vector `1` (only contains a single one) means that we already have all the hashes we need so just send us the block.
 
-These digests are very compatch in size, only `(log2(number-of-blocks) + 2) / 8` bytes needed in the worst case. For example if you are sharing one trillion blocks of data the digest would be `(log2(1000000000000) + 2) / 8 ~= 6` bytes long.
+These digests are very compact in size, only `(log2(number-of-blocks) + 2) / 8` bytes needed in the worst case. For example if you are sharing one trillion blocks of data the digest would be `(log2(1000000000000) + 2) / 8 ~= 6` bytes long.

@@ -1,4 +1,6 @@
-# Hyperdrive
+# Hyperdrive Specification
+
+## DRAFT Version 1
 
 Hyperdrive is the peer-to-peer data distribution protocol that powers Dat. It consists of two parts. First there is hypercore which is the core protocol and swarm that handles distributing append-only logs of any binary data. The second part is hyperdrive which adds a filesystem specific protocol on top of hypercore.
 

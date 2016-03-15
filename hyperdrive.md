@@ -1,4 +1,4 @@
-# Hyperdrive Specification
+# Hyperdrive + Hypercore Specification
 
 ## DRAFT Version 1
 
@@ -7,6 +7,12 @@ Hyperdrive is the peer-to-peer data distribution protocol that powers Dat. It co
 ## Hypercore
 
 The goal of hypercore is to distribute append-only logs across a network of peers. Peers download parts of the logs from other peers and can choose to only download the parts of a log they care about. Logs can contain arbitrary binary data payloads.
+
+A core goal is to be as simple and pragmatic as possible. This allows for easier implementations of clients which is an often overlooked property when implementing distributed systems. First class browser support is also an important goal as p2p data sharing in browsers is becoming more viable every day as WebRTC matures.
+
+It also tries to be modular and export responsibilities to external modules whenever possible. Peer discovery is a good example of this as it handled by 3rd party modules that wasn't written with hyperdrive in mind. A benefit of this is a much smaller core implementation that can focus on smaller and simpler problems.
+
+Prioritized synchronization of parts of a feed is also at the heart of hyperdrive as this allows for fast streaming with low latency of data such as structured datasets (wikipedia, genomic datasets), linux containers, audio, videos, and much more. To allow for low latency streaming another goal is also to keep verifiable block sizes as small as possible - even with huge data feeds.
 
 ## How Hypercore works
 

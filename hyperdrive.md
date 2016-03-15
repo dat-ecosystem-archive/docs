@@ -14,6 +14,8 @@ It also tries to be modular and export responsibilities to external modules when
 
 Prioritized synchronization of parts of a feed is also at the heart of hyperdrive as this allows for fast streaming with low latency of data such as structured datasets (wikipedia, genomic datasets), linux containers, audio, videos, and much more. To allow for low latency streaming another goal is also to keep verifiable block sizes as small as possible - even with huge data feeds.
 
+The protocol itself draws heavy inspiration from existing file sharing systems such as BitTorrent and [PPSP](https://datatracker.ietf.org/doc/rfc7574/?include_text=1)
+
 ## How Hypercore works
 
 ### Flat Trees

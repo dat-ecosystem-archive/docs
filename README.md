@@ -27,8 +27,6 @@ dat://a9933c3d00e1134e5814a0fe2b0f1166885f523dfe0d135a39a2ca4b43840d83
 Serving data (1 connection(s))
 ```
 
-The data will now available on the Internet. If I want to share this data with someone else, I'll need to open port 3282 (DATA) on my local network.
-
 On another computer, I can type:
 
 ```
@@ -41,11 +39,11 @@ And the files will be downloaded inside of the current directory. The process wi
 
 If you change any file inside the directory, you will get a different link. Each link is unique to the file list and data contents inside each file.
 
-Everything about the filesystem is replicated between two dat hosts, including directory structure, file modes, and time modified (mtime), among other filesystem metadata (TODO: link to more info here). For example, changing the file mode of a single file will create an entirely different link.
+Everything about the filesystem is replicated between two dat hosts, including directory structure, file modes, among other filesystem metadata. For example, changing the file mode of a single file will create an entirely different link.
 
-## Hosting
+## Peer Discovery
 
-By default, dat looks to host on port 3282, and if taken, will choose a random open port.
+Dat uses a variety of different methods to discover peers that have the data it's looking for, including DNS, Multicast DNS, UDP, and TCP. See [discovery-swarm](https://github.com/mafintosh/discovery-swarm) for more information.
 
 ## Local storage
 
@@ -54,10 +52,7 @@ Dat stores its data in a hidden folder that is stored by default in the user's h
 ```
 ~/.dat
 ```
-
-Because of this, data is only ever downloaded once. That is, if you have multiple projects that use the same data (perhaps at different versions) on the same machine, dat will first check the global `.dat` folder.
-
-The global `.dat` folder has inside:
+The global `.dat` folder has the following contents:
 
 ```
 $ ls ~/.dat

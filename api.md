@@ -1,6 +1,6 @@
 ## 1.0 Architecture Design
 
-![dat-arch.001.jpg](dat-arch.001.jpg)
+![dat-arch.001.jpg](arch.png)
 
 
   * dat: command-line

@@ -11,6 +11,45 @@
   * discovery-swarm: swarm
 
 
+## dat
+
+Command-line interface for dat
+
+#### `dat link DIR`
+
+Create a new link for the contents of a directory and begin automatically serving the data to a swarm in the background.
+
+  * `--foreground`: run the server in the foreground instead.
+
+#### `dat download LINK DIR`
+
+Download a link to a directory and begin automatically serving the data to a swarm in the background.
+
+  * `--foreground`: run the server in the foreground instead.
+
+#### `dat start`
+
+Starts serving dats in the background progress.
+
+  * `--foreground`: run the server in the foreground instead.
+
+#### `dat stop`
+
+Stops serving dats.
+
+#### `dat rm LINK`
+
+Remove a link from the list, stops serving it.
+
+#### `dat ls`
+
+View a static list of the current dat links that are served.
+
+#### `dat mon`
+
+Opens up real-time monitoring panel for viewing progress of running dats. Can provide optional parameter `dat mon LINK` to filter the monitor and logs for a given dat link.
+
+
 ## dat-js
 
 A common JavaScript API for Dat.
@@ -78,37 +117,3 @@ dat.on('progress', function (progress) {
   console.log(progress)
 })
 ```
-
-## dat
-
-Command-line interface for dat
-
-#### `dat link DIR`
-
-Create a new link for the contents of a directory and begin automatically serving the data to a swarm in the background.
-
-  * `--foreground`: run the server in the foreground instead.
-
-#### `dat download LINK DIR`
-
-Download a link to a directory and begin automatically serving the data to a swarm in the background.
-
-  * `--foreground`: run the server in the foreground instead.
-
-#### `dat join LINK`
-
-Starts serving the given link in a background progress. Must have already performed `link` or `download`.
-
-  * `--foreground`: run the server in the foreground instead.
-
-#### `dat leave LINK`
-
-Stops serving the given link to the discovery swarm. Must have already performed `link` or `download`.
-
-#### `dat ls`
-
-View a static list of the current dat links that are served.
-
-#### `dat mon`
-
-Opens up real-time monitoring panel for viewing progress of running dats. Can provide optional parameter `dat mon LINK` to filter the monitor and logs for a given dat link.

@@ -21,7 +21,7 @@ Create a new link for the contents of a directory and begin automatically servin
 
   * `--foreground`: run the server in the foreground instead.
 
-#### `dat download LINK DIR`
+#### `dat LINK DIR`
 
 Download a link to a directory and begin automatically serving the data to a swarm in the background.
 

@@ -38,7 +38,7 @@ Hyperdrive shares and synchronizes a set of files, similar to rsync or Dropbox. 
 
 ![cdc diagram](meta/cdc.png)
 
-We have configured our Rabin chunker to produce chunks that are around 16KB on average. So if you share a folder containing a single 1MB JPG you will get around 64 chunks. The idea of CDC is that your chunks only change if 
+We have configured our Rabin chunker to produce chunks that are around 16KB on average. So if you share a folder containing a single 1MB JPG you will get around 64 chunks.
 
 After feeding the file contents through the chunker, we take the chunks and calculate the SHA256 hash of each one. We then arrange these hashes into a special data structure we developed that we call the Flat In-Order Merkle Tree.
 

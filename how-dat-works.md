@@ -28,13 +28,29 @@ The connection logic is implemented in a module called [discovery-swarm](https:/
 
 ## Phase 3: Data exchange
 
-So now we have found data sources, have connected to them, but we havent yet figured out if they *actually* have the data we need. This is where our file transfer protocol [Hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in. You can read a much longer description of how hyperdrive works in the [Hyperdrive Specification](hyperdrive.md).
+So now we have found data sources, have connected to them, but we havent yet figured out if they *actually* have the data we need. This is where our file transfer protocol [Hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in.
 
-The short version of how Hyperdrive works is that it breaks file contents up in to pieces, hashes each piece and then constructs a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) out of all of the pieces. This ultimately gives us the Dat link, which is the top level hash of the Merkle tree.
+The short version of how Hyperdrive works is: It breaks file contents up in to pieces, hashes each piece and then constructs a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) out of all of the pieces. This ultimately gives us the Dat link, which is the top level hash of the Merkle tree.
 
-We use a technique called Rabin fingerprinting to break files up into pieces. Rabin fingerprints are a specific strategy for what is called Content Defined Chunking. Here's an example:
+Here's the long version:
+
+Hyperdrive shares and synchronizes a set of files, similar to rsync or Dropbox. For each file in the drive we use a technique called Rabin fingerprinting to break the file up into pieces. Rabin fingerprints are a specific strategy for what is called Content Defined Chunking. Here's an example:
 
 ![cdc diagram](meta/cdc.png)
+
+We have configured our Rabin chunker to produce chunks that are around 16KB on average. So if you share a folder containing a single 1MB JPG you will get around 64 chunks. The idea of CDC is that your chunks only change if 
+
+After feeding the file contents through the chunker, we take the chunks and calculate the SHA256 hash of each one. We then arrange these hashes into a special data structure we developed that we call the Flat In-Order Merkle Tree.
+
+### Flat In-Order Merkle Tree
+
+```
+      3
+  1       5
+0   2   4   6
+```
+
+Want to go lower level? Check out [How Hypercore Works?](hyperdrive.md#how-hypercore-works)
 
 When two peers connect to each other and begin speaking the Hyperdrive protocol they can efficiently determine if they have chunks the other one wants, and begin exchanging those chunks directly. Hyperdrive gives us the flexibility to have random access to any portion of a file while still verifying the other side isnt sending us bad data. We can also download different sections of files in parallel across all of the sources simultaneously, which increases overall download speed dramatically.
 

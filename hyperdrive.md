@@ -257,3 +257,85 @@ So using this digest the person can easily figure out that they only need to sen
 The bit vector `1` (only contains a single one) means that we already have all the hashes we need so just send us the block.
 
 These digests are very compact in size, only `(log2(number-of-blocks) + 2) / 8` bytes needed in the worst case. For example if you are sharing one trillion blocks of data the digest would be `(log2(1000000000000) + 2) / 8 ~= 6` bytes long.
+
+### Bitfield Run length Encoding
+
+(talk about rle)
+
+### Basic Privacy
+
+(talk about the privacy features + public id here)
+
+## Hypercore Feeds
+
+(talk about how we use the above concepts to create a feed of data)
+
+## Hypercore Replication Protocol
+
+Lets assume two peers have the identifier for a hypercore feed. This could either be the hash of the merkle tree roots described above or a public key if they want to share a signed merkle tree. The two peers wants to exchange the data verified by this tree. Lets assume the two peers have somehow connected to each other.
+
+Hypercore uses a message based protocol to exchange data. All messages sent are encoded to binary values using Protocol Buffers. Protocol Buffers are a widely supported schema based encoding support. A Protocol Buffers implementation is available on npm through the [protocol-buffers](https://github.com/mafintosh/protocol-buffers) module.
+
+These are the types of messages the peers send to each other
+
+#### Open
+
+This should be the first message sent and is also the only message without a type. It looks like this
+
+``` proto
+message Open {
+  required bytes publicId = 1;
+  required bytes nonce = 2;
+}
+```
+
+The `publicId` should be set to the public id of the Merkle Tree as specified above. The `nonce` should be set to 24 bytes of random data. When running in encrypted mode this is the only message sent unencrypted.
+
+#### `0` Handshake
+
+The message contains the protocol handshake. It has type `0`.
+
+``` proto
+message Handshake {
+  optional uint64 version = 1;
+  required bytes peerId = 2;
+  repeated string extensions = 3;
+}
+```
+
+You should send this message after sending an open message. By sending it after an open message it will be encrypted and we wont expose our peer id to a third party. The current protocol version is 0.
+
+#### `1` Have
+
+You can send a have message to give the other peer information about which blocks of data you have. It has type `1`.
+
+``` proto
+message Have {
+  required uint64 start = 1;
+  optional uint64 end = 2;
+  optional bytes bitfield = 3;
+}
+```
+
+If using a bitfield it should be encoded using a run length encoding described above. It is a good idea to send a have message soon as possible if you have blocks to share to reduce latency.
+
+#### `2` Want
+
+You can send a have message to give the other peer information about which blocks of data you want to have. It has type `2`.
+
+``` proto
+message Want {
+  required uint64 start = 1;
+  optional uint64 end = 2;
+}
+```
+
+You should only send the want message if you are interesting in a section of the feed that the other peer has not told you about.
+
+#### `3` Request
+#### `4` Response
+#### `5` Cancel
+#### `6` Pause
+#### `7` Resume
+#### `8` Close
+

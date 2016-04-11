@@ -33,6 +33,10 @@ Starts serving dats in the background progress.
 
   * `--foreground`: run the server in the foreground instead.
 
+#### `dat status`
+
+View a static list of the current dat links that are served.
+
 #### `dat stop`
 
 Stops serving dats.
@@ -40,10 +44,6 @@ Stops serving dats.
 #### `dat rm LINK`
 
 Remove a link from the list, stops serving it.
-
-#### `dat ls`
-
-View a static list of the current dat links that are served.
 
 #### `dat mon`
 

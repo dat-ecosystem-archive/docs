@@ -1,12 +1,9 @@
 ## 1.0 Architecture Design
 
-![dat-arch.001.jpg](arch.png)
-
 
   * dat: command-line
   * dat-desk: desktop application
-  * dat-server: http and ui frontend
-  * dat-js: JS api
+  * dat-server: daemon dat manager
   * hyperdrive: storage layer
   * discovery-swarm: swarm
 
@@ -83,9 +80,9 @@ linker.on('progress', function (progress) {
 })
 ```
 
-#### `dat.download(link, dir, cb)`
+#### `dat.join(link, dir, cb)`
 
-Download the given link to a given location. Get progress events from the stream. Progress events are the same as emitted by the `dat` object.
+Joins the swarm for a given link to a given location. Get progress events from the stream. Progress events are the same as emitted by the `dat` object.
 
 ```js
 var done = function (err) {
@@ -99,10 +96,6 @@ downloader.on('progress', function (progress) {
   console.log('progress item', progress)
 })
 ```
-
-#### `dat.join(link, cb)`
-
-Join a swarm for the given link. Should be called after `link` or `download`. Throws error if data has not been downloaded or linked.
 
 #### `dat.leave(link, cb)`
 

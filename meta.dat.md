@@ -10,24 +10,6 @@ Dat uses a simple metadata file called `meta.dat`. The purpose of this file is t
 
 The format is a header followed by many entries. Entry order is based on the indexing determined by the [Flat In-Order Tree](hyperdrive.md#flat-in-order-trees) algorithm we use in Dat.
 
-For example, given a tree like this you might want to look up in a `meta.dat` file the metadata for a specific node:
-
-```
-0─┐  
-  1─┐
-2─┘ │
-    3
-4─┐ │
-  5─┘
-6─┘
-```
-
-If you wanted to look up the metadata for 3, you could read the third (or any!) entry from meta.dat with the following formula (assuming you've already decoded the header and hash lengths from the beginning of the file):
-
-```
-header-length + entry-number * (8 + hash-length)
-```
-
 ### Header format
 
 ```
@@ -42,6 +24,8 @@ message Header {
   optional bool isSigned = 2;
   optional string hashType = 3 [default = "sha256"];
   optional uint32 hashLength = 4 [default = 32];
+  optional string signatureType = 5 [default = "ed25519"];
+  optional uint32 signatureLength = 6 [default = 64];
 }
 ```
 
@@ -50,11 +34,67 @@ message Header {
 For non-signed entries:
 
 ```
-<8-byte-chunk-offset><chunk-hash>
+<8-byte-chunk-end><chunk-hash>
 ```
 
-For signed entries (in live feeds):
+The 8-byte-chunk-end is an unsigned big endian 64 bitd integer that should be the absolute position in the file for the **end of the chunk**..
+
+For signed entries in live feeds (only applies to even numbered nodes e.g. leaf nodes):
 
 ```
-<8-byte-chunk-offset><64-byte-signature><chunk-hash>
+<8-byte-chunk-end><chunk-signature><chunk-hash>
+```
+
+For any odd nodes, in either a live or a non-live feed, the non-signed entry format will be used.
+
+## Example
+
+Given a tree like this you might want to look up in a `meta.dat` file the metadata for a specific node:
+
+```
+0─┐  
+  1─┐
+2─┘ │
+    3
+4─┐ │
+  5─┘
+6─┘
+```
+
+If you wanted to look up the metadata for 3, you could read the third (or any!) entry from meta.dat:
+
+First you have to read the varint at the beginning of the file so you know how big the header is:
+
+``` js
+var varint = require('varint') // https://github.com/chrisdickinson/varint
+var headerLength = varint.decode(firstChunkOfFile)
+```
+
+Now you can read the header from the file
+
+``` js
+var headerOffset = varint.encodingLength(headerLength)
+var headerEndOffset = headerOffset + headerLength
+var headerBytes = firstChunkOfFile.slice(headerOffset, headerEndOffset)
+```
+
+To decode the header use the protobuf schema. We can use the [protocol-buffers](https://github.com/mafintosh/protocol-buffers) module to do that.
+
+``` js
+var messages = require('protocol-buffers')(fs.readFileSync('meta.dat.proto'))
+var header = messages.Header.decode(headerBytes)
+```
+
+Now we have all the configuration required to calculate an entry offset.
+
+``` js
+var entryNumber = 42
+var entryOffset = headerEndOffset + entryNumber * (8 + header.hashLength)
+```
+
+If you have a signed feed, you have to take into account the extra space required for the signatures in the even nodes.
+
+``` js
+var entryOffset = headerLength + entryNumber * (8 + header.hashLength)
+                  + Math.floor(entryNumber / 2) * header.signatureLength
 ```

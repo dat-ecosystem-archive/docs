@@ -5,10 +5,10 @@ Dat uses a simple metadata file called `meta.dat`. The purpose of this file is t
 # File format
 
 ```
-<Header><Entries...>
+<Header><Entries Index...><Entries...>
 ```
 
-The format is a header followed by many entries. Entry order is based on the indexing determined by the [Flat In-Order Tree](hyperdrive.md#flat-in-order-trees) algorithm we use in Dat.
+The format is a header followed by an index of many entries. Entry order is based on the indexing determined by the [Flat In-Order Tree](hyperdrive.md#flat-in-order-trees) algorithm we use in Dat. After the entry index, a concatinated list of entries follows.
 
 ### Header format
 
@@ -21,15 +21,16 @@ The header protobuf has this schema:
 ``` proto
 message Header {
   required bytes datLink = 1;
-  optional bool isSigned = 2;
-  optional string hashType = 3 [default = "sha256"];
-  optional uint32 hashLength = 4 [default = 32];
-  optional string signatureType = 5 [default = "ed25519"];
-  optional uint32 signatureLength = 6 [default = 64];
+  required uint64 entries = 2;
+  optional bool isSigned = 3;
+  optional string hashType = 4 [default = "sha256"];
+  optional uint32 hashLength = 5 [default = 32];
+  optional string signatureType = 6 [default = "ed25519"];
+  optional uint32 signatureLength = 7 [default = 64];
 }
 ```
 
-### Entry format
+### Entry index format
 
 For non-signed entries:
 
@@ -37,7 +38,7 @@ For non-signed entries:
 <8-byte-chunk-end><chunk-hash>
 ```
 
-The 8-byte-chunk-end is an unsigned big endian 64 bitd integer that should be the absolute position in the file for the **end of the chunk**..
+The 8-byte-chunk-end is an unsigned big endian 64 bit integer that should be the absolute position in the file for the **end of the chunk**.
 
 For signed entries in live feeds (only applies to even numbered nodes e.g. leaf nodes):
 

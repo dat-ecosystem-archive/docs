@@ -39,7 +39,7 @@ The header protobuf has this schema:
 ``` proto
 message Header {
   required bytes datLink = 1;
-  optional bool isLive = 2;
+  optional bool isSigned = 2;
   optional string hashType = 3 [default = "sha256"];
   optional uint32 hashLength = 4 [default = 32];
 }

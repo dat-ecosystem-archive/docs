@@ -38,10 +38,10 @@ The header protobuf has this schema:
 
 ``` proto
 message Header {
-  dat link
-  is-signed-feed
-  hash-type
-  hash-length
+  required bytes datLink = 1;
+  optional isLive = 2;
+  optional string hashType = 3 [default = "sha256"];
+  optional uint32 hashLength = 4 [default = 32];
 }
 ```
 

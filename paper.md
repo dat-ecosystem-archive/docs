@@ -9,7 +9,7 @@ max@maxogden.com
 
 ## ABSTRACT
 
-Dat is a swarm based version control system designed for sharing large datasets over networks such that their contents can be accessed randomly, be updated incrementally, and have the integrity of their contents be trusted. Every Dat user is simultaneously a server and a client exchanging pieces of data with other peers in a swarm on demand. As data is added to a Dat repository updated files are split into pieces based on Rabin fingerprinting and deduplicated against known pieces to avoid retransmission of data. File contents are automatically verified using secure hashes meaning you do not need to trust other nodes.
+Dat is a swarm based version control system designed for sharing large datasets over networks such that their contents can be accessed randomly, be updated incrementally, and have the integrity of their contents be trusted. Every Dat user is simultaneously a server and a client exchanging pieces of data with other peers in a swarm on demand. As data is added to a Dat repository updated files are split into pieces based on Rabin fingerprinting and deduplicated against known pieces to avoid retransmission of data. File contents are automatically verified using secure hashes meaning you do not need to trust other nodes. 
 
 ## 1. INTRODUCTION
 
@@ -41,7 +41,7 @@ Content defined chunking has the benefit of being shift resistant, meaning if yo
 
 BitTorrent implements a swarm based file sharing protocol for static datasets. Data is split into fixed sized chunks, hashed, and then that hash is used to discover peers that have the same data. An advantage of using BitTorrent for dataset transfers is that download speeds can be saturated. Since the file is split into pieces, and peers can efficiently discover which pieces each of the peers they are connected to have, it means one peer can download non-overlapping regions of the dataset from many peers at the same time in parallel, maximizing network throughput.
 
-Fixed sized chunking has drawbacks for data that changes (see LBFS above). Additionally, BitTorrent always divides data into 1024 pieces, meaning large datasets could have a very large chunk size which impacts random access performance (e.g. for streaming video over BitTorrent).
+Fixed sized chunking has drawbacks for data that changes (see LBFS above). Additionally, BitTorrent assumes all metadata will be transferred up front, and most clients divide data into 1024 pieces, meaning large datasets could have a very large chunk size which impacts random access performance (e.g. for streaming video over BitTorrent).
 
 ### Kademlia Distributed Hash Table
 
@@ -69,11 +69,68 @@ WebTorrent implements the BitTorrent protocol in JavaScript using WebRTC as the 
 
 IPFS also builds on many of the concepts from this section and presents a new platform similar in scope to the Web that has content integrity, peer to peer file sharing, version history and data permanence baked in as a sort of upgrade to the current Web. Whereas Dat is one application of these ideas that is specifically focused on sharing datasets but is agnostic to what platform it is built on, IPFS goes lower level and abstracts network sockets and naming systems so that any application built on the Web can alternatively be built on IPFS to inherit it's properties, as long as their hyperlinks can be expressed as content addressed addresses to the IPFS global Merkle DAG.
 
-The research behind IPFS has coalesced many of these ideas into a more accessible format.
+The research behind IPFS has coalesced many of these ideas into a more accessible format. We are still exploring how to best implement the Dat protocol on top of the IPFS platform.
 
 ## 3. DESIGN
 
-- mirroring
-- reproducibility
-- parallel downloading
-- incremental updates
+Dat is a file sharing protocol that does not assume a dataset is static or that the entire dataset will be downloaded. The protocol is agnostic to the underlying transport, e.g. you could implement Dat over carrier pigeon. The key properties of the Dat design are explained in this section.
+
+- 1. **Mirroring** - All participants in the network simultaneously share and consume data.
+- 2. **Content Integrity** - Data and publisher integrity is verified through use of signed content addressable hashes
+- 3. **Parallel transfer** - Subsets of the data can be accessed from multiple peers simultaneously, improving transfer speeds
+- 4. **Streaming updates** - Datasets can be updated and distributed in real time to downstream peers
+- 5. **Secure Metadata** - Dat employs a capability system whereby anyone with a Dat link can connect to the swarm, but the link itself is a secure hash that is nearly impossible to guess
+
+## 3.1 Mirroring
+
+Dat is a peer to peer protocol designed to exchange pieces of a dataset amongst a swarm of peers. When a peer acquires their first piece of data in the dataset, they are now a partial mirror for the dataset. If someone else contacts them and needs the piece they have, they can share it. This can happen simultaneously while the peer is still downloading the pieces they want.
+
+### 3.1.1 Source Discovery
+
+An important aspect of mirring is source discovery, the techniques that peers use to find each other. Source discovery means finding the IP and port of data sources online that have a copy of that data you are looking for. You can then connect to them and begin exchanging data using the Dat file exchange protocol, Hypercore. By using source discovery techniques we are able to create a network where data can be discovered even if the original data source disappears.
+
+Source discovery can happen over many kinds of networks, as long as you can model the following actions:
+
+- `join(key, [port])` - Begin performing regular lookups on an interval for `key`. Specify `port` if you want to announce that you share `key` as well.
+- `leave(key, [port])` - Stop looking for `key`. Specify `port` to stop announcing that you share `key` as well.
+- `foundpeer(key, ip, port)` - Called when a peer is found by a lookup
+
+In the Dat implementation we implement the above actions on top of three types of discovery networks:
+
+- DNS name servers - An Internet standard mechanism for resolving keys to addresses
+- Multicast DNS - Useful for discovering peers on local networks
+- Kademlia Mainline Distributed Hash Table - Zero point of failure, increases probability of Dat working even if DNS servers are unreachable
+
+Additional discovery networks can be implemented as needed. We chose the above three as a starting point to have a complementary mix of strategies to increase the probability of source discovery.
+
+Our implementation of peer discovery is called discovery-channel. We also run a [custom DNS server](https://www.npmjs.com/package/dns-discovery) that Dat clients use (in addition to specifying their own if they need to), as well as a [DHT bootstrap](https://github.com/bittorrent/bootstrap-dht) server. These discovery servers are the only centralized infrastructure we need for Dat to work over the Internet, but they are redundant, interchangeable, never see the actual data being shared, anyone can run their own and Dat will still work even if they all are unavailable. If this happens discovery will just be manual (e.g. manually sharing IP/ports). Every data source that has a copy of the data also advertises themselves across these discovery networks.
+
+### 3.1.2 Peer Connections
+
+Up until this point we have just done searches to find who has the data we need. Now that we know who should talk to, we have to connect to them. Once we have a duplex binary connection to a peer we then layer on our own file sharing protocol on top, called [Hypercore](https://github.com/mafintosh/hypercore).
+
+In our implementation, we use either [TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol), [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) or WebRTC sockets for the actual peer to peer connections. UTP is nice because it is designed to *not* take up all available bandwidth on a network (e.g. so that other people sharing your wifi can still use the Internet). WebRTC support makes Dat work in modern web browsers using peer to peer connections.
+
+When we get the IP and port for a potential source we try to connect using all available protocols and hope one works. If one connects first, we abort the other ones. If none connect, we try again until we decide that source is offline or unavailable to use and we stop trying to connect to them. Sources we are able to connect to go into a list of known good sources, so that if our Internet connection goes down we can use that list to reconnect to our good sources again quickly.
+
+If we get a lot of potential sources we pick a handful at random to try and connect to and keep the rest around as additional sources to use later in case we decide we need more sources. A lot of these are parameters that we can tune for different scenarios later, but have started with some best guesses as defaults.
+
+The connection logic is implemented in a module called [discovery-swarm](https://www.npmjs.com/package/discovery-swarm). This builds on discovery-channel and adds connection establishment, management and statistics. You can see stats like how many sources are currently connected, how many good and bad behaving sources you've talked to, and it automatically handles connecting and reconnecting to sources for you. Our UTP support is implemented in the module [utp-native](https://www.npmjs.com/package/utp-native).
+
+So now we have found data sources, have connected to them, but we havent yet figured out if they *actually* have the data we need. This is where our file transfer protocol [Hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in. This is explained in a later section.
+
+Peer connections types are outside the scope of the Dat protocol, but in the Dat implementation we make a best effort to make as successful connections using our default types as possible. This means employing peer to peer connection techniques like UDP hole punching. Our approach to hole punching is to use a central known server, in our case it is our DNS server, which is accessible on the public Internet.
+
+In a scenario where two peers A and B want to connect, and both know the central server:
+
+1. Peer A creates a local UDP socket and messages the central server that it is interested in connecting to people.
+2. Central server messages Peer A back with a token that is a `hash(Peer A's remote IP + a local secret)`. The UDP packet contains the remote IP.
+3. Peer A messages the central server with the token (this way you cannot spoof your IP and DDOS a remote peer)
+4. Peer B does the same.
+5. When the central server receives Peer B's message that it wants to connect to peers it forwards Peer B's message to Peer A and Peer A's message to Peer B.
+6. Both peers now send a message to each other on their public IP and port. If UDP hole punching is supported by the routers of both peers, one of the messages should get through.
+7. At this point we reuse the UDP socket to run UTP on top to get a streaming reliable interface.
+
+## 3.2 Content Integrity
+
+Content integrity means being able to verify the data you received is the exact same version of the data that you expected. This is important for reproducibility, as 

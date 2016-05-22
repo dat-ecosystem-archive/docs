@@ -181,7 +181,7 @@ This means that two datasets share a similar sequence of data the merkle tree he
 
 As described above the top hash of a merkle tree is the hash of all its content. This has both advantages and disadvanteges.
 
-An advantage is that you can always reproduce a merkle tree simply by having the data contents of a merkle tree. 
+An advantage is that you can always reproduce a merkle tree simply by having the data contents of a merkle tree.
 
 A disadvantage is every time you add content to your data set your merkle tree hash changes and you'll need to re-distribute the new hash.
 
@@ -264,7 +264,7 @@ These digests are very compact in size, only `(log2(number-of-blocks) + 2) / 8` 
 
 ### Basic Privacy
 
-(talk about the privacy features + public id here)
+(talk about the privacy features + discovery key here)
 
 ## Hypercore Feeds
 
@@ -284,12 +284,14 @@ This should be the first message sent and is also the only message without a typ
 
 ``` proto
 message Open {
-  required bytes publicId = 1;
+  required bytes feed = 1;
   required bytes nonce = 2;
 }
 ```
 
-The `publicId` should be set to the public id of the Merkle Tree as specified above. The `nonce` should be set to 24 bytes of random data. When running in encrypted mode this is the only message sent unencrypted.
+The `feed` should be set to the discovery key of the Merkle Tree as specified above. The `nonce` should be set to 24 bytes of high entropy random data. When running in encrypted mode this is the only message sent unencrypted.
+
+When you are done using a channel send an empty message to indicate end-of-channel.
 
 #### `0` Handshake
 
@@ -297,9 +299,8 @@ The message contains the protocol handshake. It has type `0`.
 
 ``` proto
 message Handshake {
-  optional uint64 version = 1;
-  required bytes peerId = 2;
-  repeated string extensions = 3;
+  required bytes id = 1;
+  repeated string extensions = 2;
 }
 ```
 
@@ -330,12 +331,59 @@ message Want {
 }
 ```
 
-You should only send the want message if you are interesting in a section of the feed that the other peer has not told you about.
+You should only send the want message if you are interested in a section of the feed that the other peer has not told you about.
 
 #### `3` Request
-#### `4` Response
+
+Send this message to request a block of data. You can request a block by block index or byte offset. If you are only interested
+in the hash of a block you can set the hash property to true. The nodes property can be set to a tree digest of the tree nodes you already
+have for this block or byte range. A request message has type `3`.
+
+``` proto
+message Request {
+  optional uint64 block = 1;
+  optional uint64 bytes = 2;
+  optional bool hash = 3;
+  optional uint64 nodes = 4;
+}
+```
+
+#### `4` Data
+
+Send a block of data to the other peer. You can use this message to reply to a request or optimistically send other blocks of data to the other client. It has type `4`.
+
+``` proto
+message Data {
+  message Node {
+    required uint64 index = 1;
+    required uint64 size = 2;
+    required bytes hash = 3;
+  }
+
+  required uint64 block = 1;
+  optional bytes value = 2;
+  repeated Node nodes = 3;
+  optional bytes signature = 4;
+}
+````
+
 #### `5` Cancel
+
+Cancel a previous sent request. It has type `5`.
+
+``` proto
+message Cancel {
+  optional uint64 block = 1;
+  optional uint64 bytes = 2;
+}
+```
+
 #### `6` Pause
+
+An empty message that tells the other peer that they should stop requesting new blocks of data. It has type `6`.
+
 #### `7` Resume
-#### `8` Close
+
+An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
+
 

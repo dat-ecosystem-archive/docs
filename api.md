@@ -1,7 +1,5 @@
 ## 1.0 Architecture Design
 
-![dat-arch.001.jpg](arch.png)
-
 
   * dat: command-line api
   * dat-desk: desktop application
@@ -32,6 +30,10 @@ Starts serving dats in the background progress.
 
   * `--foreground`: run the server in the foreground instead.
 
+#### `dat status`
+
+View a static list of the current dat links that are served.
+
 #### `dat stop`
 
 Stops serving dats.
@@ -39,10 +41,6 @@ Stops serving dats.
 #### `dat rm LINK`
 
 Remove a link from the list, stops serving it.
-
-#### `dat ls`
-
-View a static list of the current dat links that are served.
 
 #### `dat mon`
 
@@ -82,9 +80,9 @@ linker.on('progress', function (progress) {
 })
 ```
 
-#### `dat.join(link, cb)`
+#### `dat.join(link, dir, cb)`
 
-Join a swarm for the given link. Should be called after `link` or `download`. Throws error if data has not been downloaded or linked.
+Joins the swarm for a given link to a given location. Get progress events from the stream. Progress events are the same as emitted by the `dat` object.
 
 ```js
 var done = function (err) {

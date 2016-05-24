@@ -15,7 +15,7 @@ var Level = require('level')
 // the dat link someone sent us, we want to download the data from it
 var link = new Buffer(process.argv[2], 'hex')
 
-// here are the default config dat uses:
+// here is the default config dat uses
 // used for MDNS and also as the dns 'app name', you prob shouldnt change this
 var DAT_DOMAIN = 'dat.local'
 // dat will try this first and pick the first open port if its taken

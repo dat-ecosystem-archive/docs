@@ -18,9 +18,9 @@ The protocol itself draws heavy inspiration from existing file sharing systems s
 
 ## How Hypercore works
 
-### Flat Trees
+### Flat In-Order Trees
 
-A flat tree is a simple way represent a binary tree as a list. It also allows you to identify every node of a binary tree with a numeric index. Both of these properties makes it useful in distributed applications to simplify wire protocols that uses tree structures.
+A Flat In-Order Tree is a simple way represent a binary tree as a list. It also allows you to identify every node of a binary tree with a numeric index. Both of these properties makes it useful in distributed applications to simplify wire protocols that uses tree structures.
 
 Flat trees are described in [PPSP RFC 7574 as "Bin numbers"](https://datatracker.ietf.org/doc/rfc7574/?include_text=1) and a node version is available through the [flat-tree](https://github.com/mafintosh/flat-tree) module.
 
@@ -181,7 +181,7 @@ This means that two datasets share a similar sequence of data the merkle tree he
 
 As described above the top hash of a merkle tree is the hash of all its content. This has both advantages and disadvanteges.
 
-An advantage is that you can always reproduce a merkle tree simply by having the data contents of a merkle tree. 
+An advantage is that you can always reproduce a merkle tree simply by having the data contents of a merkle tree.
 
 A disadvantage is every time you add content to your data set your merkle tree hash changes and you'll need to re-distribute the new hash.
 
@@ -257,3 +257,133 @@ So using this digest the person can easily figure out that they only need to sen
 The bit vector `1` (only contains a single one) means that we already have all the hashes we need so just send us the block.
 
 These digests are very compact in size, only `(log2(number-of-blocks) + 2) / 8` bytes needed in the worst case. For example if you are sharing one trillion blocks of data the digest would be `(log2(1000000000000) + 2) / 8 ~= 6` bytes long.
+
+### Bitfield Run length Encoding
+
+(talk about rle)
+
+### Basic Privacy
+
+(talk about the privacy features + discovery key here)
+
+## Hypercore Feeds
+
+(talk about how we use the above concepts to create a feed of data)
+
+## Hypercore Replication Protocol
+
+Lets assume two peers have the identifier for a hypercore feed. This could either be the hash of the merkle tree roots described above or a public key if they want to share a signed merkle tree. The two peers wants to exchange the data verified by this tree. Lets assume the two peers have somehow connected to each other.
+
+Hypercore uses a message based protocol to exchange data. All messages sent are encoded to binary values using Protocol Buffers. Protocol Buffers are a widely supported schema based encoding support. A Protocol Buffers implementation is available on npm through the [protocol-buffers](https://github.com/mafintosh/protocol-buffers) module.
+
+These are the types of messages the peers send to each other
+
+#### Open
+
+This should be the first message sent and is also the only message without a type. It looks like this
+
+``` proto
+message Open {
+  required bytes feed = 1;
+  required bytes nonce = 2;
+}
+```
+
+The `feed` should be set to the discovery key of the Merkle Tree as specified above. The `nonce` should be set to 24 bytes of high entropy random data. When running in encrypted mode this is the only message sent unencrypted.
+
+When you are done using a channel send an empty message to indicate end-of-channel.
+
+#### `0` Handshake
+
+The message contains the protocol handshake. It has type `0`.
+
+``` proto
+message Handshake {
+  required bytes id = 1;
+  repeated string extensions = 2;
+}
+```
+
+You should send this message after sending an open message. By sending it after an open message it will be encrypted and we wont expose our peer id to a third party. The current protocol version is 0.
+
+#### `1` Have
+
+You can send a have message to give the other peer information about which blocks of data you have. It has type `1`.
+
+``` proto
+message Have {
+  required uint64 start = 1;
+  optional uint64 end = 2;
+  optional bytes bitfield = 3;
+}
+```
+
+If using a bitfield it should be encoded using a run length encoding described above. It is a good idea to send a have message soon as possible if you have blocks to share to reduce latency.
+
+#### `2` Want
+
+You can send a have message to give the other peer information about which blocks of data you want to have. It has type `2`.
+
+``` proto
+message Want {
+  required uint64 start = 1;
+  optional uint64 end = 2;
+}
+```
+
+You should only send the want message if you are interested in a section of the feed that the other peer has not told you about.
+
+#### `3` Request
+
+Send this message to request a block of data. You can request a block by block index or byte offset. If you are only interested
+in the hash of a block you can set the hash property to true. The nodes property can be set to a tree digest of the tree nodes you already
+have for this block or byte range. A request message has type `3`.
+
+``` proto
+message Request {
+  optional uint64 block = 1;
+  optional uint64 bytes = 2;
+  optional bool hash = 3;
+  optional uint64 nodes = 4;
+}
+```
+
+#### `4` Data
+
+Send a block of data to the other peer. You can use this message to reply to a request or optimistically send other blocks of data to the other client. It has type `4`.
+
+``` proto
+message Data {
+  message Node {
+    required uint64 index = 1;
+    required uint64 size = 2;
+    required bytes hash = 3;
+  }
+
+  required uint64 block = 1;
+  optional bytes value = 2;
+  repeated Node nodes = 3;
+  optional bytes signature = 4;
+}
+````
+
+#### `5` Cancel
+
+Cancel a previous sent request. It has type `5`.
+
+``` proto
+message Cancel {
+  optional uint64 block = 1;
+  optional uint64 bytes = 2;
+}
+```
+
+#### `6` Pause
+
+An empty message that tells the other peer that they should stop requesting new blocks of data. It has type `6`.
+
+#### `7` Resume
+
+An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
+
+

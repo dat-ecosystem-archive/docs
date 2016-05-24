@@ -3,10 +3,9 @@
 ![dat-arch.001.jpg](arch.png)
 
 
-  * dat: command-line
+  * dat: command-line api
   * dat-desk: desktop application
-  * dat-server: http and ui frontend
-  * dat-js: JS api
+  * dat-server: js api for server daemon
   * hyperdrive: storage layer
   * discovery-swarm: swarm
 
@@ -21,7 +20,7 @@ Create a new link for the contents of a directory and begin automatically servin
 
   * `--foreground`: run the server in the foreground instead.
 
-#### `dat download LINK DIR`
+#### `dat LINK DIR`
 
 Download a link to a directory and begin automatically serving the data to a swarm in the background.
 
@@ -50,12 +49,12 @@ View a static list of the current dat links that are served.
 Opens up real-time monitoring panel for viewing progress of running dats. Can provide optional parameter `dat mon LINK` to filter the monitor and logs for a given dat link.
 
 
-## dat-js
+## JS api
 
 A common JavaScript API for Dat.
 
 ```
-var Dat = require('dat-js')
+var Dat = require('dat-server')
 ```
 
 #### `var dat = Dat(opts, cb)`
@@ -83,9 +82,9 @@ linker.on('progress', function (progress) {
 })
 ```
 
-#### `dat.download(link, dir, cb)`
+#### `dat.join(link, cb)`
 
-Download the given link to a given location. Get progress events from the stream. Progress events are the same as emitted by the `dat` object.
+Join a swarm for the given link. Should be called after `link` or `download`. Throws error if data has not been downloaded or linked.
 
 ```js
 var done = function (err) {
@@ -99,10 +98,6 @@ downloader.on('progress', function (progress) {
   console.log('progress item', progress)
 })
 ```
-
-#### `dat.join(link, cb)`
-
-Join a swarm for the given link. Should be called after `link` or `download`. Throws error if data has not been downloaded or linked.
 
 #### `dat.leave(link, cb)`
 

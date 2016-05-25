@@ -12,7 +12,7 @@ Command-line interface for dat
 
 #### `dat LINK DIR`
 
-Downloads the link to the given directory. 
+Downloads the link to the given directory, and then exits. 
 
 #### `dat seed LINK DIR`
 

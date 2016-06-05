@@ -50,13 +50,13 @@ After feeding the file contents through the chunker, we take the chunks and calc
 0   2   4   6
 ```
 
-Want to go lower level? Check out [How Hypercore Works?](hyperdrive.md#how-hypercore-works)
+Want to go lower level? Check out [How Hypercore Works](hyperdrive.md#how-hypercore-works)
 
 When two peers connect to each other and begin speaking the Hyperdrive protocol they can efficiently determine if they have chunks the other one wants, and begin exchanging those chunks directly. Hyperdrive gives us the flexibility to have random access to any portion of a file while still verifying the other side isnt sending us bad data. We can also download different sections of files in parallel across all of the sources simultaneously, which increases overall download speed dramatically.
 
 ## Phase 4: Data archiving
 
-So now that you've discovered, connected, and downloaded a copy of some data you can stick around for a while and serve up copies of the data to other who come along and want to download it.
+So now that you've discovered, connected, and downloaded a copy of some data you can stick around for a while and serve up copies of the data to others who come along and want to download it.
 
 The first phase, source discovery, is actually an ongoing process. When you first search for data sources you only get the sources available at the time you did your search, so we make sure to perform discovery searches as often is practically possible to make sure new sources can be found and connected to.
 

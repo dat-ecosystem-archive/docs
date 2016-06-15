@@ -4,6 +4,7 @@ pages:
 - Introduction: 'index.md'
 - 'How Dat Works': 'how-dat-works.md'
 - 'Dependencies': 'ecosystem.md'
+- 'Paper': 'papers/dat-paper.md'
 - Meta:
   - 'Changelog': 'meta/changelog.md'
   - 'Collaborators': 'meta/collaborators.md'

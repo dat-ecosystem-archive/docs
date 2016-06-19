@@ -1,0 +1,17 @@
+{
+  "Introduction": {
+    "Welcome to Dat": "README.md",
+    "How Dat works": "how-dat-works.md"
+  },
+  "Ecosystem": {
+    "Overview": "ecosystem.md"
+  },
+  "Specification": {
+    "hyperdrive": "hyperdrive.md",
+    "meta.dat": "meta.dat.md"
+  },
+  "References": {
+    "API": "api.md",
+    "DIY Dat": "diy-dat.md"
+  }
+}

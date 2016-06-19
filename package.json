@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "update": "curl -Ssl https://raw.githubusercontent.com/clkao/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
+    "build": "minidocs . -c contents.json -p  -o dist -l dat-data.png -t 'The Dat Project' -s styles.css",
+    "deploy": "gh-pages -d dist",
     "paper": "pandoc --variable author=\"Maxwell Ogden, Karissa McKelvey, Mathias Buus\" --variable title=\"Dat - Distributed Dataset Synchronization And Versioning\" --variable date=\"Version 1.0.0, May 2016\" --variable classoption=twocolumn --variable papersize=a4paper -s dat-paper.md -o dat-paper.pdf"
   },
   "repository": {
@@ -17,5 +19,18 @@
   "bugs": {
     "url": "https://github.com/datproject/docs/issues"
   },
-  "homepage": "https://github.com/datproject/docs#readme"
+  "homepage": "https://github.com/datproject/docs#readme",
+  "dependencies": {
+    "gh-pages": "^0.11.0",
+    "minidocs": "^2.0.1"
+  },
+  "devDependencies": {
+    "ecosystem-docs": "^1.1.1"
+  },
+  "browserify": {
+    "transform": [
+      "sheetify/transform",
+      "read-directory/transform"
+    ]
+  }
 }

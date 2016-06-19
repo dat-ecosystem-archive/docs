@@ -18,7 +18,7 @@ The format is a header followed by an index of many entries. Entry order is base
 
 The header protobuf has this schema:
 
-``` proto
+``` protobuf
 message Header {
   required bytes datLink = 1;
   required uint64 entries = 2;

@@ -282,7 +282,7 @@ These are the types of messages the peers send to each other
 
 This should be the first message sent and is also the only message without a type. It looks like this
 
-``` proto
+``` protobuf
 message Open {
   required bytes feed = 1;
   required bytes nonce = 2;
@@ -297,7 +297,7 @@ When you are done using a channel send an empty message to indicate end-of-chann
 
 The message contains the protocol handshake. It has type `0`.
 
-``` proto
+``` protobuf
 message Handshake {
   required bytes id = 1;
   repeated string extensions = 2;
@@ -310,7 +310,7 @@ You should send this message after sending an open message. By sending it after 
 
 You can send a have message to give the other peer information about which blocks of data you have. It has type `1`.
 
-``` proto
+``` protobuf
 message Have {
   required uint64 start = 1;
   optional uint64 end = 2;
@@ -324,7 +324,7 @@ If using a bitfield it should be encoded using a run length encoding described a
 
 You can send a have message to give the other peer information about which blocks of data you want to have. It has type `2`.
 
-``` proto
+``` protobuf
 message Want {
   required uint64 start = 1;
   optional uint64 end = 2;
@@ -339,7 +339,7 @@ Send this message to request a block of data. You can request a block by block i
 in the hash of a block you can set the hash property to true. The nodes property can be set to a tree digest of the tree nodes you already
 have for this block or byte range. A request message has type `3`.
 
-``` proto
+``` protobuf
 message Request {
   optional uint64 block = 1;
   optional uint64 bytes = 2;
@@ -352,7 +352,7 @@ message Request {
 
 Send a block of data to the other peer. You can use this message to reply to a request or optimistically send other blocks of data to the other client. It has type `4`.
 
-``` proto
+``` protobuf
 message Data {
   message Node {
     required uint64 index = 1;
@@ -371,7 +371,7 @@ message Data {
 
 Cancel a previous sent request. It has type `5`.
 
-``` proto
+``` protobuf
 message Cancel {
   optional uint64 block = 1;
   optional uint64 bytes = 2;
@@ -385,5 +385,3 @@ An empty message that tells the other peer that they should stop requesting new 
 #### `7` Resume
 
 An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
-
-

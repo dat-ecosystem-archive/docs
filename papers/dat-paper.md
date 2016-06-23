@@ -126,11 +126,59 @@ Content integrity means being able to verify the data you received is the exact 
 
 A common issue in data analysis is when data changes but the link to the data remains the same. For example, one day a file called data.zip might change, but a simple HTTP link to the file does not include a hash of the content, so clients that only have the HTTP link have no way to check if the file changed. Looking up a file by the hash of its content is called content addressability, and lets users not only verify that the data they receive is the version of the data they want, but also lets people cite specific versions of the data by referring to a specific hash.
 
-Data storage and content integrity in Dat is implemented in a module called Hypercore. Given a stream of binary data, Hypercore splits the stream into chunks using Rabin fingerprints, hashes each chunk, and arranges the hashes in a specific type of Merkle tree that allows for certain replication properties.
+Data storage and content integrity in Dat is implemented in a module called Hypercore. Given a stream of binary data, Hypercore splits the stream into chunks using Rabin fingerprints, hashes each chunk, and arranges the hashes in a specific type of Merkle tree that allows for certain replication properties. In addition to providing a content addressing system, Hypercore also provides a network protocol for exchanging chunks with peers.
 
-Hypercore is agnostic to the format of the input data, it operates on any stream of binary data. For the Dat use case of synchronizing datasets we wrote and use a file system abstraction on top of Hypercore called Hyperdrive. There are other abstractions you can write on top of Hypercore instead of Hyperdrive/Dat such as Merkle DAGs but these are outside the scope of this paper.
+Hypercore is agnostic to the format of the input data, it operates on any stream of binary data. For the Dat use case of synchronizing datasets we wrote and use a file system module on top of Hypercore called Hyperdrive. There are other abstractions you can write on top of Hypercore instead of Hyperdrive/Dat such as Merkle DAGs but these are outside the scope of this paper.
 
-Our content addressing scheme involves splitting 
+Central to the design of Hypercore is the notion of a register. This is a binary append-only feed (Kappa architecture) whose contents are cryptographically hashed and signed and therefore can be trusted. Hypercore lets you create many registers, and replicates them when synchronizing with another peer.
+
+Registers are just a way of encoding a Merkle tree that we use to efficiently replicate data over a network. When generating the Merkle tree, hashes are positioned by a scheme called binary interval numbering or just simply bin numbering. This is just a specific, deterministic way of laying out the nodes in a tree. For example a tree with 7 nodes will always be arranged like this:
+
+```
+0
+  1
+2
+    3
+4
+  5
+6
+```
+
+In our use case, the hashes of the actual content are always even numbers, at the wide end of the tree. So the above tree had four original values that become the even numbers:
+
+```
+value0 -> 0
+value1 -> 2
+value2 -> 4
+value3 -> 6
+```
+
+All odd hashes are derived by hashing the two child nodes, e.g. given hash0 is `hash(value0)` and hash2 is `hash(value1)`, hash1 is `hash(hash0 + hash2)`.
+
+A register contains two pieces of information:
+
+1. List of binary values: [value0, value1, value2, ...]
+2. List of hashes for the Merkle tree [hash0, hash1, hash2, ...] 
+
+The register itself interleaves these two lists such that the indexes (position) in the register are the same as the bin numbers from the Merkle tree. For example here is a register with three entries in pseudocode:
+
+```
+var feed = [{
+  hash: sha256(value + size),
+  size: value.length
+  value: <some buffer>
+}, {
+  hash: sha256(feed[0].hash + feed[2].hash + size),
+  size: feed[0].size + feed[1].size
+}, {
+  hash: sha256(value + size),
+  size: value.length
+  value: <some buffer>
+}, {
+  hash: sha256(feed[1].hash + feed[5].hash + size),
+  size: feed[1].size + feed[5].size
+}]
+```
 
 ## 3.3 Parallel Replication
 

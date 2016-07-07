@@ -68,7 +68,7 @@ Dat is a file sharing protocol that does not assume a dataset is static or that 
 - 2. **Content Integrity** - Data and publisher integrity is verified through use of signed hashes of the content.
 - 3. **Parallel Replication** - Subsets of the data can be accessed from multiple peers simultaneously, improving transfer speeds.
 - 4. **Streaming Updates** - Datasets can be updated and distributed in real time to downstream peers.
-- 5. **Secure Metadata** - Dat employs a capability system whereby anyone with a Dat link can connect to the swarm, but the link itself is a secure hash that is difficult to guess.
+- 5. **Private Metadata** - Dat employs a capability system whereby anyone with a Dat link can connect to the swarm, but the link itself is a secure hash that is difficult to guess.
 
 ## 3.1 Mirroring
 
@@ -122,13 +122,17 @@ In a scenario where two peers A and B want to connect, and both know the central
 
 ## 3.2 Content Integrity
 
-Content integrity means being able to verify the data you received is the exact same version of the data that you expected. This is imporant in a distributed system as this mechanism will catch incorrect data sent by bad peers. It also has implications for reproducibility as it lets you refer to a specific version of the dataset you want.
+Content integrity means being able to verify the data you received is the exact same version of the data that you expected. This is imporant in a distributed system as this mechanism will catch incorrect data sent by bad peers. It also has implications for reproducibility as it lets you refer to a specific version of a dataset.
 
-A common issue in data analysis is when data changes but the link to the data remains the same. For example, one day a file called data.zip might change, but a simple HTTP link to the file does not include a hash of the content, so clients that only have the HTTP link have no way to check if the file changed. Looking up a file by the hash of its content is called content addressability, and lets users not only verify that the data they receive is the version of the data they want, but also lets people cite specific versions of the data by referring to a specific hash.
+A common issue in data analysis is when data changes but the link to the data remains the same. For example, one day a file called data.zip might change, but a typical HTTP link to the file does not include a hash of the content, or provide a way to get updated metadata, so clients that only have the HTTP link have no way to check if the file changed without downloading the entire file again. Referring to a file by the hash of its content is called content addressability, and lets users not only verify that the data they receive is the version of the data they want, but also lets people cite specific versions of the data by referring to a specific hash.
+
+### Hypercore and Hyperdrive
 
 Data storage and content integrity in Dat is implemented in a module called Hypercore. Given a stream of binary data, Hypercore splits the stream into chunks using Rabin fingerprints, hashes each chunk, and arranges the hashes in a specific type of Merkle tree that allows for certain replication properties. In addition to providing a content addressing system, Hypercore also provides a network protocol for exchanging chunks with peers.
 
-Hypercore is agnostic to the format of the input data, it operates on any stream of binary data. For the Dat use case of synchronizing datasets we wrote and use a file system module on top of Hypercore called Hyperdrive. There are other abstractions you can write on top of Hypercore instead of Hyperdrive/Dat such as Merkle DAGs but these are outside the scope of this paper.
+Hypercore is agnostic to the format of the input data, it operates on any stream of binary data. For the Dat use case of synchronizing datasets we wrote and use a file system module on top of Hypercore called Hyperdrive. We have a layered abstraction so that if someone wishes they can use Hypercore directly to have full control over how they model their data. Hyperdrive works well when your data can be represented as files on a filesystem, which is our main use case with Dat.
+
+### Registers
 
 Central to the design of Hypercore is the notion of a register. This is a binary append-only feed (Kappa architecture) whose contents are cryptographically hashed and signed and therefore can be trusted. Hypercore lets you create many registers, and replicates them when synchronizing with another peer.
 
@@ -180,7 +184,116 @@ var feed = [{
 }]
 ```
 
+Registers can also be signed with a private key, allowing anyone with the corresponding public key to verify that new entries to the register were created by a holder of the private key. More on this in section 3.4.
+
 ## 3.3 Parallel Replication
+
+Hypercore provides a replication protocol so two peers can communicate over a stateless messaging channel to discover and exchange data. Messages are encoded using Protocol Buffers. The protocol has nine message types:
+
+#### Open
+
+This should be the first message sent and is also the only message without a type. It looks like this:
+
+``` protobuf
+message Open {
+  required bytes feed = 1;
+  required bytes nonce = 2;
+}
+```
+
+The `feed` should be set to the discovery key as specified above. The `nonce` should be set to 24 bytes of high entropy random data. When running in encrypted mode this is the only message sent unencrypted.
+
+### `0` Handshake
+
+This message is sent after sending an open message so it will be encrypted and we won't expose our peer id to a third party.
+
+``` protobuf
+message Handshake {
+  required bytes id = 1;
+  repeated string extensions = 2;
+}
+```
+
+### `1` Have
+
+Have messages give the other peer information about which blocks of data you have.
+
+``` protobuf
+message Have {
+  required uint64 start = 1;
+  optional uint64 end = 2;
+  optional bytes bitfield = 3;
+}
+```
+
+You can use `start` and `end` to represent a range of data block bin numbers. If using a bitfield it should be encoded using a run length encoding described above. It is a good idea to send a have message soon as possible if you have blocks to share to reduce latency.
+
+### `2` Want
+
+You can send a have message to give the other peer information about which blocks of data you want to have. It has type `2`.
+
+``` protobuf
+message Want {
+  required uint64 start = 1;
+  optional uint64 end = 2;
+}
+```
+
+You should only send the want message if you are interested in a section of the feed that the other peer has not told you about.
+
+### `3` Request
+
+Send this message to request a block of data. You can request a block by block index or byte offset. If you are only interested
+in the hash of a block you can set the hash property to true. The nodes property can be set to a tree digest of the tree nodes you already
+have for this block or byte range. A request message has type `3`.
+
+``` protobuf
+message Request {
+  optional uint64 block = 1;
+  optional uint64 bytes = 2;
+  optional bool hash = 3;
+  optional uint64 nodes = 4;
+}
+```
+
+### `4` Data
+
+Send a block of data to the other peer. You can use this message to reply to a request or optimistically send other blocks of data to the other client. It has type `4`.
+
+``` protobuf
+message Data {
+  message Node {
+    required uint64 index = 1;
+    required uint64 size = 2;
+    required bytes hash = 3;
+  }
+
+  required uint64 block = 1;
+  optional bytes value = 2;
+  repeated Node nodes = 3;
+  optional bytes signature = 4;
+}
+````
+
+### `5` Cancel
+
+Cancel a previous sent request. It has type `5`.
+
+``` protobuf
+message Cancel {
+  optional uint64 block = 1;
+  optional uint64 bytes = 2;
+}
+```
+
+### `6` Pause
+
+An empty message that tells the other peer that they should stop requesting new blocks of data. It has type `6`.
+
+### `7` Resume
+
+An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
+
 
 ## 3.4 Streaming Updates
 

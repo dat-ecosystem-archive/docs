@@ -8,7 +8,7 @@
   },
   "Specification": {
     "hyperdrive": "hyperdrive.md",
-    "meta.dat": "meta.dat.md"
+    "sleep": "sleep.md"
   },
   "References": {
     "API": "api.md",

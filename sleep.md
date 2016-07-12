@@ -3,17 +3,21 @@
 ### Syncable Lightweight Event Emitting Persistence
 ### Version 2.0
 
-SLEEP is a metadata format that allows data to be accessed randomly, cryptographically verified, and updated live. It has two parts, a file format that contains content addressed file metadata in a representation specifically designed to allow partial streaming access to individual chunks of data, and a 53 character identifier scheme that can be used to address the entire data set.
+git, bittorrent, but nothing in the open data space that is the equivalent
 
-The file format is a single file designed to be easy to distribute, and we also specify a way to expose SLEEP over REST.
+SLEEP is a metadata format that allows a set of files to be accessed randomly, cryptographically verified, and dynamically updated. It has two parts, a file format that contains content addressed file metadata in a representation specifically designed to allow partial streaming access to individual chunks of data, and a 53 character identifier scheme that can be used to address the entire data set.
+
+The file format can be shared as a single file for easy distribution and we also specify a way to expose SLEEP over REST.
 
 The SLEEP format can be used in a similar way to how MD5 checksums are used over HTTP today, to verify the integrity of data downloads. Whereas MD5 or SHA are usually checksums of the whole data set, meaning consumers have to download the entire all available data before they are able to verify the integrity of any of it, SLEEP allows a set of data to be split in to many small pieces, each one getting it's own cryptographically secure checksum. This allows consumers to download subsets metadata and data, in whatever order they prefer, but allowing them to verify the integrity of each piece of data as it is accessed.
 
 ## Registers
 
-SLEEP is designed around the concept of a register, an append only list that you can trust. The contents of a register are cryptographically fingerprinted and an aggregate checksum can be used to verify the contents of the register have not been tampered with. There are various ways to calculate these aggregate checksums but the data in a register is a binary append only feed, e.g. an infinite array of buffers that can only be updated by appending new buffers at the end.
+SLEEP is designed around the concept of a register, an append only list that you can trust. The contents of a register are cryptographically fingerprinted and an aggregate checksum can be used to verify the contents of the register have not been tampered with. There are various ways to calculate these aggregate checksums but the data in a register is a binary append only feed, e.g. an list of buffers that can only be updated by placing new buffers at the end of the list.
 
-In SLEEP we construct a Merkle tree where the leaf nodes are the buffers in the register, and the rest of the non-leaf nodes in the tree are derived Merkle hashes.
+SLEEP also provides an index that allows each piece of data in a register to be accessed randomly. In order to look up a specific piece of data in the register, you only need a small subset of the metadata in order to find it, making SLEEP suitable for live streaming or sparse download use cases.
+
+The register index is a Merkle tree where the leaf nodes are the hashes of the buffers in the register, and the rest of the nodes in the tree are derived Merkle hashes. A Merkle tree is defined as a tree where leaf nodes are a hash of some piece of data, and the rest of the nodes are the result of a hash of the concatenation of that nodes children.
 
 So, given a register with four values:
 
@@ -24,16 +28,18 @@ So, given a register with four values:
 4. d
 ```
 
-We would construct a Merkle tree where the leaf nodes are our four values:
+To construct the register itself you concatenate all buffers, in this case resulting in 'abcd'.
+
+The register index is constructed by creating a Merkle tree where the leaf nodes are the hash of our four values, and the rest of the nodes are the hash of the nodes two children hashes concatenated together.
 
 ```
-a -> hash(a)
-       hash(hash(a) + hash(b))
-b -> hash(b)
-          hash(hash(hash(a) + hash(b)) + hash(hash(c) + hash(d)))
-c -> hash(c)
-       hash(hash(c) + hash(d))
-d -> hash(d)
+hash(a)
+      > hash(hash(a) + hash(b))
+hash(b)
+              > hash(hash(hash(a) + hash(b)) + hash(hash(c) + hash(d)))
+hash(c)
+      > hash(hash(c) + hash(d))
+hash(d)
 ```
 
 To be able to refer to a specific node in the tree we use an in-order node traversal to assign integers to the nodes:
@@ -48,23 +54,35 @@ To be able to refer to a specific node in the tree we use an in-order node trave
 6
 ```
 
-In-order node numbering has the property with our trees that leaf nodes are always even and non-leaf nodes are always odd. 
+In-order node numbering has the property with our trees that leaf nodes are always even and non-leaf nodes are always odd. This can be used as a quick way to identify whether a node is a leaf or not.
 
-The three derived odd values (1, 3, 5) are 
+Every serialized node in the tree is one of two fixed widths, leaf nodes are all the same size and non-leaf nodes are the same size. When serializing the tree you simply write the nodes in order and concatenate them. Then to access a node by its in-order position you simply multiply the node length by the position to get the byte offset.
 
-In our use case, the hashes of the actual content are always even numbers, at the wide end of the tree. So the above tree had four original values that become the even numbers:
+All leaf nodes hold these two pieces of information:
 
-The leaf data is not fixed sized
-the hashes and offsets are fixed sized
+- The hash of the content
+- The absolute byte offset to the end of the region of data described by the node
+
+All non-leaf nodes hold these three pieces of information:
+
+- The hash of the concatenation of the two children hashes
+- The cryptographic signature of the hash
+- The byte length of the piece of data described by the node
+
+For the example register above, 'abcd', the register index (in pseudocode) would be:
+
+```
+WIP
+```
+
+This scheme allows for some interesting properties:
+
+WIP
 
 node sizes are stored to allow random access to byte ranges with minimal roundtrips
 if you dont care about large metadata its ok to skip this optimization
 
-
 # File format
-
-yo doggie
-foo
 
 ```
 <Header><Entries Index...><Entries...>

@@ -3,13 +3,9 @@
 ### Syncable Lightweight Event Emitting Persistence
 ### Version 2.0
 
-git, bittorrent, but nothing in the open data space that is the equivalent
+SLEEP is a metadata format that allows a set of files to be accessed randomly, cryptographically verified, and dynamically updated. A SLEEP file contains content addressed file metadata in a representation specifically designed to allow partial streaming access to individual chunks of data. SLEEP files can be shared as a single downloadable file for easy distribution and we also specify a way to expose SLEEP over REST.
 
-SLEEP is a metadata format that allows a set of files to be accessed randomly, cryptographically verified, and dynamically updated. It has two parts, a file format that contains content addressed file metadata in a representation specifically designed to allow partial streaming access to individual chunks of data, and a 53 character identifier scheme that can be used to address the entire data set.
-
-The file format can be shared as a single file for easy distribution and we also specify a way to expose SLEEP over REST.
-
-The SLEEP format can be used in a similar way to how MD5 checksums are used over HTTP today, to verify the integrity of data downloads. Whereas MD5 or SHA are usually checksums of the whole data set, meaning consumers have to download the entire all available data before they are able to verify the integrity of any of it, SLEEP allows a set of data to be split in to many small pieces, each one getting it's own cryptographically secure checksum. This allows consumers to download subsets metadata and data, in whatever order they prefer, but allowing them to verify the integrity of each piece of data as it is accessed.
+The SLEEP format can be used in a similar way to how MD5 checksums are used over HTTP today, to verify the integrity of data downloads. Whereas MD5 or SHA are usually checksums of the whole data set, meaning consumers have to download the entire all available data before they are able to verify the integrity of any of it, SLEEP allows a set of data to be split in to many small pieces, each one getting it's own cryptographically secure checksum. This allows consumers to download subsets metadata and data, in whatever order they prefer, but allowing them to verify the integrity of each piece of data as it is accessed. It also includes cryptographic signatures allowing users to verify that data they received was created using a holder of a specific private key.
 
 ## Registers
 
@@ -58,37 +54,82 @@ In-order node numbering has the property with our trees that leaf nodes are alwa
 
 Every serialized node in the tree is one of two fixed widths, leaf nodes are all the same size and non-leaf nodes are the same size. When serializing the tree you simply write the nodes in order and concatenate them. Then to access a node by its in-order position you simply multiply the node length by the position to get the byte offset.
 
-All leaf nodes hold these two pieces of information:
+All leaf nodes contain these two pieces of information:
 
-- The hash of the content
+- The sha256 hash of the data described by this node
 - The absolute byte offset to the end of the region of data described by the node
 
-All non-leaf nodes hold these three pieces of information:
+All non-leaf nodes contain these three pieces of information:
 
-- The hash of the concatenation of the two children hashes
+- The sha256 hash of the concatenation of the two children hashes
 - The cryptographic signature of the hash
-- The byte length of the piece of data described by the node
+- The span of bytes that the the nodes children cover
 
-For the example register above, 'abcd', the register index (in pseudocode) would be:
+When initializing a register an asymmetric Ed25519 keypair is derived. The private key is never shared. The public key is used as the URL for the register. When signing hashes in the tree the public key is used to generate an EdDSA signature. For the example register above, 'abcd', the register index (in pseudocode) would be:
 
+```js
+var keys = {
+  public: 'cc0cf6eeb82ca946ca60265ce0863fb2b3e3075ae25cba14d162ef20e3f9f223',
+  private: '87399f90815db81e687efe4fd9fc60af336f4d9ae560fda106f94cb7a92a8804cc0cf6eeb82ca946ca60265ce0863fb2b3e3075ae25cba14d162ef20e3f9f223'
+}
+
+var index = {
+  // sha256 of children[0].hash + children[1].hash
+  hash: '0440c655d63fec5c02cffd5d9b42d146aca03b255102b9b44b51c6a919b31351',
+  signature: '1713dfbaf4a7f288003394b72ec486aa4fa1a837aa0b08662b3a14b63381b84c2e6965e2638fb5375ae2e92b47c2ab8718ec1914778518fcb3c0563eb2c09604',
+  span: 4,
+  children: [
+    {
+      // echo -n "$(echo -n "a" | shasum -a 256)$(echo -n "b" | shasum -a 256)" | shasum -a 256
+      hash: '9ad4d5608a7a40db60c35f255fad821b762a82de168b4f4ed477d5d899b11796',
+      signature: '2714b99e305ce46aa6d24eb2888cf0cbde33ad4a8bcd08705b59882837bf1e482f8dcab2ae94c2359914b1fe92831bfc73af99f1c6b1f5eba47efc4efa32de0d',
+      span: 2,
+      children: [
+        {
+          // echo -n "a" | shasum -a 256
+          hash: 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb',
+          endByte: 1
+        },
+        {
+          // echo -n "b" | shasum -a 256
+          hash: '3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d',
+          endByte: 2
+        }
+      ]
+    },
+    {
+      // echo -n "$(echo -n "c" | shasum -a 256)$(echo -n "d" | shasum -a 256)" | shasum -a 256
+      hash: '09114d1a8a78b5d091e492c524ad7f8e941f403db0a6d3d52d36f17b9a86ce1c',
+      signature: '6ac5e25206f69f22612e9b58c14f9ae6738233a57ab7f6e10c1384c4e074f6c8c606edbd95a9c099a0120947866079e3d13ef66dd7d5ed1756a89a5e9032a20d',
+      span: 2,
+      children: [
+        {
+          // echo -n "c" | shasum -a 256
+          hash: '2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6',
+          endByte: 3
+        },
+        {
+          // echo -n "d" | shasum -a 256
+          hash: '18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4',
+          endByte: 4
+        }
+      ]
+    }
+  ]
+}
 ```
-WIP
-```
 
-This scheme allows for some interesting properties:
-
-WIP
-
-node sizes are stored to allow random access to byte ranges with minimal roundtrips
-if you dont care about large metadata its ok to skip this optimization
+The above representation of the tree is in hierarchical object notation. However due to the properties of the in-order node indexes we can represent the same data in a flat index while still allowing traversals.
 
 # File format
 
+SLEEP files should be named `sleep.dat` and have the following format:
+
 ```
-<Header><Entries Index...><Entries...>
+<Header><Register Index...><Register Data...>
 ```
 
-The format is a header followed by an index of many entries. Entry order is based on the indexing determined by the [Flat In-Order Tree](hyperdrive.md#flat-in-order-trees) algorithm we use in Dat. After the entry index, a concatenated list of entries follows.
+The format is a header followed by the register index. Order of the index is determined by an in-order node traversal. After the register index, the actual register entry data follows. The header length is variable width, prefixed with a varint. The Register Index is composed of fixed width metadata entries. The Register Data is composed of concatenated non-fixed width data pieces.
 
 ### Header format
 
@@ -101,7 +142,7 @@ The header protobuf has this schema:
 ``` protobuf
 message Header {
   required bytes datLink = 1;
-  required uint64 entries = 2;
+  required uint64 entryCount = 2;
   optional bool isSigned = 3;
   optional string hashType = 4 [default = "sha256"];
   optional uint32 hashLength = 5 [default = 32];
@@ -110,23 +151,35 @@ message Header {
 }
 ```
 
-### Entry index format
+### Register Index format
 
-For non-signed entries:
-
-```
-<8-byte-chunk-end><chunk-hash>
-```
-
-The 8-byte-chunk-end is an unsigned big endian 64 bit integer that should be the absolute position in the file for the **end of the chunk**.
-
-For signed entries in live feeds (only applies to even numbered nodes e.g. leaf nodes):
+For non-signed even (leaf) nodes:
 
 ```
-<8-byte-chunk-end><chunk-signature><chunk-hash>
+<8-byte-span-length><data-hash>
 ```
 
-For any odd nodes, in either a live or a non-live feed, the non-signed entry format will be used.
+The 8-byte-span-length is an unsigned big endian 64 bit integer that should be number of cumulative bytes encompassed by all of the leaf nodes underneath the current node.
+
+For signed even (leaf) nodes:
+
+```
+<8-byte-span-length><data-hash-signature><data-hash>
+```
+
+For odd (non-leaf) nodes:
+
+```
+<8-byte-end-offset><data-hash>
+```
+
+The 8-byte-end-offset is an unsigned big endian 64 bit integer that should be the absolute position in the file for the **end** of the piece data described by this node.
+
+### Register Data
+
+The last section of the file is the actual data pieces, unmodified and concatenated together in sequential order.
+
+For the example tree above, the Register Data section would simply be `abcd`.
 
 ## Example
 

@@ -1,0 +1,10 @@
+.minidocs-logo {
+  max-height: 100px;
+  width: inherit !important;
+  margin: 0 auto;
+  display: block;
+}
+
+.minidocs-content {
+  padding-bottom: 50px;
+}

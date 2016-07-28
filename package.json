@@ -4,9 +4,13 @@
   "description": "Documentation for Dat and the surrounding ecosystem.",
   "main": "index.js",
   "scripts": {
-    "update": "curl -Ssl https://raw.githubusercontent.com/clkao/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
-    "build": "minidocs . -c contents.json -p -i welcome -o dist -l dat-data.png -t 'The Dat Project' -s styles.css",
-    "deploy": "echo docs.dat-data.com > dist/CNAME && gh-pages -d dist",
+    "update": "npm run update:list && npm run update:docs",
+    "update:list": "curl -Ssl https://raw.githubusercontent.com/clkao/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
+    "update:build": "cat repos.txt | ecosystem-docs sync && cat repos.txt | ecosystem-docs read | node build.js",
+    "build:local": "minidocs docs -c docs/content.json -i welcome -o dist  -l ./node_modules/dat-design/downloads/dat-data-logo.png -t 'Dat Data' -s assets/styles.css --pushstate",
+    "build:deploy": "minidocs docs -c docs/contents.json -i welcome -o dist -l ./node_modules/dat-design/downloads/dat-data-logo.png -t 'Dat Data' -s assets/styles.css --full-html",
+    "deploy": "npm run build:deploy && echo docs.dat-data.com > dist/CNAME && gh-pages -d dist",
+    "start": "budo --dir dist --pushstate",
     "paper": "pandoc --variable author=\"Maxwell Ogden, Karissa McKelvey, Mathias Buus\" --variable title=\"Dat - Distributed Dataset Synchronization And Versioning\" --variable date=\"Version 1.0.0, May 2016\" --variable classoption=twocolumn --variable papersize=a4paper -s dat-paper.md -o dat-paper.pdf"
   },
   "repository": {
@@ -21,16 +25,18 @@
   },
   "homepage": "https://github.com/datproject/docs#readme",
   "dependencies": {
+    "dat-design": "^1.2.11",
     "gh-pages": "^0.11.0",
-    "minidocs": "^2.0.3"
+    "minidocs": "^4.0.0"
   },
   "devDependencies": {
-    "ecosystem-docs": "^1.1.1"
+    "budo": "^8.3.0",
+    "ecosystem-docs": "^1.1.1",
+    "ndjson": "^1.4.3"
   },
   "browserify": {
     "transform": [
-      "sheetify/transform",
-      "read-directory/transform"
+      "minidocs/transform"
     ]
   }
 }

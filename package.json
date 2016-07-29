@@ -7,7 +7,7 @@
     "update": "npm run update:list && npm run update:docs",
     "update:list": "curl -Ssl https://raw.githubusercontent.com/clkao/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
     "update:build": "cat repos.txt | ecosystem-docs sync && cat repos.txt | ecosystem-docs read | node build.js",
-    "build:local": "minidocs docs -c docs/content.json -i welcome -o dist  -l ./node_modules/dat-design/downloads/dat-data-logo.png -t 'Dat Data' -s assets/styles.css --pushstate",
+    "build:local": "minidocs docs -c docs/contents.json -i welcome -o dist  -l ./node_modules/dat-design/downloads/dat-data-logo.png -t 'Dat Data' -s assets/styles.css --pushstate",
     "build:deploy": "minidocs docs -c docs/contents.json -i welcome -o dist -l ./node_modules/dat-design/downloads/dat-data-logo.png -t 'Dat Data' -s assets/styles.css --full-html",
     "deploy": "npm run build:deploy && echo docs.dat-data.com > dist/CNAME && gh-pages -d dist",
     "start": "budo --dir dist --pushstate",
@@ -33,10 +33,5 @@
     "budo": "^8.3.0",
     "ecosystem-docs": "^1.1.1",
     "ndjson": "^1.4.3"
-  },
-  "browserify": {
-    "transform": [
-      "minidocs/transform"
-    ]
   }
 }

@@ -27,7 +27,7 @@
   "dependencies": {
     "dat-design": "^1.2.11",
     "gh-pages": "^0.11.0",
-    "minidocs": "^4.0.0"
+    "minidocs": "^4.0.5"
   },
   "devDependencies": {
     "budo": "^8.3.0",

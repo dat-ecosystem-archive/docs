@@ -8,16 +8,45 @@ Repository for the documentation of the Dat Project ecosystem. View the docs at 
 
 ## Writing & Editing Docs
 
+[See docs folder](docs/readme.md) for information on editing and adding docs. Once you finish editing the docs, follow the update & deploy docs instructions.
+
+## Installation & Usage
+
 This documentation uses [minidocs](https://www.npmjs.com/package/minidocs).
 
-The table of contents is in `content.json`.
-
-### Installation & Usage
+### Viewing Docs Locally
 
 1. Clone Repository
 2. `npm install`
-3. `npm run build` to build the docs.
-4. `npm run deploy` to deploy docs to GitHub pages.
+3. `npm run build:local` to build the docs for local viewing
+4. `npm runs start` to view the docs in browser
+
+### Updating & Deploying Docs
+
+1. Clone Repository
+2. `npm install`
+3. Make documentation edits
+4. `npm run deploy` to build docs & deploy to GitHub pages.`
+
+### Updating External Module Docs
+
+We use [ecosystem-docs](https://github.com/hughsk/ecosystem-docs) to get documentation from other modules.
+
+1. `npm run update` will update the list of repositories and download the latest docs.
+2. Deploy!
+
+## NPM Commands
+
+All the npm commands
+
+* `npm run deploy`: build and deploy to github
+* `npm run build:deploy`: build full html pages for deployment
+* `npm run build:local`: build app for local viewing
+* `npm start`: start budo server to view locally
+* `npm update`: run both update commands
+* `npm run update:list` updates the repository list only
+* `npm run update:build` downloads the latest readme to the docs folder.
+* `npm run paper`: create the paper with pandoc
 
 ## License
 

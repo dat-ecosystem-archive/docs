@@ -36,7 +36,7 @@ Here's the long version:
 
 Hyperdrive shares and synchronizes a set of files, similar to rsync or Dropbox. For each file in the drive we use a technique called Rabin fingerprinting to break the file up into pieces. Rabin fingerprints are a specific strategy for what is called Content Defined Chunking. Here's an example:
 
-![cdc diagram](https://raw.githubusercontent.com/datproject/docs/master/meta/cdc.png)
+![cdc diagram](https://raw.githubusercontent.com/datproject/docs/master/assets/cdc.png)
 
 We have configured our Rabin chunker to produce chunks that are around 16KB on average. So if you share a folder containing a single 1MB JPG you will get around 64 chunks.
 
@@ -68,4 +68,4 @@ Because Dat is built on a foundation of strong cryptographic data integrity and 
 
 ## Implementations
 
-This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), go to the [Dependencies](ecosystem.md) page
+This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), go to the [Dependencies](ecosystem) page

@@ -1,0 +1,26 @@
+{
+  "Introduction": {
+    "Welcome to Dat": "welcome.md",
+    "How Dat Works": "how-dat-works.md"
+  },
+  "Specification": {
+    "hyperdrive spec": "hyperdrive_spec.md",
+    "sleep": "sleep.md"
+  },
+  "References": {
+    "API": "api.md",
+    "DIY Dat": "diy-dat.md"
+  },
+  "Modules": {
+    "Overview": "ecosystem.md",
+    "Interface": {
+      "Dat Command Line": "dat.md",
+      "dat.land": "dat.land.md",
+      "Dat Desktop": "dat-desktop.md"
+    },
+    "Core": {
+      "Hyperdrive": "hyperdrive.md",
+      "Hypercore": "hypercore.md"
+    }
+  }
+}

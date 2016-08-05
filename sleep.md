@@ -65,7 +65,7 @@ All non-leaf nodes contain these three pieces of information:
 - The cryptographic signature of the hash
 - The span of bytes that the the nodes children cover
 
-When initializing a register an asymmetric Ed25519 keypair is derived. The private key is never shared. The public key is used as the URL for the register. When signing hashes in the tree the public key is used to generate an EdDSA signature. For the example register above, 'abcd', the register index (in pseudocode) would be:
+When initializing a register an asymmetric Ed25519 keypair is derived. The private key is never shared. The public key is used as the URL for the register. When signing hashes in the tree the public key is used to generate an EdDSA signature. For the example register above, 'abcd', the register index (in JSON) would be:
 
 ```js
 var keys = {
@@ -119,7 +119,7 @@ var index = {
 }
 ```
 
-The above representation of the tree is in hierarchical object notation. However due to the properties of the in-order node indexes we can represent the same data in a flat index while still allowing traversals.
+The above representation of the tree is in JSON. However due to the properties of the in-order node indexes we can represent the same data in a flat index while still allowing traversals.
 
 # File format
 
@@ -195,7 +195,7 @@ Given a tree like this you might want to look up in a `meta.dat` file the metada
 6─┘
 ```
 
-If you wanted to look up the metadata for 3, you could read the third (or any!) entry from meta.dat:
+If you wanted to look up the metadata for 3, you could read the third (or any!) entry from sleep.dat:
 
 First you have to read the varint at the beginning of the file so you know how big the header is:
 

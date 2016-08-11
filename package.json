@@ -32,10 +32,11 @@
     "minidocs": "^4.0.5"
   },
   "devDependencies": {
-    "node-sass": "^3.8.0",
-    "node-sass-magic-importer": "^0.1.4",
     "budo": "^8.3.0",
     "ecosystem-docs": "^1.1.1",
-    "ndjson": "^1.4.3"
+    "ndjson": "^1.4.3",
+    "node-sass": "^3.8.0",
+    "node-sass-magic-importer": "^0.1.4",
+    "nodemon": "^1.10.0"
   }
 }

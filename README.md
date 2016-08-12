@@ -40,9 +40,11 @@ We use [ecosystem-docs](https://github.com/hughsk/ecosystem-docs) to get documen
 All the npm commands
 
 * `npm run deploy`: build and deploy to github
-* `npm run build:deploy`: build full html pages for deployment
-* `npm run build:local`: build app for local viewing
+* `npm run build:deploy`: build full html pages & css for deployment
+* `npm run build:local`: build app & css for local viewing
 * `npm start`: start budo server to view locally
+* `npm run build:css`: build css, runs with both build commands
+* `npm run watch:css`: watch css live and build:local with changes
 * `npm update`: run both update commands
 * `npm run update:list` updates the repository list only
 * `npm run update:build` downloads the latest readme to the docs folder.

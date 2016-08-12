@@ -1,4 +1,5 @@
 dist
+*.css
 .DS_Store
 repos.txt
 node_modules

@@ -1,0 +1,74 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);
+
+// ugly selector needed to overwrite default styles
+body #choo-root.minidocs {
+  @import '~dat-design/scss/variables/colors.scss';
+  @import '~dat-design/scss/variables/transitions.scss';
+  @import '~dat-design/scss/base/links.scss';
+
+  font-family: 'Source Sans Pro', 'Helvetica Neue', 'Lucida Grande', Arial, sans-serif;
+  line-height: 1.5;
+  color: $color-neutral;
+
+  // transitions on interactive elements
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    transition-property: background-color, color;
+    transition-duration: $transition-duration;
+    transition-timing-function: $transition-timing-function;
+  }
+
+  .minidocs-header {
+    margin: 0;
+  }
+
+  .minidocs-logo {
+    max-height: 100px;
+    width: inherit;
+    display: block;
+  }
+
+  .minidocs-content {
+    padding-bottom: 50px;
+    max-width: 48em; // sets a max-width to avoid endless lines on wide screens
+  }
+
+  .minidocs-sidebar {
+    background-color: $color-neutral--10;
+  }
+
+  .minidocs-menu {
+    // overwrite the "#" default style
+    .h1::before {
+      display: none;
+    }
+    .h1, .h2, .h3 {
+      font-weight: 400;
+    }
+    .h1, .h2 {
+      margin-bottom: 8px;
+    }
+    .h2 {
+      font-size: 1.4em;
+    }
+    .content-link {
+      transition-property: background-color, color, border-color, padding-left;
+      color: $color-neutral--80;
+      padding-left: 0;
+      &:hover, &:focus {
+        color: $color-neutral;
+        border-left-color: transparent;
+        padding-left: .65rem;
+        background-color: rgba(0,0,0,.05);
+      }
+      &.active {
+        padding-left: .65rem;
+        border-left-color: $color-green--hover;
+        background-color: #FFF;
+      }
+    }
+  }
+}

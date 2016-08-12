@@ -27,7 +27,7 @@ body #choo-root.minidocs {
 
   .minidocs-logo {
     max-height: 100px;
-    width: inherit !important;
+    width: inherit;
     display: block;
   }
 
@@ -67,6 +67,7 @@ body #choo-root.minidocs {
       &.active {
         padding-left: .65rem;
         border-left-color: $color-green--hover;
+        background-color: #FFF;
       }
     }
   }

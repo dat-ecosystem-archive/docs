@@ -19,7 +19,7 @@ This documentation uses [minidocs](https://www.npmjs.com/package/minidocs).
 1. Clone Repository
 2. `npm install`
 3. `npm run build:local` to build the docs for local viewing
-4. `npm runs start` to view the docs in browser
+4. `npm run start` to view the docs in browser
 
 ### Updating & Deploying Docs
 

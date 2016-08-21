@@ -1,4 +1,6 @@
-If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), here you go:
+# Ecosystem
+
+We have built and contributed to a variety of modules that support our work on dat as well as the larger data and code ecosystem. Feel free to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat):
 
 - [dat](https://www.npmjs.com/package/dat) - the main command line tool that uses all of the below
 - [discovery-channel](https://www.npmjs.com/package/discovery-channel) - discover data sources

@@ -2,17 +2,16 @@
   "Dat": {
     "Introduction": "dat.md",
     "How Dat Works": "how-dat-works.md",
-    "FAQ": "faq.md",
-    "DIY Dat": "diy-dat.md",
-    "Cookbook": "cookbook.md"
+    "FAQ": "faq.md"
+  },
+  "Examples": {
+    "Browser Dat": "cookbook/browser.md",
+    "DIY Dat": "cookbook/diy-dat.md",
   },
   "Ecosystem": {
     "Overview": "ecosystem.md",
     "SLEEP": "sleep.md",
-    "Hyperdrive": {
-      "Specification": "hyperdrive_spec.md",
-      "API": "hyperdrive.md",
-      "Core": "hypercore.md"
-    }
+    "Hyperdrive": "hyperdrive.md",
+    "Hypercore": "hypercore.md"
   }
 }

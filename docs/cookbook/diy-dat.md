@@ -24,12 +24,13 @@ var archive = drive.createArchive(link, {
     return raf(path.join(self.dir, name))
   }
 })
+
+// connects to the node swarm
 var swarm = Swarm(archive)
 
 archive.open(function (err) {
   if (err) return console.error(err)
   each(archive.list({live: archive.live}), function (data, next) {
-    var startBytes = self.stats.bytesDown
     archive.download(data, function (err) {
       if (err) return console.error(err)
       console.log('file downloaded', data.relname)

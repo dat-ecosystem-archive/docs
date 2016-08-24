@@ -4,7 +4,7 @@
   "description": "Documentation for Dat and the surrounding ecosystem.",
   "main": "index.js",
   "scripts": {
-    "update": "npm run update:list && npm run update:docs",
+    "update": "npm run update:list && npm run update:build",
     "update:list": "curl -Ssl https://raw.githubusercontent.com/clkao/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
     "update:build": "cat repos.txt | ecosystem-docs sync && cat repos.txt | ecosystem-docs read | node build.js",
     "build:local": "npm run build:css && minidocs docs -c docs/contents.json -i dat -o dist  -l ./node_modules/dat-design/downloads/dat-data-logo.png -t 'Dat Data' -s assets/styles.css --pushstate",

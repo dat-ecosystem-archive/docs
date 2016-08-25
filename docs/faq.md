@@ -1,18 +1,18 @@
 # FAQ
 
-## Is dat different from hyperdrive?
+## Is Dat different from hyperdrive?
 
-[hyperdrive](http://github.com/mafintosh/hyperdrive) is a file sharing network originally built for dat.
+[Hyperdrive](http://github.com/mafintosh/hyperdrive) is a file sharing network originally built for dat.
 
-Dat uses hyperdrive and a variety of other modules. Hyperdrive and Dat are compatible with each other but Hyperdrive is able to make more lower-level decisions. Dat presents a user-friendly interface and ecosystem for scientists, researchers, and data analysts.
+Dat uses hyperdrive and a variety of other modules. Hyperdrive and Dat are compatible with each other but hyperdrive is able to make more lower-level decisions. Dat presents a user-friendly interface and ecosystem for scientists, researchers, and data analysts.
 
-## How is dat different than IPFS?
+## How is Dat different than IPFS?
 
 ## Is there JavaScript implementation?
 
 Yes, find it on GitHub: [dat-js](http://github.com/joehand/dat-js).
 
-## Is there any non-persistent JS dat implementation?
+## Is there any non-persistent JS Dat implementation?
 
 Not yet. Want to work on it? Start here to learn more: [dat-js](http://github.com/joehand/dat-js).
 

@@ -111,9 +111,9 @@ Again lets expand our data set to contain 6 items `(a, b, c, d, e, f)`:
 10 = h(f)
 ```
 
-To ensure always have only a single root we'll simply hash all the roots together again. At most there will be `log2(number of data blocks)`.
+To ensure we always have a single root only we'll simply hash all the roots together again. At most there will be `log2(number of data blocks)`.
 
-In addition to hashing the roots we'll also include a bin endian uint64 binary representation of the corresponding node index.
+In addition to hashing the roots we'll also include a big endian uint64 binary representation of the corresponding node index.
 
 Using the two above examples the final hashes would be:
 
@@ -136,7 +136,7 @@ Using these hashes we can reproduce `hash1` in the following way:
 
 If `h(uint64be(#3) + 3) == hash1` then we know that data we received from the other person is correct. They sent us `a` and the corresponding hashes.
 
-Since we only need uncle hashes to verify the block the amount of hashes we need is at worst `log2(number-of-blocks)` and the roots of the merkle trees which has the same complexity.
+Since we only need uncle hashes to verify the block. The number of hashes we need is at worst `log2(number-of-blocks)` and the roots of the merkle trees which has the same complexity.
 
 A merkle tree generator is available on npm through the [merkle-tree-stream](https://github.com/mafintosh/merkle-tree-stream) module.
 
@@ -175,7 +175,7 @@ We'll notice that the hash stored at 3 will be the same for both trees since the
 5 -> (c, d)
 ```
 
-This means that two datasets share a similar sequence of data the merkle tree helps you detect that.
+This means that if two datasets share a similar sequence of data the merkle tree helps you detect that.
 
 ## Signed Merkle Trees
 
@@ -185,7 +185,7 @@ An advantage is that you can always reproduce a merkle tree simply by having the
 
 A disadvantage is every time you add content to your data set your merkle tree hash changes and you'll need to re-distribute the new hash.
 
-Using a bit of cryptography however we can make our merkle tree appendable. First generate a cryptographic key pair that can be used to sign data using [ed25519](https://ed25519.cr.yp.to/) keys, as they are compact in size (32 byte public keys). A key pair (public key, secret key) can be used to sign data. Signing data means that if you trust a public key and you receive data and a signature for that data you can verify that a signature was generated with the corresponding secret key.
+However Using a bit of cryptography we can make our merkle tree appendable. First generate a cryptographic key pair that can be used to sign data using [ed25519](https://ed25519.cr.yp.to/) keys, as they are compact in size (32 byte public keys). A key pair (public key, secret key) can be used to sign data. Signing data means that if you trust a public key and you receive data and a signature for that data you can verify that a signature was generated with the corresponding secret key.
 
 How does this relate to merkle trees? Instead of distributing the hash of a merkle tree we can distribute our public key instead. We then use our secret key to continously sign the merkle trees of our data set every time we append to it.
 
@@ -209,7 +209,7 @@ Notice that all new signatures verify the entire dataset since they all sign a m
 
 This technique has the added benefit that you can always convert a signed merkle tree to a normal unsigned one if you wish (or turn an unsigned tree into a signed tree).
 
-In general you should send as wide as possible signed tree back when using signed merkle trees as that lowers the amount of signatures the other person needs to verify which has a positive performance impact for some platforms. It will also allow other users to more quickly detect if a tree has duplicated content.
+In general you should send an as wide as possible signed tree back when using signed merkle trees as that lowers the amount of signatures the other person needs to verify which has a positive performance impact for some platforms. It will also allow other users to more quickly detect if a tree has duplicated content.
 
 ## Block Tree Digest
 
@@ -239,7 +239,7 @@ To communicate which hashes we have just have to communicate two things: which u
 
 Looking at the above tree that means if we want to fetch block `0` we need to communicate whether of not we already have the uncles `(2, 5)` and the parent `3`. This information can be compressed into very small bit vector using the following scheme.
 
-Let the trailing bit donate whether or not the leading bit is a parent and not a uncle. Let the previous trailing bits denote wheather or not we have the next uncle.
+Let the trailing bit denote whether or not the leading bit is a parent and not a uncle. Let the previous trailing bits denote wheather or not we have the next uncle.
 
 For example for block `0` the following bit vector `1011` is decoded the following way
 

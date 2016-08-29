@@ -50,9 +50,9 @@ After feeding the file contents through the chunker, we take the chunks and calc
 0   2   4   6
 ```
 
-Want to go lower level? Check out [How Hypercore Works](hyperdrive.md#how-hypercore-works)
+Want to go lower level? Check out [How Hypercore Works](https://github.com/datproject/docs/blob/master/docs/hyperdrive_spec.md#how-hypercore-works)
 
-When two peers connect to each other and begin speaking the Hyperdrive protocol they can efficiently determine if they have chunks the other one wants, and begin exchanging those chunks directly. Hyperdrive gives us the flexibility to have random access to any portion of a file while still verifying the other side isnt sending us bad data. We can also download different sections of files in parallel across all of the sources simultaneously, which increases overall download speed dramatically.
+When two peers connect to each other and begin speaking the hyperdrive protocol they can efficiently determine if they have chunks the other one wants, and begin exchanging those chunks directly. Hyperdrive gives us the flexibility to have random access to any portion of a file while still verifying the other side isn't sending us bad data. We can also download different sections of files in parallel across all of the sources simultaneously, which increases overall download speed dramatically.
 
 ## Phase 4: Data archiving
 
@@ -68,4 +68,4 @@ Because Dat is built on a foundation of strong cryptographic data integrity and 
 
 ## Implementations
 
-This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), go to the [Dependencies](ecosystem) page
+This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), go to the [Dependencies](/ecosystem) page

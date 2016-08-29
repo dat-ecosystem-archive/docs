@@ -12,7 +12,7 @@ The [Dat CLI](https://npmjs.org/dat) module itself combines these modules and wr
 
 ## Getting Started
 
-You will need node and npm installed to build with Dat. [Read more](https://github.com/maxogden/dat/blob/master/CONTRIBUTING.md#development-workflow) about our development work flow to learn how we manage our module dependencies during development.
+You will need node and npm installed to build with Dat. [Read more](https://github.com/datproject/dat/blob/master/CONTRIBUTING.md#development-workflow) about our development work flow to learn how we manage our module dependencies during development.
 
 ## Module #1: Download a File
 

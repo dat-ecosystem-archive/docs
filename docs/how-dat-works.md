@@ -2,7 +2,7 @@
 
 Note this is about Dat 1.0 and later. For historical info about earlier incarnations of Dat (Alpha, Beta) check out [this post](http://dat-data.com/blog/2016-01-19-brief-history-of-dat).
 
-When someone starts downloading data with the [Dat command-line tool](https://github.com/maxogden/dat), here's what happens:
+When someone starts downloading data with the [Dat command-line tool](https://github.com/datproject/dat), here's what happens:
 
 ## Phase 1: Source discovery
 
@@ -68,4 +68,4 @@ Because Dat is built on a foundation of strong cryptographic data integrity and 
 
 ## Implementations
 
-This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/maxogden/dat), go to the [Dependencies](/ecosystem) page
+This covered a lot of ground. If you want to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/datproject/dat), go to the [Dependencies](/ecosystem) page

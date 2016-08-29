@@ -1,6 +1,6 @@
 {
   "Dat": {
-    "Introduction": "dat.md",
+    "Introduction": "modules/dat.md",
     "How Dat Works": "how-dat-works.md",
     "FAQ": "faq.md"
   },
@@ -11,7 +11,7 @@
   "Ecosystem": {
     "Overview": "ecosystem.md",
     "SLEEP": "sleep.md",
-    "Hyperdrive": "hyperdrive.md",
-    "Hypercore": "hypercore.md"
+    "Hyperdrive": "modules/hyperdrive.md",
+    "Hypercore": "modules/hypercore.md"
   }
 }

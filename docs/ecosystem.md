@@ -8,7 +8,7 @@ Dat embraces the Unix philosophy: a modular design with composable parts. All of
 
 * [dat](dat) - the command line interface for sharing and downloading files
 * [dat.land](dat.land) - repository for the [dat.land](https://dat.land) website, a public data registry and sharing
-* [dat desktop](dat-desktop) - dat desktop application for sharing and downloading files
+* [dat desktop](https://github.com/juliangruber/dat-desktop) - dat desktop application for sharing and downloading files
 
 ## File and Block Component Modules:
 

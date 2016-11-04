@@ -10,7 +10,7 @@
     "build:local": "npm run build:css && minidocs docs -c docs/contents.json -i dat -o dist  -l ./node_modules/dat-design/public/img/dat-data-logo.svg -t 'Dat Data' -s assets/styles.css --pushstate",
     "build:deploy": "npm run build:css && minidocs docs -c docs/contents.json -i dat -o dist -l ./node_modules/dat-design/public/img/dat-data-logo.svg -t 'Dat Data' -s assets/styles.css --full-html",
     "build:css": "node-sass --importer node_modules/node-sass-magic-importer assets/styles.scss assets/styles.css",
-    "deploy": "npm run build:deploy && echo docs.dat-data.com > dist/CNAME && gh-pages -d dist",
+    "deploy": "npm run build:deploy && echo docs.datproject.org > dist/CNAME && gh-pages -d dist",
     "watch:css": "nodemon -e scss -x \"npm run build:local\"",
     "start": "budo --dir dist --pushstate",
     "paper": "pandoc --variable author=\"Maxwell Ogden, Karissa McKelvey, Mathias Buus\" --variable title=\"Dat - Distributed Dataset Synchronization And Versioning\" --variable date=\"Version 1.0.0, May 2016\" --variable classoption=twocolumn --variable papersize=a4paper -s dat-paper.md -o dat-paper.pdf"

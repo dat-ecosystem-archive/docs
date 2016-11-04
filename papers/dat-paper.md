@@ -1,6 +1,6 @@
 # Abstract
 
-Dat is a swarm based version control system designed for sharing large datasets over networks such that their contents can be accessed randomly, be updated incrementally, and have the integrity of their contents be trusted. Every Dat user is simultaneously a server and a client exchanging pieces of data with other peers in a swarm on demand. As data is added to a Dat repository updated files are split into pieces using Rabin fingerprinting and deduplicated against known pieces to avoid retransmission of data. File contents are automatically verified using secure hashes meaning you do not need to trust other nodes.
+Dat is a swarm based version control system designed for sharing datasets over networks such that their contents can be accessed randomly, be updated incrementally, and have the integrity of their contents be trusted. Every Dat user is simultaneously a server and a client exchanging pieces of data with other clients in a swarm on demand. As data is added to a Dat repository updated files are split into pieces using Rabin fingerprinting and deduplicated against known pieces to avoid retransmission of data. File contents are automatically verified using secure hashes meaning you do not need to trust other nodes.
 
 # 1. Introduction
 
@@ -152,15 +152,15 @@ A common issue in data analysis is when data changes but the link to the data re
 
 ### Hypercore and Hyperdrive
 
-Data storage and content integrity in Dat is implemented in a module called Hypercore. Given a stream of binary data, Hypercore splits the stream into chunks using Rabin fingerprints, hashes each chunk, and arranges the hashes in a specific type of Merkle tree that allows for certain replication properties. In addition to providing a content addressing system, Hypercore also provides a network protocol for exchanging chunks with peers.
+Data storage and content integrity in Dat is implemented in a module called [Hypercore](https://npmjs.org/hypercore). Given a stream of binary data, Hypercore splits the stream into chunks using Rabin fingerprints, hashes each chunk, and arranges the hashes in a specific type of Merkle tree that allows for certain replication properties. In addition to providing a content addressing system, Hypercore also provides a network protocol for exchanging chunks with peers. The defining feature of Hypercore is its ability to fully or partially synchronize streams in a distributed setting even if the stream is being appended to.
 
 Hypercore is agnostic to the format of the input data, it operates on any stream of binary data. For the Dat use case of synchronizing datasets we wrote and use a file system module on top of Hypercore called Hyperdrive. We have a layered abstraction so that if someone wishes they can use Hypercore directly to have full control over how they model their data. Hyperdrive works well when your data can be represented as files on a filesystem, which is our main use case with Dat.
 
 ### Registers
 
-Central to the design of Hypercore is the notion of a register. This is a binary append-only feed (Kappa architecture) whose contents are cryptographically hashed and signed and therefore can be trusted. Hypercore lets you create many registers, and replicates them when synchronizing with another peer.
+Central to the design of Hypercore is the notion of a register. This is a binary append-only stream (Kappa architecture) whose contents are cryptographically hashed and signed and therefore can be trusted. Hypercore lets you create many registers, and replicates them when synchronizing with another peer.
 
-Registers are just a way of encoding a Merkle tree that we use to efficiently replicate data over a network. When generating the Merkle tree, hashes are positioned by a scheme called binary interval numbering or just simply bin numbering. This is just a specific, deterministic way of laying out the nodes in a tree. For example a tree with 7 nodes will always be arranged like this:
+Registers are a way of encoding a Merkle tree that we use to efficiently replicate data over a network. When generating the Merkle tree, hashes are positioned by a scheme called binary interval numbering or just simply bin numbering. This is just a specific, deterministic way of laying out the nodes in a tree. For example a tree with 7 nodes will always be arranged like this:
 
 ```
 0
@@ -212,7 +212,9 @@ Registers can also be signed with a private key, allowing anyone with the corres
 
 ## 3.3 Parallel Replication
 
-Hypercore provides a replication protocol so two peers can communicate over a stateless messaging channel to discover and exchange data. Messages are encoded using Protocol Buffers. The protocol has nine message types:
+Hypercore provides a replication protocol so two peers can communicate over a stateless messaging channel to discover and exchange data. Once you have received the register metadata, you can make individual requests for chunks from any peer you are connected to. This allows clients to parallelize data requests across the entire pool of peers they have established connections with.
+
+Messages are encoded using Protocol Buffers. The protocol has nine message types:
 
 #### Open
 
@@ -267,9 +269,7 @@ You should only send the want message if you are interested in a section of the 
 
 ### `3` Request
 
-Send this message to request a block of data. You can request a block by block index or byte offset. If you are only interested
-in the hash of a block you can set the hash property to true. The nodes property can be set to a tree digest of the tree nodes you already
-have for this block or byte range. A request message has type `3`.
+Send this message to request a block of data. You can request a block by block index or byte offset. If you are only interested in the hash of a block you can set the hash property to true. The nodes property can be set to a tree digest of the tree nodes you already have for this block or byte range. A request message has type `3`.
 
 ``` protobuf
 message Request {

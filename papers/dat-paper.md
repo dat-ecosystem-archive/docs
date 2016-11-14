@@ -78,7 +78,7 @@ Dat is a file sharing protocol that does not assume a dataset is static or that 
 - 2. **Content Integrity** - Data and publisher integrity is verified through use of signed hashes of the content.
 - 3. **Parallel Replication** - Subsets of the data can be accessed from multiple peers simultaneously, improving transfer speeds.
 - 4. **Streaming Updates** - Datasets can be updated and distributed in real time to other peers.
-- 5. **End To End Encryption** - Dat employs a capability system whereby anyone with a Dat link can connect to the swarm, but the link itself is a secure hash that is difficult to guess.
+- 5. **Network Privacy** - Dat employs a capability system whereby anyone with a Dat link can connect to the swarm, but the link itself is very difficult to guess.
 
 ## 3.1 Mirroring
 
@@ -103,16 +103,6 @@ In the Dat implementation we implement the above actions on top of three types o
 Additional discovery networks can be implemented as needed. We chose the above three as a starting point to have a complementary mix of strategies to increase the probability of source discovery.
 
 Our implementation of peer discovery is called discovery-channel. We also run a [custom DNS server](https://www.npmjs.com/package/dns-discovery) that Dat clients use (in addition to specifying their own if they need to), as well as a [DHT bootstrap](https://github.com/bittorrent/bootstrap-dht) server. These discovery servers are the only centralized infrastructure we need for Dat to work over the Internet, but they are redundant, interchangeable, never see the actual data being shared, anyone can run their own and Dat will still work even if they all are unavailable. If this happens discovery will just be manual (e.g. manually sharing IP/ports). Every data source that has a copy of the data also advertises themselves across these discovery networks.
-
-#### 3.1.1.1 User Privacy
-
-On the Web today, with SSL, there is a guarantee that the traffic between your computer and the server is private. As long as you trust the server to not leak your logs, attackers who intercept your network traffic will not be able to read the HTTP traffic exchanged between you and the server. This is a fairly straightforward model as clients only have to trust a single server for some domain.
-
-There is an inherent tradeoff in peer to peer systems of source discovery vs. user privacy. The more people you ask for some data, the more people you trust to keep what your asked for private. Our goal is to have Dat be configurable in respect to this tradeoff to allow application developers to meet their own privacy guidelines.
-
-It is up to client programs to make design decisions around which discovery networks they trust. For example if a Dat client decides to use the BitTorrent DHT to discover peers, and they are searching for a public Dat key with known contents, then because of the privacy design of the BitTorrent DHT anyone who can view that clients network traffic can find out what content they are searching for.
-
-A client could choose to only use discovery networks with certain privacy guarantees. For example a client could only connect to an approved list of sources that they trust, similar to SSL. As long as they trust each source, the encryption built into the Dat network protocol will prevent the Dat key they are looking for from being leaked.
 
 ### 3.1.2 Peer Connections
 
@@ -150,17 +140,19 @@ Content integrity means being able to verify the data you received is the exact 
 
 A common issue in data analysis is when data changes but the link to the data remains the same. For example, one day a file called data.zip might change, but a typical HTTP link to the file does not include a hash of the content, or provide a way to get updated metadata, so clients that only have the HTTP link have no way to check if the file changed without downloading the entire file again. Referring to a file by the hash of its content is called content addressability, and lets users not only verify that the data they receive is the version of the data they want, but also lets people cite specific versions of the data by referring to a specific hash.
 
-### Hypercore and Hyperdrive
+Dat uses SHA256 hashes to address content. Hashes are arranged in a Merkle tree, a tree where each non-leaf node is the hash of all child nodes. Leaf nodes contain actual data. This means that in order to verify the integrity of some subset of content only the top most common ancestors of the leaf nodes that contain that content must be fetched. For example to verify all content in a Merkle tree the top level node of the tree can be used. Due to the behavior of secure cryptographic hashes the top hash can only be produced if all data below it matches exactly. If two trees have matching top hashes then you know that all other nodes in the tree must match as well, and you can conclude that your dataset is synchronized.
+
+### 3.2.1 Hypercore and Hyperdrive
 
 Data storage and content integrity in Dat is implemented in a module called [Hypercore](https://npmjs.org/hypercore). Given a stream of binary data, Hypercore splits the stream into chunks using Rabin fingerprints, hashes each chunk, and arranges the hashes in a specific type of Merkle tree that allows for certain replication properties. In addition to providing a content addressing system, Hypercore also provides a network protocol for exchanging chunks with peers. The defining feature of Hypercore is its ability to fully or partially synchronize streams in a distributed setting even if the stream is being appended to.
 
-Hypercore is agnostic to the format of the input data, it operates on any stream of binary data. For the Dat use case of synchronizing datasets we wrote and use a file system module on top of Hypercore called Hyperdrive. We have a layered abstraction so that if someone wishes they can use Hypercore directly to have full control over how they model their data. Hyperdrive works well when your data can be represented as files on a filesystem, which is our main use case with Dat.
+Hypercore is agnostic to the format of the input data, it operates on any stream of binary data. For the Dat use case of synchronizing datasets we use a file system module on top of Hypercore called Hyperdrive. We have a layered abstraction so that if someone wishes they can use Hypercore directly to have full control over how they model their data. Hyperdrive works well when your data can be represented as files on a filesystem, which is our main use case with Dat.
 
-### Registers
+### 3.2.2 Registers
 
-Central to the design of Hypercore is the notion of a register. This is a binary append-only stream (Kappa architecture) whose contents are cryptographically hashed and signed and therefore can be trusted. Hypercore lets you create many registers, and replicates them when synchronizing with another peer.
+Central to the design of Hypercore is the notion of a register. This is a binary append-only stream whose contents are cryptographically hashed and signed and therefore can be trusted. Hypercore lets you create many registers, and replicates them when synchronizing with another peer.
 
-Registers are a way of encoding a Merkle tree that we use to efficiently replicate data over a network. When generating the Merkle tree, hashes are positioned by a scheme called binary interval numbering or just simply bin numbering. This is just a specific, deterministic way of laying out the nodes in a tree. For example a tree with 7 nodes will always be arranged like this:
+Registers are a way of encoding a Merkle tree that we use to efficiently replicate data over a network. When generating the Merkle tree, hashes are positioned by a scheme called binary interval numbering or just simply "bin" numbering. This is just a specific, deterministic way of laying out the nodes in a tree. For example a tree with 7 nodes will always be arranged like this:
 
 ```
 0
@@ -181,34 +173,22 @@ value2 -> 4
 value3 -> 6
 ```
 
-All odd hashes are derived by hashing the two child nodes, e.g. given hash0 is `hash(value0)` and hash2 is `hash(value1)`, hash1 is `hash(hash0 + hash2)`.
-
 A register contains two pieces of information:
 
-1. List of binary values: [value0, value1, value2, ...]
-2. List of hashes for the Merkle tree [hash0, hash1, hash2, ...] 
+Evens: List of binary values with their hash and size: [value0, value1, value2, ...]
+Odds: List of Merkle hashes with the size of all their children: [hash0, hash1, hash2, ...] 
 
-The register itself interleaves these two lists such that the indexes (position) in the register are the same as the bin numbers from the Merkle tree. For example here is a register with three entries in pseudocode:
+The register itself interleaves these two lists such that the indexes (position) in the register are the same as the bin numbers from the Merkle tree.
+
+All odd hashes are derived by hashing the two child nodes, e.g. given hash0 is `hash(value0)` and hash2 is `hash(value1)`, hash1 is `hash(hash0 + hash2)`.
+
+For example a register with two data entries would look something like this (pseudocode):
 
 ```
-var feed = [{
-  hash: sha256(value + size),
-  size: value.length
-  value: <some buffer>
-}, {
-  hash: sha256(feed[0].hash + feed[2].hash + size),
-  size: feed[0].size + feed[1].size
-}, {
-  hash: sha256(value + size),
-  size: value.length
-  value: <some buffer>
-}, {
-  hash: sha256(feed[1].hash + feed[5].hash + size),
-  size: feed[1].size + feed[5].size
-}]
+0. hash(value0)
+1. hash(hash(value0) + hash(value1))
+2. hash(value1)
 ```
-
-Registers can also be signed with a private key, allowing anyone with the corresponding public key to verify that new entries to the register were created by a holder of the private key. More on this in section 3.4.
 
 ## 3.3 Parallel Replication
 
@@ -229,7 +209,7 @@ message Open {
 
 The `feed` should be set to the discovery key as specified above. The `nonce` should be set to 24 bytes of high entropy random data. When running in encrypted mode this is the only message sent unencrypted.
 
-### `0` Handshake
+##### `0` Handshake
 
 This message is sent after sending an open message so it will be encrypted and we won't expose our peer id to a third party.
 
@@ -240,7 +220,7 @@ message Handshake {
 }
 ```
 
-### `1` Have
+##### `1` Have
 
 Have messages give the other peer information about which blocks of data you have.
 
@@ -254,7 +234,7 @@ message Have {
 
 You can use `start` and `end` to represent a range of data block bin numbers. If using a bitfield it should be encoded using a run length encoding described above. It is a good idea to send a have message soon as possible if you have blocks to share to reduce latency.
 
-### `2` Want
+##### `2` Want
 
 You can send a have message to give the other peer information about which blocks of data you want to have. It has type `2`.
 
@@ -267,7 +247,7 @@ message Want {
 
 You should only send the want message if you are interested in a section of the feed that the other peer has not told you about.
 
-### `3` Request
+##### `3` Request
 
 Send this message to request a block of data. You can request a block by block index or byte offset. If you are only interested in the hash of a block you can set the hash property to true. The nodes property can be set to a tree digest of the tree nodes you already have for this block or byte range. A request message has type `3`.
 
@@ -280,7 +260,7 @@ message Request {
 }
 ```
 
-### `4` Data
+##### `4` Data
 
 Send a block of data to the other peer. You can use this message to reply to a request or optimistically send other blocks of data to the other client. It has type `4`.
 
@@ -299,7 +279,7 @@ message Data {
 }
 ````
 
-### `5` Cancel
+##### `5` Cancel
 
 Cancel a previous sent request. It has type `5`.
 
@@ -310,14 +290,57 @@ message Cancel {
 }
 ```
 
-### `6` Pause
+##### `6` Pause
 
 An empty message that tells the other peer that they should stop requesting new blocks of data. It has type `6`.
 
-### `7` Resume
+##### `7` Resume
 
 An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
 
 ## 3.4 Streaming Updates
 
-## 3.5 Secure Metadata
+Registers can be thought of as a distributed replicated bitstream. This means Dat is able to replicate live changes to data efficiently by default. This is accomplished by using the replication protocol to traverse the Merkle tree of remote sources and replicate only the latest nodes. Due to the low level message oriented design of the replication protocol different node traversal strategies can be implemented.
+
+TODO example of using protocol messages to request a subset of nodes in a live sync scenario
+
+```js
+var feed = [
+  {
+    hash: sha256(value + size),
+    size: value.length
+    value: <some buffer>
+  }, 
+  {
+    hash: sha256(feed[0].hash + feed[2].hash + size),
+    size: feed[0].size + feed[1].size
+  }, 
+  {
+    hash: sha256(value + size),
+    size: value.length
+    value: <some buffer>
+  }
+]
+```
+
+## 3.6 Network Privacy
+
+On the Web today, with SSL, there is a guarantee that the traffic between your computer and the server is private. As long as you trust the server to not leak your logs, attackers who intercept your network traffic will not be able to read the HTTP traffic exchanged between you and the server. This is a fairly straightforward model as clients only have to trust a single server for some domain.
+
+There is an inherent tradeoff in peer to peer systems of source discovery vs. user privacy. The more sources you contact and ask for some data, the more sources you trust to keep what you asked for private. Our goal is to have Dat be configurable in respect to this tradeoff to allow application developers to meet their own privacy guidelines.
+
+It is up to client programs to make design decisions around which discovery networks they trust. For example if a Dat client decides to use the BitTorrent DHT to discover peers, and they are searching for a publicly shared Dat key with known contents, then because of the privacy design of the BitTorrent DHT it becomes public knowledge what key that client is searching for.
+
+A client could choose to only use discovery networks with certain privacy guarantees. For example a client could only connect to an approved list of sources that they trust, similar to SSL. As long as they trust each source, the encryption built into the Dat network protocol will prevent the Dat key they are looking for from being leaked.
+
+### 3.6.2 Security
+
+Dat links contain Base64 encoded Ed25519 public keys. Every Dat repository has corresponding a private key that kept internally in the Dat metadata and never shared.
+
+Hypercore registers are signed with the private key, allowing anyone with the Dat link (the public key) to verify that new entries to the register were created by a holder of the private key.
+
+Dat never exposes either the public or private key over the network. During the discovery phase the SHA256 hash of the public key is used as the discovery key. This means that the original key is impossible to discover (unless it was shared publicly through a separate channel) since only the hash of the key is exposed publicly.
+
+All messages in the Dat protocol are encrypted using the public key during transport. This means that unless you know the public key (e.g. unless the Dat link was shared with you) then you will not be able to discover or communicate with any member of the swarm for that Dat.
+
+Dat does not provide an authentication mechanism at this time. Instead it provides a capability system. Anyone with the Dat link is currently considered able to discover and access data. Do not share your Dat links publicly if you do not want them to be accessed.

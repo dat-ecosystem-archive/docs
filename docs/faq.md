@@ -16,13 +16,9 @@ Dat keeps a secure version log of changes to a dataset over time which allows Da
 
 Dat links are private and unadvertised unless they are explicitly shared publicly by the user, meaning that Dat supports private, end-to-end encrypted data exchange by default.
 
-## Is there JavaScript implementation?
+## Is there a JavaScript implementation?
 
-Yes, find it on GitHub: [dat-js](http://github.com/joehand/dat-js).
-
-## Is there any non-persistent JS Dat implementation?
-
-Not yet. Want to work on it? Start here to learn more: [dat-js](http://github.com/joehand/dat-js).
+Yes, it is our only implementation. Find it on GitHub: [dat-js](http://github.com/joehand/dat-js).
 
 ## Is there an online dataset registry, like GitHub?
 

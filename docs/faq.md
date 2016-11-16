@@ -30,6 +30,10 @@ Yes, but currently under heavy construction. See [dat.land](http://github.com/da
 
 Yes, but currently under heavy construction. See [dat-desktop](http://github.com/juliangruber/dat-desktop)
 
+## Does Dat use WebRTC?
+
+Our [dat.land](http://github.com/datproject/dat.land) prototype used WebRTC to transfer data between peers. Moving forward, we are not planning on immediately supporting WebRTC in any Dat client because of reliability issues and lack of support in non-browser environments. Our future browser implementations of Dat will use websockets to transfer data to non-browser Dat interfaces.
+
 ## Do you plan to have Python or R or other third-party language integrations?
 
 Yes. We are currently developing the serialization format (like .zip archives) called [SLEEP](/sleep) so that third-party libraries can read data without reimplementing all of hyperdrive (which is node-only).

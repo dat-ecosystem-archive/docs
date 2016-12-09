@@ -1,6 +1,6 @@
 # Abstract
 
-Dat is a protocol designed for streaming datasets over networks. Data in Dat Streams can be accessed randomly or fully replicated, be updated incrementally, and have the integrity of their contents be trusted. Dat clients can simultaneously be uploading and/or downloading, exchanging pieces of data with other clients over Dat Streams in a swarm on demand. Datasets can be multi-homed such that if the original source goes offline clients can choose to automatically discover additional sources. As data is added to a Dat repository, updated files are split into pieces using Rabin fingerprinting and deduplicated against known pieces to avoid retransmission of data. Dat Streams are automatically verified using secure hashes meaning data is protected against tampering or corruption. Dat guarantees privacy if the Dat Link is kept secret, but does not provide authentication of sources, only authentication of data.
+Dat is a protocol designed for syncing distributed, dynamic datasets. A secure changelog is used to ensure dataset versions are distributed safely. Files are efficiently versioned by checking new file regions against existing ones to duplication of existing similar file regions. Any byte range of any version of any file can be efficiently accessed as a stream from a Dat repository over a network connection. Consumers can choose to fully or partially replicate the contents of a remote Dat repository, and can also subscribe to live changes. Dat uses built-in public key cryptography to encrypt and sign all network traffic, allowing it to make certain privacy and security guarantees.
 
 # 1. Background
 
@@ -72,7 +72,7 @@ The design of registers was inspired by the infrastructure backing the Certifica
 
 # 3. Dat
 
-Dat is a file sharing protocol that does not assume a dataset is static or that the entire dataset will be downloaded. The protocol is agnostic to the underlying transport e.g. you could implement Dat over carrier pigeon. The key properties of the Dat design are explained in this section.
+Dat is a dataset synchronization protocol that does not assume a dataset is static or that the entire dataset will be downloaded. The protocol is agnostic to the underlying transport e.g. you could implement Dat over carrier pigeon. The key properties of the Dat design are explained in this section.
 
 - 1. **Mirroring** - Any participant in the network can simultaneously share and consume data.
 - 2. **Content Integrity** - Data and publisher integrity is verified through use of signed hashes of the content.
@@ -109,7 +109,7 @@ TODO detail each discovery mechanism
 
 ### 3.1.2 Peer Connections
 
-After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either [TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol), [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol), WebSockets or WebRTC for the network connections. UTP is designed to not take up all available bandwidth on a network (e.g. so that other people sharing wifi can still use the Internet). WebSockets and WebRTC makes Dat work in modern web browsers.
+After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either [TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol), [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol), WebSockets or WebRTC for the network connections. UTP is designed to not take up all available bandwidth on a network (e.g. so that other people sharing wifi can still use the Internet). WebSockets and WebRTC makes Dat work in modern web browsers. Note that these are the protocols we support in the reference Dat implementation, but the Dat protocol itself is transport agnostic.
 
 When Dat gets the IP and port for a potential source it tries to connect using all available protocols and hopes one works. If one connects first, Dat aborts the other ones. If none connect, Dat will try again until it decides that source is offline or unavailable and then stops trying to connect to them. Sources Dat is able to connect to go into a list of known good sources, so that the Internet connection goes down Dat can use that list to reconnect to known good sources again quickly.
 
@@ -117,7 +117,7 @@ If Dat gets a lot of potential sources it picks a handful at random to try and c
 
 The connection logic is implemented in a module called [discovery-swarm](https://www.npmjs.com/package/discovery-swarm). This builds on discovery-channel and adds connection establishment, management and statistics. It provides statistics such as how many sources are currently connected, how many good and bad behaving sources have been talked to, and it automatically handles connecting and reconnecting to sources. UTP support is implemented in the module [utp-native](https://www.npmjs.com/package/utp-native).
 
-Once a duplex binary connection to a remote source is open Dat then layers on its own file sharing protocol on top called a Dat Stream.
+Once a duplex binary connection to a remote source is open Dat then layers on its own protocol on top called a Dat Stream.
 
 ## 3.2 Content Integrity
 

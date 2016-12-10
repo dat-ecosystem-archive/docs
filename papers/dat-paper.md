@@ -294,21 +294,21 @@ Dat is also able to fully or partially synchronize streams in a distributed sett
 TODO example of using protocol messages to request a subset of nodes in a live sync scenario
 
 ```js
-var feed = [
-  {
-    hash: sha256(value + size),
-    size: value.length
-    value: <some buffer>
-  }, 
-  {
-    hash: sha256(feed[0].hash + feed[2].hash + size),
-    size: feed[0].size + feed[1].size
-  }, 
-  {
-    hash: sha256(value + size),
-    size: value.length
-    value: <some buffer>
-  }
+var log = [
+{
+  hash: hash(value + size),
+  size: value.length
+  value: <some buffer>
+}, 
+{
+  hash: hash(log[0].hash+log[2].hash+size),
+  size: log[0].size + log[1].size
+}, 
+{
+  hash: hash(value + size),
+  size: value.length
+  value: <some buffer>
+}
 ]
 ```
 

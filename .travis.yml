@@ -23,5 +23,5 @@ install:
 
 deploy:
   provider: script
-  script: npm run deploy
+  script: npm run travis:update && npm run deploy
   skip_cleanup: true

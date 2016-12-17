@@ -23,5 +23,5 @@ install:
 
 deploy:
   provider: script
-  script: npm run update && npm run deploy
+  script: npm run deploy
   skip_cleanup: true

@@ -4,9 +4,7 @@
   "description": "Documentation for Dat and the surrounding ecosystem.",
   "main": "index.js",
   "scripts": {
-    "travis:update": "npm run travis:list && npm run travis:sync",
-    "travis:list": "npm run update:list && cat repos.txt | node scripts/sync.js",
-    "travis:sync": "cat repos.txt | ecosystem-docs read -d ./.data -t ${GH_TOKEN} | node scripts/build.js",
+    "travis:update": "npm run update:list && cat repos.txt | ecosystem-docs sync -t ${GH_TOKEN} && cat repos.txt | ecosystem-docs read -t ${GH_TOKEN} | node scripts/build.js",
     "update": "npm run update:list && npm run update:build",
     "update:list": "curl -Ssl https://raw.githubusercontent.com/clkao/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
     "update:build": "cat repos.txt | ecosystem-docs sync && cat repos.txt | ecosystem-docs read | node scripts/build.js",

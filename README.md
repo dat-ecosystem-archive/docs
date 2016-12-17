@@ -8,46 +8,31 @@ Repository for the documentation of the Dat Project ecosystem. View the docs at 
 
 ## Writing & Editing Docs
 
-[See docs folder](docs/readme.md) for information on editing and adding docs. Once you finish editing the docs, follow the update & deploy docs instructions.
+[See docs folder](docs/readme.md) for information on editing and adding docs. Once you finish editing the docs, send a PR to the `deploy` branch to get the edits automatically deployed.
 
-## Installation & Usage
+## Development
 
-This documentation uses [minidocs](https://www.npmjs.com/package/minidocs).
+This documentation uses [minidocs](https://github.com/freeman-lab/minidocs) for layout, [ecosystem-docs](https://github.com/hughsk/ecosystem-docs) to get documentation from other modules, and ideas from [pull-stream-docs](https://github.com/pull-stream/pull-stream-docs) for auto travis deployment.
 
 ### Viewing Docs Locally
 
 1. Clone Repository
 2. `npm install`
 3. `npm run build:local` to build the docs for local viewing
+4. `npm run update` to update external modules
 4. `npm run start` to view the docs in browser
 
-### Updating & Deploying Docs
+### Deployment
 
-1. Clone Repository
-2. `npm install`
-3. Make documentation edits
-4. `npm run deploy` to build docs & deploy to GitHub pages.`
+Deployment happens automatically via Travis when updates are pushed to the deploy branch. 
 
-### Updating External Module Docs
+### NPM Commands
 
-We use [ecosystem-docs](https://github.com/hughsk/ecosystem-docs) to get documentation from other modules.
-
-1. `npm run update` will update the list of repositories and download the latest docs.
-2. Deploy!
-
-## NPM Commands
-
-All the npm commands
-
-* `npm run deploy`: build and deploy to github
-* `npm run build:deploy`: build full html pages & css for deployment
-* `npm run build:local`: build app & css for local viewing
 * `npm start`: start budo server to view locally
+* `npm update`: update external module readme files
+* `npm run build:local`: build app & css for local viewing
 * `npm run build:css`: build css, runs with both build commands
 * `npm run watch:css`: watch css live and build:local with changes
-* `npm update`: run both update commands
-* `npm run update:list` updates the repository list only
-* `npm run update:build` downloads the latest readme to the docs folder.
 * `npm run paper`: create the paper with pandoc
 
 ## License

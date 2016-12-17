@@ -1,6 +1,14 @@
-## Writing Documentation
+# Writing & Updating Documentation
 
-1. Add file to this folder
-2. Write docs
-3. Add to table of contents in `contents.json`
-4. Build & Deploy (see main readme)
+This documentation uses [minidocs](https://github.com/freeman-lab/minidocs).
+
+## Adding New Pages
+
+1. Add the page as a markdown file in this directory.
+2. Edit `contents.json` to add to the TOC.
+
+## Deploying to Website
+
+1. Write documentation
+2. Open PR to the `deploy` branch
+3. When PR is merged, Travis will automatically deploy the docs!

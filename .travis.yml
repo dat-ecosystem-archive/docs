@@ -4,7 +4,7 @@ node_js:
 
 branches:
   only:
-    - master
+    - deploy
 
 before_script:
   - git config --global user.email "robot@overlord.industries"

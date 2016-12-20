@@ -24,7 +24,7 @@ This documentation uses [minidocs](https://github.com/freeman-lab/minidocs) for 
 
 ### Deployment
 
-Deployment happens automatically via Travis when updates are pushed to the deploy branch. 
+Deployment happens automatically via Travis when updates are pushed to the master branch.
 
 ### NPM Commands
 

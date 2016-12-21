@@ -37,3 +37,10 @@ Our [dat.land](http://github.com/datproject/dat.land) prototype used WebRTC to t
 ## Do you plan to have Python or R or other third-party language integrations?
 
 Yes. We are currently developing the serialization format (like .zip archives) called [SLEEP](/sleep) so that third-party libraries can read data without reimplementing all of hyperdrive (which is node-only).
+
+## Dat on the CLI isn't connecting, how do I debug?
+
+1. Try running `dat doctor` and following the instructions
+2. Try running your command with `DEBUG=discovery* ` in front, e.g. `DEBUG=discovery* dat sync`
+
+When reading debug output, look for `inbound connection` (means someone else successfully connected to you) or `onconnect` (you successfully connected to someone else). `discovery peer=` messages mean you found a candidate and will try to connect to them.

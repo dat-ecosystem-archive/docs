@@ -80,7 +80,7 @@ Feeds are created with hypercore.
 
 ### Hypercore
 
-[Hypercore](https://github.com/mafintosh/hypercore) is secure distributed streams that just work. Using cryptography, streaming binary data to other computers is as easy as sharing a key. This creates an efficient gossip network where latency is reduced to a minimum. Hypercore is an eventually consistent, highly available, partition tolerant system.
+[Hypercore](https://github.com/mafintosh/hypercore) is a protocol and network for distributing and replicating feeds of binary data. This creates an efficient gossip network where latency is reduced to a minimum. Hypercore is an eventually consistent, highly available, partition tolerant system.
 
 ### Hyper- (modules)
 

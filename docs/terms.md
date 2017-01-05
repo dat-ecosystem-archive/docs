@@ -24,7 +24,7 @@ A group of peers that have downloaded the data (or parts of it) and are connecte
 
 ### Owner
 
-User who owns a dat, has keys on local machine allowing them to write data.
+User who owns a dat, has the secret key on local machine allowing them to write data.
 
 ### Collaborator
 
@@ -48,11 +48,11 @@ Like an HTTP header, the list of file contents and a variety of information rega
 
 ### Discovery Key
 
-Hashed key for connected to peers over the network.
+The discovery key is a hashed public key. The discovery key is used to find peers on the public key without exposing the original public key to network.
 
 ### Key
 
-A 32-bit hash that uniquely represents a dat.
+A 32-bit hash that uniquely represents a feed.
 
 ### Public Key vs Secret Key
 

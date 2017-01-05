@@ -40,6 +40,16 @@ A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-y
 
 User needs this to share or download data. e.g., `dat://ab3ed4f...`
 
+### Snapshot Archive / non-live Archive
+
+A snapshot archive, or non-live archive, uses a content-based hash as the link. This means that the link is unique for that set of files and content. Once the content changes, the link will change.
+
+Snapshot archives can be used as checkpoints or for publishing specific versions of datasets with guarantees that the content will not change.
+
+### Beaker
+
+The [Beaker Browser](https://beakerbrowser.com/) is an experimental p2p browser that can view and publish dats alongside traditional web browsing.
+
 ## Technical Terms
 
 ### Metadata
@@ -62,8 +72,18 @@ The secret key is how messages are signed on the dat. The owner is the only one 
 
 A feed is a term we use interchangeably with the term "append-only log". It’s the lowest level component of a dat.
 
+Feeds are created with hypercore.
+
 ### Hyperdrive
+
+[Hyperdrive](https://github.com/mafintosh/hyperdrive) is peer to peer directories. Moving files between computers on a planet-scale system was never easier. We built this to efficiently share terabytes of scientific data in real time between research institutions on multiple continents, but it should work fine to share a text file on your the local network too.
 
 ### Hypercore
 
+[Hypercore](https://github.com/mafintosh/hypercore) is secure distributed streams that just work. Using cryptography, streaming binary data to other computers is as easy as sharing a key. This creates an efficient gossip network where latency is reduced to a minimum. Hypercore is an eventually consistent, highly available, partition tolerant system.
+
 ### Hyper- (modules)
+
+Modules that are use hyperdrive archives or hypercore feeds in a cross-compatible way, for example [hyperdiscovery](https://github.com/karissa/hyperdiscovery) or [hyperhealth](https://github.com/karissa/hyperhealth).
+
+If a module is only compatible with one one of hyperdrive or hypercore, they should be prefixed with that name, e.g. [hyperdrive-import-files](https://github.com/juliangruber/hyperdrive-import-files).

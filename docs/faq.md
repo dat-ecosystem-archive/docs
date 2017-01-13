@@ -10,7 +10,7 @@ Code for Science and Society (CSS), a US based 501(c)(3) not for profit organiza
 
 Dat uses hyperdrive and a variety of other modules. Hyperdrive and Dat are compatible with each other but hyperdrive is able to make lower-level decisions. Dat presents a user-friendly interface and ecosystem for scientists, researchers, and data analysts.
 
-# How do Dat peers discover one another on the Internet?
+## How do Dat peers discover one another on the Internet?
 
 Dat is very flexible. It currently uses 3 methods, and you can implement your own.
 

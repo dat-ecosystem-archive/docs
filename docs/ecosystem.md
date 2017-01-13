@@ -4,20 +4,20 @@ We have built and contributed to a variety of modules that support our work on D
 
 Dat embraces the Unix philosophy: a modular design with composable parts. All of the pieces can be replaced with alternative implementations as long as they implement the abstract API.
 
-## Public Interface Modules:
+## Public Interface Modules
 
 * [dat](dat) - the command line interface for sharing and downloading files
 * [dat.land](dat.land) - repository for the [dat.land](https://dat.land) website, a public data registry and sharing
 * [dat desktop](https://github.com/juliangruber/dat-desktop) - dat desktop application for sharing and downloading files
 
-## File and Block Component Modules:
+## File and Block Component Modules
 
 * [hyperdrive](hyperdrive) - The file sharing network dat uses to distribute files and data. Read the technical [hyperdrive-specification](hyperdrive-specification) about how hyperdrive works.
 * [hypercore](hypercore) - exchange low-level binary blocks with many sources
 * [rabin](https://www.npmjs.com/package/rabin) - Rabin fingerprinter stream
 * [merkle-tree-stream](https://www.npmjs.com/package/merkle-tree-stream) - Used to construct Merkle trees from chunks
 
-## Networking & Peer Discovery Modules:
+## Networking & Peer Discovery Modules
 
 * [discovery-channel](https://www.npmjs.com/package/discovery-channel) - discover data sources
 * [discovery-swarm](https://www.npmjs.com/package/discovery-swarm) - discover and connect to sources

@@ -42,7 +42,7 @@ Yes. See [datproject/datfolder](http://github.com/datproject/datfolder) on GitHu
 
 ## Is there a desktop application?
 
-Yesn. See [datproject/dat-desktop](http://github.com/datproject/dat-desktop) on GitHub.
+Yes. See [datproject/dat-desktop](http://github.com/datproject/dat-desktop) on GitHub.
 
 ## Does Dat use WebRTC?
 

@@ -10,6 +10,18 @@ Code for Science and Society (CSS), a US based 501(c)(3) not for profit organiza
 
 Dat uses hyperdrive and a variety of other modules. Hyperdrive and Dat are compatible with each other but hyperdrive is able to make lower-level decisions. Dat presents a user-friendly interface and ecosystem for scientists, researchers, and data analysts.
 
+# How do dat peers discover one another on the Internet?
+
+Dat is very flexible. It currently uses 3 methods, and you can implement your own.
+
+ 1) Multicast udp, which lets it work over the local network (LAN), 
+ 2) A distributed hash table, which lets it work without a central server, and 
+ 3) some centralized signaling servers that run a modified version of DNS.
+
+## Are the dat links guaranteed to be unique?
+
+It's not technically impossible that they'd collide, but it's extremely unlikely. Dat links are are 32 bytes long. That's 1.1579 x 10^77 possible numbers!
+
 ## How is Dat different than IPFS?
 
 IPFS and Dat share a number of underlying similarities but address different problems. Both deduplicate content-addressed pieces of data and have a mechanism for searching for peers who have a specific piece of data. Both have implementations which work in modern Web browsers, as well as command line tools.
@@ -24,15 +36,15 @@ Yes, it is our only implementation. Find it on GitHub: [dat-js](http://github.co
 
 ## Is there an online dataset registry, like GitHub?
 
-Yes, but currently under heavy construction. See [dat.land](http://github.com/datproject/dat.land)
+Yes. See [datproject/datfolder](http://github.com/datproject/datfolder) on GitHub.
 
 ## Is there a desktop application?
 
-Yes, but currently under heavy construction. See [dat-desktop](http://github.com/juliangruber/dat-desktop)
+Yesn. See [datproject/dat-desktop](http://github.com/datproject/dat-desktop) on GitHub.
 
 ## Does Dat use WebRTC?
 
-Our [dat.land](http://github.com/datproject/dat.land) prototype used WebRTC to transfer data between peers. Moving forward, we are not planning on immediately supporting WebRTC in any Dat client because of reliability issues and lack of support in non-browser environments. Our future browser implementations of Dat will use websockets to transfer data to non-browser Dat interfaces.
+Our [datfolder](http://github.com/datproject/datfolder) prototype used WebRTC to transfer data between peers. Moving forward, we are not planning on immediately supporting WebRTC in any Dat client because of reliability issues and lack of support in non-browser environments. Our future browser implementations of Dat will use websockets to transfer data to non-browser Dat interfaces.
 
 ## Do you plan to have Python or R or other third-party language integrations?
 

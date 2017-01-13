@@ -1,6 +1,6 @@
 # FAQ
 
-### General
+## General
 
 ### Who is behind the project?
 

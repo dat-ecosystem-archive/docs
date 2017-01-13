@@ -16,7 +16,9 @@ Dat is very flexible. It currently uses 3 methods, and you can implement your ow
 
  1) Multicast udp, which lets it work over the local network (LAN), 
  2) A distributed hash table, which lets it work without a central server, and 
- 3) some centralized signaling servers that run a modified version of DNS.
+ 3) Centralized signaling servers that run a modified version of DNS.
+
+We run a signaling server for users of our client applications. However, anyone can run a signaling server and can overwrite the default for their application.
 
 ## Are the dat links guaranteed to be unique?
 

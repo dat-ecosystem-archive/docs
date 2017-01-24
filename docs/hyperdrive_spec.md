@@ -266,9 +266,13 @@ These digests are very compact in size, only `(log2(number-of-blocks) + 2) / 8` 
 
 (talk about the privacy features + discovery key here)
 
-## Hypercore Feeds
+### Hypercore Feeds
 
-(talk about how we use the above concepts to create a feed of data)
+Hypercore appends arbitrary binary blocks to form the feed. It is agnostic to the content of the block. As each block is appended, new merkle-tree nodes are generated to address it. Each addition generates new roots, which are signed if the feed is a signed-feed. The binary blocks are stored without changes, and the new hashes and signatures are stored to an internal datbase.
+
+Feeds can be used to represent many kinds of data. In Hyperdrive, they are used to represent the changes in the archive file-set over time.
+
+Hypercore feeds are append-only and totally-ordered. They are not allowed to have branches in their history. In unsigned feeds, this is the natural state, as the merkle-tree is only able to represent a single total order. In signed feeds, however, it would be possible to create multiple signed trees, and therefore multiple histories. This is considered a corrupted state. Multiple histories create confusion about the correct state of the feed, and could be used to deliver malicious targeted payloads. By forcing uniform distribution, we avoid confusion about the order and content of the feed, and ensure that each payload must be globally-visible.
 
 ## Hypercore Replication Protocol
 

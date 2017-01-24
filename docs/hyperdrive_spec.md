@@ -136,7 +136,7 @@ Using these hashes we can reproduce `hash1` in the following way:
 
 If `h(uint64be(#3) + 3) == hash1` then we know that data we received from the other person is correct. They sent us `a` and the corresponding hashes.
 
-Since we only need uncle hashes to verify the block. The number of hashes we need is at worst `log2(number-of-blocks)` and the roots of the merkle trees which has the same complexity.
+Since we only need uncle hashes to verify the block, the number of hashes we need is at worst `log2(number-of-blocks)` and the roots of the merkle trees which has the same complexity.
 
 A merkle tree generator is available on npm through the [merkle-tree-stream](https://github.com/mafintosh/merkle-tree-stream) module.
 
@@ -207,7 +207,7 @@ If we append a new item to our data set we simply do the same thing:
 
 Notice that all new signatures verify the entire dataset since they all sign a merkle tree that spans all data. If a signed update ever conflicts against previously-verified trees, suggesting a change in the history of data, the feed is considered corrupt and replication will stop. This serves two purposes. First of all it makes sure that the dataset publisher cannot change old data. It also ensures that the publisher cannot share different versions of the same dataset to different persons without the other people noticing it (at some point they'll get a signature for the same node index that has different hashes if they talk to multiple people).
 
-This technique has the added benefit that you can always convert a signed merkle tree to a normal unsigned one if you wish (or turn an unsigned tree into a signed tree).
+These techniques have the added benefit that you can always convert a signed merkle tree to a normal unsigned one if you wish (or turn an unsigned tree into a signed tree).
 
 In general you should send an as wide as possible signed tree back when using signed merkle trees as that lowers the amount of signatures the other person needs to verify which has a positive performance impact for some platforms. It will also allow other users to more quickly detect if a tree has duplicated content.
 
@@ -233,7 +233,7 @@ Now if we ask for block `1` afterwards (`2` in flat tree notation) the other per
 
 If we only use non-signed merkle trees the other person can easily calculate which hashes we already have if we tell them which blocks we've got.
 
-This however isn't always possible if we use a signed merkle tree since the roots are changing. In general it also useful to be able to communicate that you have some hashes already without disclosing all the blocks you have.
+This however isn't always possible if we use a signed merkle tree since the roots are changing. In general it's also useful to be able to communicate that you have some hashes already without disclosing all the blocks you have.
 
 To communicate which hashes we have just have to communicate two things: which uncles we have and whether or not we have any parent node that can verify the tree.
 

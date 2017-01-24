@@ -262,10 +262,6 @@ These digests are very compact in size, only `(log2(number-of-blocks) + 2) / 8` 
 
 (talk about rle)
 
-### Basic Privacy
-
-(talk about the privacy features + discovery key here)
-
 ## Hypercore Feeds
 
 (talk about how we use the above concepts to create a feed of data)
@@ -385,3 +381,51 @@ An empty message that tells the other peer that they should stop requesting new 
 #### `7` Resume
 
 An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
+
+## Networking
+
+Networking in Dat is implemented outside of Hypercore and Hyperdrive, enabling future flexibility and transport agnosticism. Networking is split into two tasks: Source Discovery and Connection Protocols.
+
+### Source Discovery
+
+Source discovery means finding the IP and port of data sources online that have a copy of that data you are looking for. You can then connect to them and begin exchanging data using Hypercore's replication. By using source discovery techniques Dat is able to create a network where data can be discovered even if the original data source disappears.
+
+Source discovery can happen over many kinds of networks, as long as you can model the following actions:
+
+- `join(key, [port])` - Begin performing regular lookups on an interval for `key`. Specify `port` if you want to announce that you share `key` as well.
+- `leave(key, [port])` - Stop looking for `key`. Specify `port` to stop announcing that you share `key` as well.
+- `foundpeer(key, ip, port)` - Called when a peer is found by a lookup
+
+In the Dat implementation we implement the above actions on top of three types of discovery networks:
+
+- Modified DNS servers - A centralized Internet standard mechanism for resolving keys to addresses
+- Multicast DNS - Useful for discovering peers on local networks
+- Kademlia Mainline Distributed Hash Table - Zero point of failure, increases probability of Dat working even if DNS servers are unreachable
+
+Additional discovery networks can be implemented as needed. We chose the above three as a starting point to have a complementary mix of strategies to increase the probability of source discovery.
+
+Our implementation of source discovery is called [discovery-channel](https://npmjs.org/discovery-channel). We also run a [custom DNS server](https://www.npmjs.com/package/dns-discovery) that Dat clients use (in addition to specifying their own if they need to), as well as a [DHT bootstrap](https://github.com/bittorrent/bootstrap-dht) server. These discovery servers are the only centralized infrastructure we need for Dat to work over the Internet, but they are redundant, interchangeable, never see the actual data being shared, anyone can run their own and Dat will still work even if they all are unavailable. If this happens discovery will just be manual (e.g. manually sharing IP/ports).
+
+### Connection Protocols
+
+Dat is agnostic about the connection protocols, so long as they provide reliable ordered delivery.
+
+After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either [TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol), [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol), WebSockets or WebRTC for the network connections. UTP is designed to not take up all available bandwidth on a network (e.g. so that other people sharing wifi can still use the Internet). WebSockets and WebRTC makes Dat work in modern web browsers.
+
+When Dat gets the IP and port for a potential source it tries to connect using all available protocols and hopes one works. If one connects first, Dat aborts the other ones. If none connect, Dat will try again until it decides that source is offline or unavailable and then stops trying to connect to them. Sources Dat is able to connect to go into a list of known good sources, so that the Internet connection goes down Dat can use that list to reconnect to known good sources again quickly.
+
+If Dat gets a lot of potential sources it picks a handful at random to try and connect to and keeps the rest around as additional sources to use later in case it decides it needs more sources.
+
+The connection logic is implemented in a module called [discovery-swarm](https://www.npmjs.com/package/discovery-swarm). This builds on discovery-channel and adds connection establishment, management and statistics. It provides statistics such as how many sources are currently connected, how many good and bad behaving sources have been talked to, and it automatically handles connecting and reconnecting to sources. UTP support is implemented in the module [utp-native](https://www.npmjs.com/package/utp-native).
+
+Once a duplex binary connection to a remote source is open Dat then layers on its own protocol on top called a Dat Stream.
+
+### Network Privacy
+
+Dat links are Ed25519 public keys which have a length of 32 bytes (64 characters when Base64 encoded). Every Dat repository has corresponding a private key that kept internally in the Dat metadata and never shared.
+
+Dat never exposes either the public or private key over the network. During the discovery phase the SHA256 hash of the public key is used as the discovery key. This means that the original key is impossible to discover (unless it was shared publicly through a separate channel) since only the hash of the key is exposed publicly.
+
+All messages in the Dat protocol are encrypted symmetrically using the public key during transport. This means that unless you know the public key (e.g. unless the Dat link was shared with you) then you will not be able to discover or communicate with any member of the swarm for that Dat. Anyone with the public key can verify that messages (such as entries in a Dat Stream) were created by a holder of the private key.
+
+Dat does not provide an authentication mechanism. Instead it provides a capability system. Anyone with the Dat link is currently considered able to discover and access data. Do not share your Dat links publicly if you do not want them to be accessed.

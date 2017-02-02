@@ -6,7 +6,7 @@
   "scripts": {
     "travis:update": "npm run update:list && cat repos.txt | ecosystem-docs sync -t ${GH_TOKEN} && cat repos.txt | ecosystem-docs read -t ${GH_TOKEN} | node scripts/build.js",
     "update": "npm run update:list && npm run update:build",
-    "update:list": "curl -Ssl https://raw.githubusercontent.com/clkao/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
+    "update:list": "curl -Ssl https://raw.githubusercontent.com/datproject/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
     "update:build": "cat repos.txt | ecosystem-docs sync && cat repos.txt | ecosystem-docs read | node scripts/build.js",
     "build:local": "npm run build:css && minidocs docs -c docs/contents.json -i dat -o dist  -l ./node_modules/dat-design/public/img/dat-data-logo.svg -t 'Dat Data' -s assets/styles.css --pushstate",
     "build:deploy": "npm run build:css && minidocs docs -c docs/contents.json -i dat -o dist -l ./node_modules/dat-design/public/img/dat-data-logo.svg -t 'Dat Data' -s assets/styles.css --full-html",

@@ -24,13 +24,28 @@ This documentation uses [minidocs](https://github.com/freeman-lab/minidocs) for 
 
 ### Deployment
 
-Deployment happens automatically via Travis when updates are pushed to the master branch.
+This repository uses [netlify](https://www.netlify.com/) for deployment. Deployment will happen automatically.
+
+It works this way:
+
+* Git webhook tells netlify there is new content
+* netlify pulls latest repo
+* netlify automatically runs `npm install`
+* netlify runs the build script `sh scripts/netlify.sh`, which:
+  * sets git config so we can use `ecosystem-docs` and pull latests readme files
+  * runs `npm run netlify` which updates remote repos and builds.
+* deploys `/dist` to the web
 
 ### NPM Commands
 
-* `npm start`: start budo server to view locally
+#### Local Docs Preview:
+
 * `npm update`: update external module readme files
 * `npm run build:local`: build app & css for local viewing
+* `npm start`: start budo server to view locally
+
+#### Other commands: 
+
 * `npm run build:css`: build css, runs with both build commands
 * `npm run watch:css`: watch css live and build:local with changes
 * `npm run paper`: create the paper with pandoc

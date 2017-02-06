@@ -34,11 +34,11 @@ Yes, it is our only implementation. Find it on GitHub: [dat-node](http://github.
 
 ### Is there an online dataset registry, like GitHub?
 
-Yes. See [datproject/datfolder](http://github.com/datproject/datfolder) on GitHub.
+Yes. See [datproject/datproject.org](https://github.com/datproject/datproject.org) on GitHub.
 
 ### Is there a desktop application?
 
-Yes. See [datproject/dat-desktop](http://github.com/datproject/dat-desktop) on GitHub.
+Yes, you'll be able to [install soon](https://datproject.org/install)! See [datproject/dat-desktop](http://github.com/datproject/dat-desktop) on GitHub for development updates.
 
 ### Do you plan to have Python or R or other third-party language integrations?
 
@@ -82,7 +82,7 @@ Dat uses hyperdrive and a variety of other modules. Hyperdrive and Dat are compa
 
 ### Does Dat use WebRTC?
 
-Our [datfolder](http://github.com/datproject/datfolder) prototype used WebRTC to transfer data between peers. Moving forward, we are not planning on immediately supporting WebRTC in any Dat client because of reliability issues and lack of support in non-browser environments. Our future browser implementations of Dat will use websockets to transfer data to non-browser Dat interfaces.
+No. We implemented a prototype web version using WebRTC. Moving forward, we are not planning on immediately supporting WebRTC in any Dat client because of reliability issues and lack of support in non-browser environments. Our future browser implementations of Dat will use websockets to transfer data to non-browser Dat interfaces.
 
 ### Dat on the CLI isn't connecting, how do I debug?
 

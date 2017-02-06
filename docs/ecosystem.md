@@ -1,14 +1,15 @@
 # Dat Module Ecosystem
 
-We have built and contributed to a variety of modules that support our work on Dat as well as the larger data and code ecosystem. Feel free to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/datproject/dat) and the [Dat-js](https://github.com/joehand/dat-js), the javascript Dat module.
+We have built and contributed to a variety of modules that support our work on Dat as well as the larger data and code ecosystem. Feel free to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/datproject/dat) and the [Dat Desktop](https://github.com/datproject/dat-desktop).
 
 Dat embraces the Unix philosophy: a modular design with composable parts. All of the pieces can be replaced with alternative implementations as long as they implement the abstract API.
 
 ## Public Interface Modules
 
-* [dat](dat) - the command line interface for sharing and downloading files
-* [dat.land](dat.land) - repository for the [dat.land](https://dat.land) website, a public data registry and sharing
-* [dat desktop](https://github.com/juliangruber/dat-desktop) - dat desktop application for sharing and downloading files
+* [dat](https://github.com/datproject/dat) - the command line interface for sharing and downloading files
+* [Dat Desktop](https://github.com/datproject/dat-desktop) - dat desktop application for sharing and downloading files
+* [datproject.org](https://github.com/datproject/datproject.org/) - repository for the Dat project website, a public data registry and sharing
+* [Dat Protocol](https://www.datprotocol.com/) - The Dat protocol specification
 
 ## File and Block Component Modules
 

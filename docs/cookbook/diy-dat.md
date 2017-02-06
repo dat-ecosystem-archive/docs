@@ -2,6 +2,8 @@
 
 In this guide, we will show how to develop applications with the Dat ecosystem. The Dat ecosystem is very modular making it easy to develop custom applications using Dat.
 
+This tutorial will follow the steps for sharing and downloading files using Dat. In practice, we implement these in [dat-node](https://github.com/datproject/dat-node), a high-level module for using Dat that provides easy access to the core Dat modules.
+
 For any Dat application, there are three essential modules you will start with: 
 
 1. [hyperdrive](https://npmjs.org/hyperdrive) for file synchronization and versioning

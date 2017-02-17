@@ -64,17 +64,6 @@ Only someone with the key can download data for Dat. It is the responsibility of
 
 Dat uses the concept of a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) to make sure content is not tampered with. When content is added to a Dat we  cryptographically fingerprint it and add it to the tree. On download, we can use the tree to make sure the content has not changed and the parent hashes match.
 
-### What if I don't want to download all the data? Does dat have an index?
-
-Yes, you can tell Dat to only download the data you want using our Node.js API.  You can do this by using `sparse` mode in `dat-node`, which make it only download content that the peer asks for. To do this, simply pass `{sparse: true}` when you create the dat (or hyperdrive):
-
-```js
-var Dat = require('dat-node')
-Dat(dir, {sparse: true}, function (dat) {
-  console.log('got the dat!')
-})
-```
-
 ### How does Dat help to improve transparency?
 
 Dat uses an append-only to track changes over time. An append-only log shows all of the changes for a given Dat since it was shared. We use this for version control but it can also bolster transparency for a dataset. Any changes to a dataset will be tracked and you can see what changed and when.
@@ -90,6 +79,18 @@ As a peer to peer network, Dat faces similar privacy risks as Bittorrent. When y
 [Hyperdrive](http://github.com/mafintosh/hyperdrive) is a file sharing network built for Dat.
 
 Dat uses hyperdrive and a variety of other modules. Hyperdrive and Dat are compatible with each other but hyperdrive is able to make lower-level decisions. Dat presents a user-friendly interface and ecosystem for scientists, researchers, and data analysts.
+
+### What if I don't want to download all the data? Does dat have an index?
+
+Yes, you can tell Dat to only download the data you want using our Node.js API.  You can do this by using `sparse` mode in `dat-node`, which make it only download content that the peer asks for. To do this, simply pass `{sparse: true}` when you create the dat (or hyperdrive):
+
+```js
+var Dat = require('dat-node')
+Dat(dir, {sparse: true}, function (dat) {
+  console.log('got the dat!')
+})
+```
+
 
 ### Does Dat use WebRTC?
 

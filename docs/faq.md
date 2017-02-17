@@ -44,6 +44,12 @@ Yes, you'll be able to [install soon](https://datproject.org/install)! See [datp
 
 Yes. We are currently developing the serialization format (like .zip archives) called [SLEEP](/sleep) so that third-party libraries can read data without reimplementing all of hyperdrive (which is node-only).
 
+### Can multiple people write to one archive?
+
+Dat uses one keypair to verify that only one writer is allowed to add or update files in a Dat. This means that all peers connecting to the data are read-only right now. If the original creator of the dat loses the keypair, the data can no longer be updated.
+
+We are interested in implementations of multi-party writers to dat. Come talk to us in #dat on freenode for more information.
+
 ## Security & Privacy
 
 ### Is data shared over Dat encrypted?

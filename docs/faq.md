@@ -64,6 +64,17 @@ Only someone with the key can download data for Dat. It is the responsibility of
 
 Dat uses the concept of a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) to make sure content is not tampered with. When content is added to a Dat we  cryptographically fingerprint it and add it to the tree. On download, we can use the tree to make sure the content has not changed and the parent hashes match.
 
+### What if I don't want to download all the data? Does dat have an index?
+
+Yes, you can tell Dat to only download the data you want using our Node.js API.  You can do this by using `sparse` mode in `dat-node`, which make it only download content that the peer asks for. To do this, simply pass `{sparse: true}` when you create the dat (or hyperdrive):
+
+```js
+var Dat = require('dat-node')
+Dat(dir, {sparse: true}, function (dat) {
+  console.log('got the dat!')
+})
+```
+
 ### How does Dat help to improve transparency?
 
 Dat uses an append-only to track changes over time. An append-only log shows all of the changes for a given Dat since it was shared. We use this for version control but it can also bolster transparency for a dataset. Any changes to a dataset will be tracked and you can see what changed and when.
@@ -82,7 +93,9 @@ Dat uses hyperdrive and a variety of other modules. Hyperdrive and Dat are compa
 
 ### Does Dat use WebRTC?
 
-No. We implemented a prototype web version using WebRTC. Moving forward, we are not planning on immediately supporting WebRTC in any Dat client because of reliability issues and lack of support in non-browser environments. Our future browser implementations of Dat will use websockets to transfer data to non-browser Dat interfaces.
+Dat can use WebRTC but it's very experimental. You can check out our tutorial on using [Dat in the browser here](/browser)
+
+We implemented a prototype web version using WebRTC. Moving forward, we are not planning on immediately supporting WebRTC in any Dat application because of reliability issues and lack of support in non-browser environments. Our future browser implementations of Dat will use websockets to transfer data to non-browser Dat interfaces.
 
 ### Dat on the CLI isn't connecting, how do I debug?
 

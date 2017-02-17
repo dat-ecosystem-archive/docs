@@ -46,10 +46,4 @@ It works this way:
 
 #### Other commands: 
 
-* `npm run build:css`: build css, runs with both build commands
-* `npm run watch:css`: watch css live and build:local with changes
-* `npm run paper`: create the paper with pandoc
-
-## License
-
-ISC
+* `n

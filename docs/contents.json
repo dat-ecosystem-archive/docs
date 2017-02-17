@@ -6,7 +6,8 @@
     "FAQ": "faq.md"
   },
   "Cookbook": {
-    "DIY Dat": "cookbook/diy-dat.md"
+    "With WebRTC in the Browser": "cookbook/browser.md",
+    "Do-it-yourself": "cookbook/diy-dat.md"
   },
   "Ecosystem": {
     "Overview": "ecosystem.md",

@@ -2,17 +2,97 @@
 
 Dat is written in JavaScript, so naturally, it can work entirely in the browser! The great part about this is that as more peers connect to each other in their client, the site assets will be shared between users rather hitting any server.
 
-This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dat links can be rendered live and read dynamically, whereas BitTorrent links are static. In other words, the original owner can update a Dat and all peers will receive the updates automatically.
+This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dat links can be rendered live and read dynamically, whereas BitTorrent links are static. In other words, Dat functions more like DropBox or BitTorrent Sync. The original owner can update the files in the directory and all peers will receive the updates automatically.
 
-OK, now for the goods:
+OK, now for the goods.
 
-## Hyperdrive
+## Creating a dat
 
-For now, there isn't an easy dat implementation for the browser. We have a simpler interface for node at [dat-js](http://github.com/joehand/dat-js).  
+```js
+var Dat = require('dat-js')
 
-If you want to get your hands dirty, here is the lower-level implementations to create a browser-based hyperdrive instance that will be compatible with dat.
+var dat = Dat()
+dat.add(function (repo) {
+  var writer = repo.archive.createFileWriteStream('hello.txt')
+  writer.write('world')
+  writer.end(function () { replicate(repo.key) })
+})
+```
+
+## Downloading data
+
+```js
+var Dat = require('dat-js')
+var concat = require('concat-stream')
+
+var clone = Dat()
+clone.add(key, function (repo) {
+  var readStream = repo.archive.createFileReadStream('hello.txt')
+  concat(readStream, function (data) {
+    console.log(data.toString()) // prints 'world'
+  })
+  // and do other things with the stream
+})
+```
+
+The `repo.archive` is a [hyperdrive](http://github.com/mafintosh/hyperdrive) instance, which manages all of the files. A hyperdrive archive has a bunch of simple methods including only getting the files and byte ranges you want from a particular repository.
+
+For the full hyperdrive API and more examples, see the full [hyperdrive documentation](/hyperdrive).
+
+## Downloading only what you need
+
+You might be asking 'Is it possible to index into a subset of a dat dataset?' Most datasets are too large for browsers, and we probably only want a subset of them.
+
+You can do this by using `sparse` mode, which make it only download content that the peer asks for. To do this, simply pass `{sparse: true}` when you create the dat:
+
+```js
+var Dat = require('dat-js')
+
+var dat= Dat()
+dat.add(key, {sparse: true}, function (repo) {
+  // etc..
+})
+```
+
+## Under the hood
+
+Let's look under the hood of `dat-js` to see how a simple lower-level implementation can be built to create a browser-based dat.
+
+Here's the most simple example using the underlying modules directly:
+
+```js
+var webrtc = require('webrtc-swarm')
+var signalhub = require('signalhub')
+var hyperdrive = require('hyperdrive')
+var memdb = require('memdb')
+var pump = require('pump')
+
+var DEFAULT_SIGNALHUBS = 'https://signalhub.mafintosh.com'
+
+var drive = hyperdrive(memdb())
+
+var archive = drive.createArchive()
+var link = archive.discoveryKey.toString('hex')
+
+var swarm = webrtc(signalhub(link, DEFAULT_SIGNALHUBS))
+swarm.on('peer', function (peer) {
+  var peer = archive.replicate({
+    upload: true,
+    download: true
+  })
+  pump(conn, peer, conn)
+})
+```
+
+That's it. Now you are serving a dat-compatible hyperdrive from the browser. In another browser tab, you can connect to the swarm and download the data by using the same code as above. Just make sure to reference the archive you created before by using `archive.key` as the first argument:
+
+## Storage API for metadata and content
+
+Hyperdrive is the underlying database that runs dat.
 
 Hyperdrive will save the metadata (small) and the content (potentially large) separately. You can control where both of these are saved and how they are retrieved. These tweaks have huge impact on performance, stability, and user experience, so it's important to understand the tradeoffs.
+
+There are a million different ways to store and retrieve data in the browser, and all have their pros and cons depending on the use case. We've compiled a variety of examples here to try to make it as clear as possible.
 
 The first argument to `hyperdrive` will be the main database for all metadata and content. The `file` option can be supplied to specify how to read and write content data. If a `file` option is not supplied, the content will also be stored in the main database.
 
@@ -21,38 +101,7 @@ var hyperdrive = require('hyperdrive')
 var drive = hyperdrive(<YOUR DATABASE HERE>, {file: <CONTENT DATABASE HERE>})
 ```
 
-### The most basic example
-
-```js
-var hyperdrive = require('hyperdrive')
-var memdb = require('memdb')
-var swarm = require('hyperdrive-archive-swarm')
-
-var drive = hyperdrive(memdb())
-var archive = drive.createArchive()
-
-// joins the webrtc swarm
-swarm(archive)
-
-// this key can be used in another browser tab
-console.log(archive.key)
-```
-
-That's it. Now you are serving a dat-compatible hyperdrive from the browser. In another browser tab, you can connect to the swarm and download the data by using the same code as above. Just make sure to reference the hyperdrive you created before by using `archive.key` as the first argument:
-
-```js
-var drive = hyperdrive(memdb())
-var archive = drive.createArchive(<KEY HERE>)
-
-// joins the webrtc swarm
-swarm(archive)
-```
-
-For the full hyperdrive API and more examples, see the full [hyperdrive documentation](/hyperdrive).
-
-## Patterns for browser-based data storage and transfer
-
-There are a million different ways to store and retrieve data in the browser, and all have their pros and cons depending on the use case. We've compiled a variety of examples here to try to make it as clear as possible.
+There are many different ways to piece modules together to create the storage infrastructure for a hyperdrive -- here are some tested examples:
 
 ### In-memory storage
 

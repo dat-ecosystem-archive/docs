@@ -28,6 +28,10 @@ Data is transferred directly between peers, we do not store any data right now. 
 
 Dat tracks all of the changes to files, but doesn't currently save a backup of those files. To save backups your current data in your dat, you can use [dat-backup](http://npmjs.org/dat-backup) and [archiver-server](http://npmjs.org/archiver-server). We plan to bake this into the CLI tool and desktop app soon.
 
+### What happens if Dat (the organization/group) disappears? Will all my files get lost or be inaccessible? 
+
+No. Dat doesn't import or copy your data anywhere, just simply scans and stores filesystem metadata while tracking your changes to the data. This means that you can easily move your data around and keep it intact in its original form on the filesystem. You can even simultaneously host your data on HTTP along with Dat to ensure backwards compatibility with existing web tools.
+
 ### How is Dat different than IPFS?
 
 IPFS and Dat share a number of underlying similarities but address different problems. Both deduplicate content-addressed pieces of data and have a mechanism for searching for peers who have a specific piece of data. Both have implementations which work in modern Web browsers, as well as command line tools.

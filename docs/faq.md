@@ -20,6 +20,10 @@ We run a signaling server for users of our client applications. However, anyone 
 
 It's not technically impossible that they'd collide, but it's extremely unlikely. Dat links are are 32 bytes long. That's 1.1579 x 10^77 possible numbers!
 
+### What are the limits on file sizes?
+
+Data is transferred directly between peers, we do not store any data right now. The main limits are importing and transfer speeds, which will improve soon. We plan to help institutions and others set up cloud storage for academic uses and commercial options for general users.
+
 ### How is Dat different than IPFS?
 
 IPFS and Dat share a number of underlying similarities but address different problems. Both deduplicate content-addressed pieces of data and have a mechanism for searching for peers who have a specific piece of data. Both have implementations which work in modern Web browsers, as well as command line tools.

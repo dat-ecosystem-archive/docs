@@ -38,7 +38,7 @@ In the future, owners will be able to grant collaborators write access to the Da
 
 ### Secure Register
 
-A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-you-can-trust/) is an authoritative list of information you can trust. We maintain an open register called [Dat Folder](datfolder.org) which contains public data, and is open to everyone.
+A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-you-can-trust/) is an authoritative list of information you can trust. We maintain an open register called [Dat Folder](https://datproject.org) which contains public data, and is open to everyone.
 
 ### Dat Link
 

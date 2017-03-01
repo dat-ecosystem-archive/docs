@@ -18,7 +18,7 @@ We run a signaling server for users of our client applications. However, anyone 
 
 ### Are the Dat links guaranteed to be unique?
 
-It's not technically impossible that they'd collide, but it's extremely unlikely. Dat links are are 32 bytes long. That's 1.1579 x 10^77 possible numbers!
+It's not technically impossible that they'd collide, but it's extremely unlikely. Dat links are 32 bytes long. That's 1.1579 x 10^77 possible numbers!
 
 ### What are the limits on file sizes?
 

@@ -1,8 +1,7 @@
-# Install Dat
+## Dat Desktop
 
-|         | Dat Desktop     |
-|---------|-------------------|
 | MacOS   | [Download](https://github.com/datproject/dat-desktop/releases/download/1.0.3/dat-desktop-1.0.3.dmg)          |
+|---------|-------------------|
 | Linux   | [Build from Source](http://github.com/datproject/dat-desktop) |
 | Windows | Coming Soon       |
 

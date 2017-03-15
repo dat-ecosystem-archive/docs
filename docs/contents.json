@@ -1,7 +1,6 @@
 {
   "Dat": {
     "Introduction": "modules/dat.md",
-    "Install": "install.md",
     "How Dat Works": "how-dat-works.md",
     "Terminology": "terms.md",
     "FAQ": "faq.md"

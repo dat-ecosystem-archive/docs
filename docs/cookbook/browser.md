@@ -8,11 +8,33 @@ Because dat-js uses webrtc, it can only connect to other browser clients. It is 
 
 OK, now for the goods.
 
-## Creating a dat
+## Install
+
+Embed the following script [dat.min.js](https://raw.githubusercontent.com/datproject/dat-js/master/dat.min.js) on the page:
+```
+<script type="text/javascript" src="dat.min.js"></script>
+```
+This provides a `Dat` prototype on the `window` object.
+
+### Browserify
+
+Or use Node.js in the browser with [browserify](http://github.com/substack/node-browserify), which lets you use node.js style require() to organize your browser code using npm.
+
+```
+npm install dat-js
+```
+
+Then use `dat-js` like this:
+
+```
+var Dat = require('dat-js')
+```
+
+## Quick Examples
+
+### Sharing data
 
 ```js
-var Dat = require('dat-js')
-
 var dat = Dat()
 dat.add(function (repo) {
   var writer = repo.archive.createFileWriteStream('hello.txt')
@@ -21,7 +43,7 @@ dat.add(function (repo) {
 })
 ```
 
-## Downloading data
+### Downloading data
 
 ```js
 var Dat = require('dat-js')

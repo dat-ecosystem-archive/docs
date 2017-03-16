@@ -2,7 +2,7 @@
 
 Dat is written in JavaScript, so naturally, it can work entirely in the browser! The great part about this is that as more peers connect to each other in their client, the site assets will be shared between users rather hitting any server.
 
-This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dat links can be rendered live and read dynamically, whereas BitTorrent links are static. In other words, Dat functions more like DropBox or BitTorrent Sync. The original owner can update the files in the directory and all peers will receive the updates automatically.
+This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dat links can be rendered live and read dynamically, whereas BitTorrent links are static.The original owner can update the files in the directory and all peers will receive the updates automatically.
 
 Because dat-js uses webrtc, it can only connect to other browser clients. It is not possible for the dat-js library to connect to the UTP and UDP clients used in the Node.js versions.
 

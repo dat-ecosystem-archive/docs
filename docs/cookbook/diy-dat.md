@@ -4,7 +4,7 @@ In this guide, we will show how to develop applications with the Dat ecosystem. 
 
 This tutorial will follow the steps for sharing and downloading files using Dat. In practice, we implement these in [dat-node](https://github.com/datproject/dat-node), a high-level module for using Dat that provides easy access to the core Dat modules.
 
-For any Dat application, there are three essential modules you will start with: 
+For any Dat application, there are three essential modules you will start with:
 
 1. [hyperdrive](https://npmjs.org/hyperdrive) for file synchronization and versioning
 2. [hyperdrive-archive-swarm](https://npmjs.org/hyperdrive-archive-swarm) helps discover and connect to peers over local networks and the internet
@@ -73,15 +73,15 @@ Once you are finished, see if you can view this file by running:
 node bonus.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2 cookbook/diy-dat.md
 ```
 
-[See how we coded it](https://github.com/joehand/diy-dat-examples/blob/master/module-1/bonus.js). 
+[See how we coded it](https://github.com/joehand/diy-dat-examples/blob/master/module-1/bonus.js).
 
 ## Module #2: Download all files to computer
 
 This module will build on the last module. Instead of displaying a single file, we will download all of the files from a Dat into a local directory. View the code for this module on [Github](https://github.com/joehand/diy-dat-examples/tree/master/module-2).
 
-To download the files to the file system, instead of to a database, we will use the `file` option in `hyperdrive` and the [random-access-file](http://npmjs.org/random-access-file) module. We will also learn two new archive functions that make handling all the files a bit easier than the file stream in module #1. 
+To download the files to the file system, instead of to a database, we will use the `file` option in `hyperdrive` and the [random-access-file](http://npmjs.org/random-access-file) module. We will also learn two new archive functions that make handling all the files a bit easier than the file stream in module #1.
 
-Setup will be the same as before (make sure you install random-access-file and stream-each this time): 
+Setup will be the same as before (make sure you install random-access-file and stream-each this time):
 
 ```bash
 mkdir module-2 && cd module-2
@@ -131,7 +131,3 @@ You should be able to run the module and see all our docs files in the `download
 ```bash
 node index.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2
 ```
-
-## Module #3: Sharing a file
-
-## Module #4: Sharing a directory of files

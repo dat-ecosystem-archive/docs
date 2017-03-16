@@ -16,7 +16,7 @@ The [Dat CLI](https://npmjs.org/dat) module itself combines these modules and wr
 
 You will need node and npm installed to build with Dat. [Read more](https://github.com/datproject/dat/blob/master/CONTRIBUTING.md#development-workflow) about our development work flow to learn how we manage our module dependencies during development.
 
-## Module #1: Download a File
+## Download a File
 
 Our first module will download files from a Dat link entered by the user. View the code for this module on [Github](https://github.com/joehand/diy-dat-examples/tree/master/module-1).
 
@@ -57,7 +57,7 @@ node index.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2
 
 You should see the first file in our docs repo.
 
-#### Module #1 Bonus: Display any file in the Dat
+#### Bonus: Display any file in the Dat
 
 With a few more lines of code, the user can enter a file to display from the Dat link.
 
@@ -75,7 +75,7 @@ node bonus.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2 c
 
 [See how we coded it](https://github.com/joehand/diy-dat-examples/blob/master/module-1/bonus.js).
 
-## Module #2: Download all files to computer
+## Download all files to computer
 
 This module will build on the last module. Instead of displaying a single file, we will download all of the files from a Dat into a local directory. View the code for this module on [Github](https://github.com/joehand/diy-dat-examples/tree/master/module-2).
 

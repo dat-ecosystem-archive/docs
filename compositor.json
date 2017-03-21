@@ -1,0 +1,92 @@
+{
+  "name": "datproject/docs",
+  "version": "0.1.4",
+  "libraries": {
+    "xv": "^1.1.25"
+  },
+  "title": "",
+  "branch": "",
+  "style": {
+    "name": "Swiss",
+    "componentSet": {
+      "nav": "nav/BasicNav",
+      "header": "header/SwissHeader",
+      "article": "article/SwissArticle",
+      "footer": "footer/BasicFooter"
+    },
+    "fontFamily": "\"Helvetica Neue\", Helvetica, Arial, sans-serif",
+    "heading": {
+      "fontWeight": 700,
+      "letterSpacing": "-0.01em"
+    },
+    "layout": {
+      "fluid": true
+    },
+    "colors": {
+      "text": "#000",
+      "background": "#fff",
+      "primary": "#05a",
+      "secondary": "#444",
+      "highlight": "#f30",
+      "border": "#ccc",
+      "muted": "#eee"
+    }
+  },
+  "content": [
+    {
+      "component": "nav",
+      "links": [
+        {
+          "href": "http://docs.datproject.org/",
+          "text": "Home"
+        },
+        {
+          "href": "https://github.com/datproject/docs",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://npmjs.com/package/dat-docs",
+          "text": "npm"
+        }
+      ]
+    },
+    {
+      "component": "header",
+      "heading": "docs",
+      "subhead": "Documentation resources for dat and the surrounding ecosystem",
+      "children": [
+        {
+          "component": "ui/TweetButton",
+          "text": "docs: Documentation resources for dat and the surrounding ecosystem",
+          "url": "http://docs.datproject.org/"
+        },
+        {
+          "component": "ui/GithubButton",
+          "user": "datproject",
+          "repo": "docs"
+        }
+      ],
+      "text": "v1.0.0"
+    },
+    {
+      "component": "article",
+      "metadata": {
+        "source": "github.readme"
+      },
+      "html": "<h2>Dat Project Documentation</h2>\n<p>Repository for the documentation of the Dat Project ecosystem. View the docs at <a href=\"https://docs.datproject.org/\">docs.datproject.org</a>.</p>\n<p><a href=\"http://webchat.freenode.net/?channels=dat\"><img src=\"https://img.shields.io/badge/irc%20channel-%23dat%20on%20freenode-blue.svg\"></a>\n<a href=\"https://gitter.im/datproject/discussions?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge\"><img src=\"https://badges.gitter.im/Join%20Chat.svg\"></a>\n<a href=\"http://docs.dat-data.com\"><img src=\"https://img.shields.io/badge/Dat%20Project-Docs-green.svg\"></a></p>\n<h2>Writing &amp; Editing Docs</h2>\n<p><a href=\"docs/readme.md\">See docs folder</a> for information on editing and adding docs. Once you finish editing the docs, send a PR to the <code>deploy</code> branch to get the edits automatically deployed.</p>\n<h2>Development</h2>\n<p>This documentation uses <a href=\"https://github.com/freeman-lab/minidocs\">minidocs</a> for layout, <a href=\"https://github.com/hughsk/ecosystem-docs\">ecosystem-docs</a> to get documentation from other modules, and ideas from <a href=\"https://github.com/pull-stream/pull-stream-docs\">pull-stream-docs</a> for auto travis deployment.</p>\n<h3>Viewing Docs Locally</h3>\n<ol>\n<li>Clone Repository</li>\n<li><code>npm install</code></li>\n<li><code>npm run build:local</code> to build the docs for local viewing</li>\n<li><code>npm run update</code> to update external modules</li>\n<li><code>npm run start</code> to view the docs in browser</li>\n</ol>\n<h3>Deployment</h3>\n<p>This repository uses <a href=\"https://www.netlify.com/\">netlify</a> for deployment. Deployment will happen automatically.</p>\n<p>It works this way:</p>\n<ul>\n<li>Git webhook tells netlify there is new content</li>\n<li>netlify pulls latest repo</li>\n<li>netlify automatically runs <code>npm install</code></li>\n<li>netlify runs the build script <code>sh scripts/netlify.sh</code>, which:<ul>\n<li>sets git config so we can use <code>ecosystem-docs</code> and pull latests readme files</li>\n<li>runs <code>npm run netlify</code> which updates remote repos and builds.</li>\n</ul>\n</li>\n<li>deploys <code>/dist</code> to the web</li>\n</ul>\n<h3>NPM Commands</h3>\n<h4>Local Docs Preview:</h4>\n<ul>\n<li><code>npm update</code>: update external module readme files</li>\n<li><code>npm run build:local</code>: build app &amp; css for local viewing</li>\n<li><code>npm start</code>: start budo server to view locally</li>\n</ul>\n<h4>Other commands:</h4>\n<ul>\n<li>`n</li>\n</ul>\n"
+    },
+    {
+      "component": "footer",
+      "links": [
+        {
+          "href": "https://github.com/datproject/docs",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://github.com/datproject",
+          "text": "datproject"
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,12 @@ When someone starts downloading data with the [Dat command-line tool](https://gi
 
 ## Phase 1: Source discovery
 
-Dat links look like this: `dat.land/c3fcbcdcf03360529b47df32ccfb9bc1d7f64aaaa41cca43ca9ac7f6778db8da`. The domain, dat.land, is there so if someone opens the link in a browser we can provide them with download instructions, and as an easy way for people to visually distinguish and remember Dat links. Dat itself doesn't actually use the dat.land part, it just needs the last part of the link which is a fingerprint of the data that is being shared. The first thing that happens when you go to download data using one of these links is you ask various discovery networks if they can tell you where to find sources that have a copy of the data you need.
+Dat links look like this:
+`https://datproject.org/f34f99538702f3b55ea3b88c9e374fb72db0ca35903c2249aaa09280accc2062`.
+The domain, datproject.org, is there so if someone opens the link in a browser
+we can provide them with download instructions, and as an easy way for people
+to visually distinguish and remember Dat links. Dat itself doesn't actually use
+the datproject.org part, it just needs the last part of the link which is a fingerprint of the data that is being shared. The first thing that happens when you go to download data using one of these links is you ask various discovery networks if they can tell you where to find sources that have a copy of the data you need.
 
 Source discovery means finding the IP and port of all the known data sources online that have a copy of that data you are looking for. You can then connect to them and begin exchanging data. By introducing this discovery phase we are able to create a network where data can be discovered even if the original data source disappears.
 

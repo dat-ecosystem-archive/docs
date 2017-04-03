@@ -10,10 +10,17 @@ OK, now for the goods.
 
 ## Install
 
-Embed the following script [dat.min.js](https://raw.githubusercontent.com/datproject/dat-js/master/dat.min.js) on the page:
+Embed the following script [dat.min.js](https://cdn.jsdelivr.net/dat/6.2.0/dat.min.js) on the page:
 ```
 <script type="text/javascript" src="dat.min.js"></script>
 ```
+
+You can also use the jsdelivr CDN for faster load speeds:
+
+```
+<script type="text/javascript" src="https://cdn.jsdelivr.net/dat/6.2.0/dat.min.js"></script>
+```
+
 This provides a `Dat` prototype on the `window` object.
 
 ### Browserify

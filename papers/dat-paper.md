@@ -179,110 +179,6 @@ For example a Dat Stream with two data entries would look something like this (p
 
 Dat Streams include a message based replication protocol so two peers can communicate over a stateless channel to discover and exchange data. Once you have received the Stream metadata, you can make individual requests for chunks from any peer you are connected to. This allows clients to parallelize data requests across the entire pool of peers they have established connections with.
 
-Messages are encoded using Protocol Buffers. The protocol has nine message types:
-
-#### Open
-
-This should be the first message sent and is also the only message without a type. It looks like this:
-
-``` protobuf
-message Open {
-  required bytes feed = 1;
-  required bytes nonce = 2;
-}
-```
-
-The `feed` should be set to the discovery key as specified above. The `nonce` should be set to 24 bytes of high entropy random data. When running in encrypted mode this is the only message sent unencrypted.
-
-##### `0` Handshake
-
-This message is sent after sending an open message so it will be encrypted and we won't expose our peer id to a third party.
-
-``` protobuf
-message Handshake {
-  required bytes id = 1;
-  repeated string extensions = 2;
-}
-```
-
-##### `1` Have
-
-Have messages give the other peer information about which blocks of data you have.
-
-``` protobuf
-message Have {
-  required uint64 start = 1;
-  optional uint64 end = 2;
-  optional bytes bitfield = 3;
-}
-```
-
-You can use `start` and `end` to represent a range of data block bin numbers. If using a bitfield it should be encoded using a run length encoding described above. It is a good idea to send a have message soon as possible if you have blocks to share to reduce latency.
-
-##### `2` Want
-
-You can send a have message to give the other peer information about which blocks of data you want to have. It has type `2`.
-
-``` protobuf
-message Want {
-  required uint64 start = 1;
-  optional uint64 end = 2;
-}
-```
-
-You should only send the want message if you are interested in a section of the feed that the other peer has not told you about.
-
-##### `3` Request
-
-Send this message to request a block of data. You can request a block by block index or byte offset. If you are only interested in the hash of a block you can set the hash property to true. The nodes property can be set to a tree digest of the tree nodes you already have for this block or byte range. A request message has type `3`.
-
-``` protobuf
-message Request {
-  optional uint64 block = 1;
-  optional uint64 bytes = 2;
-  optional bool hash = 3;
-  optional uint64 nodes = 4;
-}
-```
-
-##### `4` Data
-
-Send a block of data to the other peer. You can use this message to reply to a request or optimistically send other blocks of data to the other client. It has type `4`.
-
-``` protobuf
-message Data {
-  message Node {
-    required uint64 index = 1;
-    required uint64 size = 2;
-    required bytes hash = 3;
-  }
-
-  required uint64 block = 1;
-  optional bytes value = 2;
-  repeated Node nodes = 3;
-  optional bytes signature = 4;
-}
-````
-
-##### `5` Cancel
-
-Cancel a previous sent request. It has type `5`.
-
-``` protobuf
-message Cancel {
-  optional uint64 block = 1;
-  optional uint64 bytes = 2;
-}
-```
-
-##### `6` Pause
-
-An empty message that tells the other peer that they should stop requesting new blocks of data. It has type `6`.
-
-##### `7` Resume
-
-An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
-
 ## 3.4 Efficient Versioning
 
 Given a stream of binary data, Dat splits the stream into chunks using Rabin fingerprints, hashes each chunk, and arranges the hashes in a specific type of Merkle tree that allows for certain replication properties. Dat uses the chunk boundaries provided by Rabin fingerprinting to decide where to slice up the binary input stream. The Rabin implementation in Dat is tuned to produce a chunk every 16kb on average. This means for a 1MB file the initial chunking will produce around 64 chunks.
@@ -331,3 +227,78 @@ Dat never exposes either the public or private key over the network. During the 
 All messages in the Dat protocol are encrypted using the public key during transport. This means that unless you know the public key (e.g. unless the Dat link was shared with you) then you will not be able to discover or communicate with any member of the swarm for that Dat. Anyone with the public key can verify that messages (such as entries in a Dat Stream) were created by a holder of the private key.
 
 Dat does not provide an authentication mechanism. Instead it provides a capability system. Anyone with the Dat link is currently considered able to discover and access data. Do not share your Dat links publicly if you do not want them to be accessed.
+
+
+### SLEEP
+
+### What is SLEEP?
+
+SLEEP is the the on-disk format that Dat produces and uses. It is a set of 9 files that hold all of the metadata needed to list the contents of a Dat repository and verify the integrity of the data you receive. SLEEP is designed to work with REST, allowing servers to be plain HTTP file servers serving the static SLEEP files, meaning you can implement a Dat protocol client using HTTP with a static HTTP file server as the backend.
+
+SLEEP files contain metadata about the data inside a Dat repository, including cryptographic hashes, cryptographic signatures, filenames and file permissions. The SLEEP format is specifically engineered to allow efficient access to subsets of the metadat and/or data in the repository, even on very large repositories, which enables Dat's peer to peer networking to be fast.
+
+The acronym SLEEP is a slumber related pun on REST and stands for Syncable Lightweight Event Emitting Persistence. The Event Emitting part refers to how SLEEP files are append-only in nature, meaning they grow over time and new updates can be subscribed to as a realtime feed of events through the Dat protocol.
+
+The SLEEP version used in Dat as of 2017 is SLEEP V2. The previous version is [documented here](http://specs.okfnlabs.org/sleep/).
+
+### SLEEP Files
+
+SLEEP is a set of 9 files that should be stored in a folder with the following names. In Dat, the files are stored in a folder called `.dat` in the top level of the repository.
+
+```
+metadata.key
+metadata.signatures
+metadata.bitfield
+metadata.tree
+metadata.data
+content.key
+content.signatures
+content.bitfield
+content.tree
+```
+
+The files prefixed with `content` store metadata about the primary data in a Dat repository, for example the raw binary contents of the files. The files prefixed with `metadata` store metadata about the files in the repository, for example the filenames, file sizes, file permissions. The `content` and `metadata` files are both serialized representations of Hypercore feeds, making SLEEP a set of two Hypercore feeds to represent a set of files, one for file data and one for file metadata.
+
+#### File Descriptions
+
+##### metadata.key
+
+The ed25519 public key
+
+#####  metadata.signatures
+
+64 byte signatures for the merkle tree, every time tree is updated we sign the roots, and append them to the signatures file. all the even nodes
+
+##### metadata.bitfield
+
+bitfields for data, tree, index (tells you which blocks are missing). 1 bit for every 64kb of data
+
+##### metadata.tree
+
+merkle tree, all the fixed size nodes written in in-order tree notation, hash plus byte size (32 bytes plus 8 bytes)
+
+##### metadata.data
+
+raw data
+
+##### content.key
+
+##### content.signatures
+
+##### content.bitfield
+
+##### content.tree
+
+#### File Headers
+
+```
+32 byte header
+4 bytes - magic byte
+1 byte - version number
+1 byte - block size
+rest - length prefixed string containing algorithm
+
+ed25519
+bitfield
+blake2b
+```

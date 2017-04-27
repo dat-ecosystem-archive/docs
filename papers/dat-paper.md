@@ -228,7 +228,6 @@ All messages in the Dat protocol are encrypted using the public key during trans
 
 Dat does not provide an authentication mechanism. Instead it provides a capability system. Anyone with the Dat link is currently considered able to discover and access data. Do not share your Dat links publicly if you do not want them to be accessed.
 
-
 ### SLEEP
 
 ### What is SLEEP?
@@ -259,46 +258,244 @@ content.tree
 
 The files prefixed with `content` store metadata about the primary data in a Dat repository, for example the raw binary contents of the files. The files prefixed with `metadata` store metadata about the files in the repository, for example the filenames, file sizes, file permissions. The `content` and `metadata` files are both serialized representations of Hypercore feeds, making SLEEP a set of two Hypercore feeds to represent a set of files, one for file data and one for file metadata.
 
+#### SLEEP File Headers
+
+The following structured binary format is used for `signatures`, `bitfield`, and `tree` files. The header contains metadata as well as information needed to decode the rest of the files after the header. SLEEP files are designed to be easy to append new data to at the end, easy to read arbitrary byte offsets in the middle, and are relatively flat, simple files that rely on the filesystem for the heavy lifting.
+
+SLEEP files are laid out like this:
+
+```
+<32 byte header>
+<fixed-size entry 1>
+<fixed-size entry 2>
+<fixed-size entry ...>
+<fixed-size entry n>
+````
+
+- 32 byte header
+  - 4 bytes - magic byte (value varies depending on which file, used to quickly identify which file type it is)
+  - 1 byte - version number of the file header protocol, current version is 0
+  - 2 byte Uint16BE - entry size, describes how long each entry in the file is
+  - 1 byte - length prefix for body
+  - rest of 32 byte header - string describing key algorithm (in dat 'ed25519'). length of this string matches the length in the previous length prefix field. This string must fit within the 32 byte header limitation (24 bytes reserved for string). Unused bytes should be filled with zeroes.
+
+Possible values in the Dat implementation for the body field are:
+
+```
+Ed25519
+BLAKE2b
+```
+
+To calculate the offset of some entry position, first read the header and get the entry size, then do `32 + entrySize * entryIndex`. To calculate how many entries are in a file, you can use the entry size and the filesize on disk and do `(fileSize - 32) / entrySize`.
+
+As mentioned above, `signatures`, `bitfield` and `tree` are the three SLEEP files. There are two additional files, `key`, and `data`, which do not contain SLEEP file headers and store plain serialized data for easy access. `key` stores the public key that is described by the `signatures` file, and `data` stores the raw block data that the `tree` file contains the hashes and metadata for.
+
 #### File Descriptions
 
-##### metadata.key
+##### key
 
-The ed25519 public key
+The public key used to verify the signatures in the `signatures` file. Stored in binary as a single buffer written to disk. To find out what format of key is stored in this file, read the header of `signatures`. In Dat, it's always a ed25519 public key, but other implementations can specify other key types using a string value in that header.
 
-#####  metadata.signatures
+##### tree
 
-64 byte signatures for the merkle tree, every time tree is updated we sign the roots, and append them to the signatures file. all the even nodes
-
-##### metadata.bitfield
-
-bitfields for data, tree, index (tells you which blocks are missing). 1 bit for every 64kb of data
-
-##### metadata.tree
-
-merkle tree, all the fixed size nodes written in in-order tree notation, hash plus byte size (32 bytes plus 8 bytes)
-
-##### metadata.data
-
-raw data
-
-##### content.key
-
-##### content.signatures
-
-##### content.bitfield
-
-##### content.tree
-
-#### File Headers
+A SLEEP formatted 32 byte header with data entries representing a serialized merkle tree based on the data in the data storage layer. All the fixed size nodes written in in-order tree notation. The header algorithm string for `tree` files is `BLAKE2b`. The entry size is 40 bytes. Entries are formatted like this:
 
 ```
-32 byte header
-4 bytes - magic byte
-1 byte - version number
-1 byte - block size
-rest - length prefixed string containing algorithm
-
-ed25519
-bitfield
-blake2b
+<32 byte header>
+  <4 byte magic string: 0x05025702>
+  <1 byte version number: 0>
+  <2 byte entry size: 40>
+  <1 byte algorithm name length prefix: 7>
+  <7 byte algorithm name: BLAKE2b>
+  <17 zeroes>
+<40 byte entries>
+  <32 byte BLAKE2b hash>
+  <8 byte Uint64BE child tree leaf byte length>
 ```
+
+The child tree leaf byte length is the byte size containing aggregate length of all leaf nodes in the tree below this node.
+
+This file uses the in-order notation, meaning even entries are leaf nodes and odd entries are parent nodes (non-leaf).
+
+To prevent pre-image attacks, all hashes start with a one byte type descriptor:
+
+```
+0 - LEAF
+1 - PARENT
+2 - ROOT
+```
+
+To calculate leaf node entries (the hashes of the data entries) we hash this data:
+
+```
+BLAKE2b(0 + Uint64BE of length of entry data + entry data)
+```
+
+Then we take this 32 byte hash and write it to the tree as 40 bytes like this:
+
+```
+32 byte BLAKE2b hash + Uint64BE of length of data 
+```
+
+Note that the Uint64 of length of data is included both in the hashed data and written at the end of the entry. This is to expose more metadata to Dat for advanced use cases such as verifying data length in sparse replication scenarios.
+
+To calculate parent node entries (the hashes of the leaf nodes) we hash this data:
+
+```
+BLAKE2b(1
+  + Uint64BE containing (left child length + right child length)
+  + left child hash
+  + right child hash
+)
+```
+
+Then we take this 32 byte hash and write it to the tree as 40 bytes like this:
+
+```
+32 byte BLAKE2b hash + Uint64BE containing (left child length + right child length)
+```
+
+The reason the tree entries contain data lengths is to allow for sparse mode replication. Encoding lengths (and including lengths in all hashes) means you can verify the merkle subtrees independent of the rest of the tree, which happens during sparse replication scenarios (diagram would be useful here).
+
+The tree file corresponds directly to the `data` file.
+
+##### data
+
+The `data` file is only included in the SLEEP format for the `metadata.*` prefixed files which contains filesystem metadata and not actual file data. For the `content.*` files, the data is stored externally (in Dat it is stored as normal files on the filesystem and not in a SLEEP file). However you can configure Dat to use a `content.data` file if you want and it will still work.
+
+The `data` file does not contain a SLEEP file header. It just contains a bunch of concatenated data entries. Entries are written in the same order as they appear in the `tree` file. To read a `data` file, first decode the `tree` file and for every leaf in the `tree` file you can calculate a data offset for the data described by that leaf node in the `data` file.
+
+For example, if we wanted to seek to a specific entry offset (say entry 42):
+
+- First, read the header of the `tree` file and get the entry size, then do `32 + entrySize * 42` to get the raw tree index: `32 + (40 * 42)`
+- Since we want the leaf entry (even node in the in-order layout), we multiply the entry index by 2:
+ `32 + (40 * (42 * 2))`
+- Read the 40 bytes at that offset in the `tree` file to get the leaf node entry.
+- Read the last 8 bytes of the entry to get the length of the data entry
+- To calculate the offset of where in the `data` file your entry begins, you need to sum all the lengths of all the earlier entries in the tree. The most efficient way to do this is to sum all the previous parent node (non-leaf) entry lengths. You can also sum all leaf node lengths, but parent nodes contain the sum of their childrens lengths so it's more efficient to use parents. During Dat replication, these nodes are fetched as part of the Merkle tree verification so you will already have them locally. This is a log(N) operation where N is the entry index. Entries are also small and therefore easily cacheable.
+- Once you get the offset, you use the length you decoded above and read N bytes (where N is the decoded length) at the offset in the `data` file. You can verify the data integrity using the 32 byte hash from the `tree` entry.
+
+Using this scheme, if you write 4GB of data using on average 64KB data chunks (note: chunks can be variable length and do not need to be the same size), your tree file will be around 5MB (0.00125% overhead).
+
+#####  signatures
+
+A SLEEP formatted 32 byte header with data entries being 64 byte signatures.
+
+```
+<32 byte header>
+  <4 byte magic string: 0x05025701>
+  <1 byte version number: 0>
+  <2 byte entry size: 64>
+  <1 byte algorithm name length prefix: 7>
+  <7 byte algorithm name: Ed25519>
+  <17 zeroes>
+<64 byte entries>
+  <64 byte Ed25519 signature>
+```
+
+Every time the tree is updated we sign the current roots of the Merkle tree, and append them to the signatures file. It is possible for the in-order Merkle tree to have multiple roots at once. A root is defined as a parent node with a full set of child node slots filled below it.
+
+For example, this tree hash 2 roots (1 and 4)
+
+```
+0
+  1
+2
+
+4
+```
+
+This tree hash one root (3):
+
+```
+0
+  1
+2
+    3
+4
+  5
+6
+```
+
+This one has one root (1):
+
+```
+0
+  1
+2
+```
+
+The signatures file starts with no entries. Each time a new leaf is appended to the `tree` file (aka whenever data is added to a Dat), we take all root hashes at the current state of the Merkle tree and hash and sign them, then append them as a new entry to the signatures file.
+
+```
+Ed25519 sign(
+  BLAKE2b(
+    2 // ROOT
+    + for (every root node) {
+        32 Byte Root Hash
+      + 8 Byte Uint64BE Root Tree Index
+      + 8 Byte Uint64BE Aggregated Tree Byte Length
+    }
+  )
+)
+```
+
+The reason we hash all the root nodes is that the BLAKE2b hash above is only calculateable if you have all of the pieces of data required to generate all the intermediate hashes. This is the crux of Dat's data integrity guarantees.
+
+##### bitfield
+
+A SLEEP formatted 32 byte header followed by a series of 3328 byte long entries.
+
+```
+<32 byte header>
+  <4 byte magic string: 0x05025700>
+  <1 byte version number: 0>
+  <2 byte entry size: 3328>
+  <1 byte algorithm name length prefix: 0> // unused
+  <1 byte algorithm name: 0> // unused
+  <24 zeroes>
+<3328 byte entries> // (2048 + 1024 + 256)
+```
+
+The bitfield describes which pieces of data you have, and which nodes in the `tree` file have been written. This file exists as an index of the `tree` and `data` to quickly figure out which pieces of data you have or are missing. This file can be regenerated if you delete it, so it is considered a materialized index.
+
+The `bitfield` file actually contains three bitfields of different sizes. A bitfield (AKA bitmap) is defined as a set of bits where each bit (0 or 1) represents if you have or do not have a piece of data at that bit index. So if there is a dataset of 10 cat pictures, and you have pictures 1, 3, and 5 but are missing the rest, your bitfield would look like `1010100000`.
+
+Each entry contains three objects:
+
+- Data Bitfield (1024 bytes) - 1 bit for for each data entry that you have synced (1 for every entry in `data`).
+- Tree Bitfield (2048 bytes) - 1 bit for every tree entry (all nodes in `tree`)
+- Bitfield Index (256 bytes) - This is an index of the Data Bitfield that makes it efficient to figure out which pieces of data are missing from the Data Bitfield without having to do a linear scan.
+
+The Data Bitfield is 1Kb somewhat arbitrarily, but the idea is that because most filesystems work in 4Kb block sizes, we can fit the Data, Tree and Index in less then 4Kb of data for efficient writes to the filesystem. The Tree and Index sizes are based on the Data size (the Tree has twice the entries as the Data, odd and even nodes vs just even nodes in `tree`, and Index is always 1/4th the size).
+
+To generate the Index, you pairs of 2 bytes at a time from the Data Bitfield, check if all bites in the 2 bytes are the same, and generate 4 bits of Index metadata for every 2 bytes of Data (hence how 1024 bytes of Data ends up as 256 bytes of Index).
+
+First you generate a 2 bit tuple for the 2 bytes of Data:
+
+```
+// [first bit means all bits in the data byte are the same, second bit states which bit they are]
+// note for first bit, 0 means true (because files on fs init with all zeroes)
+if (data is all 1's) then [1,1]
+if (data is all 0's) then [0,0]
+if (data is not all the same bits) then [1, 0]
+// [0, 1] is unused/reserved
+```
+
+The Index itself is (surprise, surprise) an in-order binary tree (not a traditional bitfield but a weird hybrid bitfield tree). To generate the tree, you take the tuples you generatee above and then write them into a tree like this, where non-leaf nodes are generated using the above scheme by looking at the results of the relative even child tuples for each odd parent tuple:
+
+```
+// for e.g. 32 bytes (16 tuples) of fully replicated data (all 1's)
+0 - [11 11 11 11]
+1 -     [11 11 11 11]
+2 - [11 11 11 11]
+3 -         [11 11 11 11]
+4 - [11 11 11 11]
+5 -     [11 11 11 11]
+6 - [11 11 11 11]
+7 - empty in this case (added when next entry is written)
+```
+
+In this scheme, to represent 32 bytes of data it takes 8 bytes of Index (actually 7 because of the unused one in this specific example). In this example it compresses nicely as its all contiguous ones on disk, similarly for an empty bitfield it would be all zeroes.
+
+If you write 4GB of data using on average 64KB data chunk size, your bitfield will be at most 32KB.

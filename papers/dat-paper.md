@@ -238,7 +238,7 @@ SLEEP files contain metadata about the data inside a Dat repository, including c
 
 The acronym SLEEP is a slumber related pun on REST and stands for Syncable Lightweight Event Emitting Persistence. The Event Emitting part refers to how SLEEP files are append-only in nature, meaning they grow over time and new updates can be subscribed to as a realtime feed of events through the Dat protocol.
 
-The SLEEP version used in Dat as of 2017 is SLEEP V2. The previous version is [documented here](http://specs.okfnlabs.org/sleep/).
+The SLEEP version used in Dat as of 2017 is SLEEP V2. The previous version is documented at http://specs.okfnlabs.org/sleep.
 
 ### SLEEP Files
 
@@ -310,10 +310,10 @@ A SLEEP formatted 32 byte header with data entries representing a serialized mer
   <17 zeroes>
 <40 byte entries>
   <32 byte BLAKE2b hash>
-  <8 byte Uint64BE child tree leaf byte length>
+  <8 byte Uint64BE children leaf byte length>
 ```
 
-The child tree leaf byte length is the byte size containing aggregate length of all leaf nodes in the tree below this node.
+The children leaf byte length is the byte size containing the sum byte length of all leaf nodes in the tree below this node.
 
 This file uses the in-order notation, meaning even entries are leaf nodes and odd entries are parent nodes (non-leaf).
 
@@ -328,13 +328,22 @@ To prevent pre-image attacks, all hashes start with a one byte type descriptor:
 To calculate leaf node entries (the hashes of the data entries) we hash this data:
 
 ```
-BLAKE2b(0 + Uint64BE of length of entry data + entry data)
+BLAKE2b(
+  <1 byte type>
+    0
+  <8 bytes Uint64BE>
+    length of entry data
+  <entry data>
+)
 ```
 
 Then we take this 32 byte hash and write it to the tree as 40 bytes like this:
 
 ```
-32 byte BLAKE2b hash + Uint64BE of length of data 
+<32 bytes>
+  BLAKE2b hash
+<8 bytes Uint64BE>
+  length of data
 ```
 
 Note that the Uint64 of length of data is included both in the hashed data and written at the end of the entry. This is to expose more metadata to Dat for advanced use cases such as verifying data length in sparse replication scenarios.
@@ -342,17 +351,25 @@ Note that the Uint64 of length of data is included both in the hashed data and w
 To calculate parent node entries (the hashes of the leaf nodes) we hash this data:
 
 ```
-BLAKE2b(1
-  + Uint64BE containing (left child length + right child length)
-  + left child hash
-  + right child hash
+BLAKE2b(
+  <1 byte>
+    1
+  <8 bytes Uint64BE>
+    left child length + right child length
+  <32 bytes>
+    left child hash
+  <32 bytes>
+    right child hash
 )
 ```
 
 Then we take this 32 byte hash and write it to the tree as 40 bytes like this:
 
 ```
-32 byte BLAKE2b hash + Uint64BE containing (left child length + right child length)
+<32 bytes>
+  BLAKE2b hash
+<8 bytes Uint64BE>
+  left child length + right child length
 ```
 
 The reason the tree entries contain data lengths is to allow for sparse mode replication. Encoding lengths (and including lengths in all hashes) means you can verify the merkle subtrees independent of the rest of the tree, which happens during sparse replication scenarios (diagram would be useful here).
@@ -430,11 +447,12 @@ The signatures file starts with no entries. Each time a new leaf is appended to 
 ```
 Ed25519 sign(
   BLAKE2b(
-    2 // ROOT
-    + for (every root node) {
-        32 Byte Root Hash
-      + 8 Byte Uint64BE Root Tree Index
-      + 8 Byte Uint64BE Aggregated Tree Byte Length
+    <1 byte>
+      2 // root type
+    for (every root node) {
+      <32 byte root hash>
+      <8 byte Uint64BE root tree index>
+      <8 byte Uint64BE child byte lengths>
     }
   )
 )
@@ -451,8 +469,8 @@ A SLEEP formatted 32 byte header followed by a series of 3328 byte long entries.
   <4 byte magic string: 0x05025700>
   <1 byte version number: 0>
   <2 byte entry size: 3328>
-  <1 byte algorithm name length prefix: 0> // unused
-  <1 byte algorithm name: 0> // unused
+  <1 byte algorithm name length: 0>
+  <1 byte algorithm name: 0>
   <24 zeroes>
 <3328 byte entries> // (2048 + 1024 + 256)
 ```
@@ -474,18 +492,28 @@ To generate the Index, you pairs of 2 bytes at a time from the Data Bitfield, ch
 First you generate a 2 bit tuple for the 2 bytes of Data:
 
 ```
-// [first bit means all bits in the data byte are the same, second bit states which bit they are]
-// note for first bit, 0 means true (because files on fs init with all zeroes)
 if (data is all 1's) then [1,1]
 if (data is all 0's) then [0,0]
-if (data is not all the same bits) then [1, 0]
-// [0, 1] is unused/reserved
+if (data is not all the same) then [1, 0]
 ```
 
-The Index itself is (surprise, surprise) an in-order binary tree (not a traditional bitfield but a weird hybrid bitfield tree). To generate the tree, you take the tuples you generatee above and then write them into a tree like this, where non-leaf nodes are generated using the above scheme by looking at the results of the relative even child tuples for each odd parent tuple:
+In the above scheme, the first bit means all bits in the data byte are the same, second bit states which bit they are. Note that `[0, 1]` is unused/reserved for future use.
+
+The Index itself is an in-order binary tree, not a traditional bitfield. To generate the tree, you take the tuples you generate above and then write them into a tree like the following example, where non-leaf nodes are generated using the above scheme by looking at the results of the relative even child tuples for each odd parent tuple:
 
 ```
-// for e.g. 32 bytes (16 tuples) of fully replicated data (all 1's)
+// for e.g. 16 bytes (8 tuples) of
+// sparsely replicated data (some 1's, some 0's)
+0 - [00 00 00 00]
+1 -     [10 10 10 10]
+2 - [11 11 11 11]
+```
+
+The tuples at entry `1` above are `[1,0]` because the relative child tuples are not uniform. In the following example, all non-leaf nodes are `[1,1]` because their relative children are all uniform (`[1,1]`)
+
+```
+// for e.g. 32 bytes (16 tuples) of
+// fully replicated data (all 1's)
 0 - [11 11 11 11]
 1 -     [11 11 11 11]
 2 - [11 11 11 11]
@@ -493,9 +521,8 @@ The Index itself is (surprise, surprise) an in-order binary tree (not a traditio
 4 - [11 11 11 11]
 5 -     [11 11 11 11]
 6 - [11 11 11 11]
-7 - empty in this case (added when next entry is written)
 ```
 
-In this scheme, to represent 32 bytes of data it takes 8 bytes of Index (actually 7 because of the unused one in this specific example). In this example it compresses nicely as its all contiguous ones on disk, similarly for an empty bitfield it would be all zeroes.
+Using this scheme, to represent 32 bytes of data it takes at most 8 bytes of Index. In this example it compresses nicely as its all contiguous ones on disk, similarly for an empty bitfield it would be all zeroes.
 
 If you write 4GB of data using on average 64KB data chunk size, your bitfield will be at most 32KB.

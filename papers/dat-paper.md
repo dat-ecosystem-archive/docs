@@ -611,6 +611,7 @@ message Node {
 ```
 
 The `Node` object has three fields
+
   - `path` - the string of the absolute file path of this file. 
   - `Stat` - a Stat encoded object representing the file metadata
   - `children` - a compressed list of the sequence numbers as described earlier
@@ -645,6 +646,7 @@ message Stat {
 ```
 
 These are the field defintions:
+
   - `mode` - posix file mode bitmask
   - `uid` - posix user id
   - `gid` - posix group id

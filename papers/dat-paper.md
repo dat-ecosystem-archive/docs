@@ -526,3 +526,132 @@ The tuples at entry `1` above are `[1,0]` because the relative child tuples are 
 Using this scheme, to represent 32 bytes of data it takes at most 8 bytes of Index. In this example it compresses nicely as its all contiguous ones on disk, similarly for an empty bitfield it would be all zeroes.
 
 If you write 4GB of data using on average 64KB data chunk size, your bitfield will be at most 32KB.
+
+##### metadata.data
+
+This file is used to store content described by the rest of the `metadata.*` hypercore SLEEP files. Whereas the `content.*` SLEEP files describe the data stored in the actual data cloned in the Dat repository filesystem, the `metadata` data feed is stored inside the `.dat` folder along with the rest of the SLEEP files.
+
+The contents of this file is a series of versions of the Dat filesystem tree. As this is a hypercore data feed, it's just an append only log of binary data entries. The challenge is representing a tree in an one dimensional way (append only log). For example, imagine three files:
+
+```
+~/dataset $ ls
+figures
+  graph1.png
+  graph2.png
+results.csv
+
+1 directory, 3 files
+```
+
+We want to take this structure and map it to a serialized representation that gets written into an append only log in a way that still allows for efficient random access by file path.
+
+To do this, we convert the filesystem metadata into entries in a feed like this:
+
+```
+{
+  "path": "/results.csv",
+  children: [[]],
+  sequence: 0
+}
+{
+  "path": "/figures/graph1.png",
+  children: [[0], []],
+  sequence: 1
+}
+{
+  "path": "/figures/graph2",
+  children: [[0], [1]],
+  sequence: 2
+}
+```
+
+##### Filename Resolution
+
+Each sequence represents adding one of the files to the feed, so at sequence 0 the filesystem state only has a single file, `results.csv` in it. At sequence 1, there are only 2 files added to the feed, and at sequence 3 all files are finally added. The `children` field represents a shorthand way of declaring which other files at every level of the directory hierarchy exist alongside the file being added at that revision. For example at the time of sequence 1, children is `[[0], []]`. The first sub-array, `[0]`, represents the first folder in the `path`, which is the root folder `/`. In this case `[0]` means the root folder at this point in time only has a single file, the file that is the subject of sequence `0`. The second subarray is empty `[]` because there are no other existing files in the second folder in the `path`, `figures`.
+
+To look up a file by filename, you fetch the latest entry in the log, then use the `children` metadata in that entry to look up the longest common ancestor based on the parent folders of the filename you are querying. You can then recursively repeat this operation until you find the `path` entry you are looking for (or you exhaust all options which means the file does not exist). This is a `O(number of slashes in your path)` operation.
+
+For example, if you wanted to look up `/results.csv` given the above feed, you would start by grabbing the metadata at sequence 2. The longest common ancestor between `/results.csv` and `/figures/graph2` is `/`. You then grab the corresponding entry in the children array for `/`, which in this case is the first entry, `[0]`. You then repeat this with all of the chilren entries until you find a child that is closer to the entry you are looking for. In this example, the first entry happens to be the match we are looking for.
+
+You can also perform lookups relative to a point in time by starting from a specific sequence number in the feed. For example to get the state of some file relative to an old sequence number, similar to checking out an old version of a repository in Git.
+
+##### Data Serialization
+
+The format of the `metadata.data` file is as follows:
+
+```
+<Header>
+<Node 1>
+<Node 2>
+<Node ...>
+<Node N>
+```
+
+Each entry in the feed is encoded using Protocol Buffers.
+
+The first message we write to the feed is of a type called Header which uses this schema:
+
+```
+message Header {
+  required string type = 1;
+  optional bytes content = 2;
+}
+```
+
+This is used to declare two pieces of metadata used by Dat. It includes a `type` string with the value `hyperdrive` and `content` binary value that holds the public key of the content feed that this metadata feed represents. When you share a Dat, the metadata key is the main key that gets used, and the content feed key is linked from here in the metadata.
+
+After the header the feed will contain many filesystem `Node` entries:
+
+```
+message Node {
+  required string path = 1;
+  optional Stat value = 2;
+  optional bytes children = 3;
+}
+```
+
+The `Node` object has three fields
+  - `path` - the string of the absolute file path of this file. 
+  - `Stat` - a Stat encoded object representing the file metadata
+  - `children` - a compressed list of the sequence numbers as described earlier
+
+The `children` value is encoded by starting with the nested array of sequence numbers, e.g. `[[3], [2, 1]]`. You then sort the individual arrays, in this case resulting in `[[3], [1, 2]]`. You then delta compress each subarray by storing the difference between each integer. In this case it would be `[[3], [1, 1]]` because `3` is 3 more than 0, `1` is 1 more than than 0, and `2` is 1 more than `1`.
+
+When we write these delta compressed subarrays we write them using variable width integers (varints), using a repeating pattern like this, one for each array:
+
+```
+<varint of first subarray element length>
+<varint of the first delta in this array>
+<varint of the next delta ...>
+<varint of the last delta>
+```
+
+This encoding is designed for efficiency as it reduces the filesystem path metadata down to a series of small integers.
+
+The `Stat` objects use this encoding:
+
+```
+message Stat {
+  required uint32 mode = 1;
+  optional uint32 uid = 2;
+  optional uint32 gid = 3;
+  optional uint64 size = 4;
+  optional uint64 blocks = 5;
+  optional uint64 offset = 6;
+  optional uint64 byteOffset = 7;
+  optional uint64 mtime = 8;
+  optional uint64 ctime = 9;
+}
+```
+
+These are the field defintions:
+  - `mode` - posix file mode bitmask
+  - `uid` - posix user id
+  - `gid` - posix group id
+  - `size` - file size in bytes
+  - `blocks` - number of data feed entries that make up this file
+  - `offset` - the data feed entry index for the first block in this file
+  - `byteOffset` - the data feed file byte offset for the first block in this file
+  - `mtime` - posix modified_at time
+  - `mtime` - posix created_at time
+

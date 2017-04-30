@@ -290,13 +290,13 @@ To calculate the offset of some entry position, first read the header and get th
 
 As mentioned above, `signatures`, `bitfield` and `tree` are the three SLEEP files. There are two additional files, `key`, and `data`, which do not contain SLEEP file headers and store plain serialized data for easy access. `key` stores the public key that is described by the `signatures` file, and `data` stores the raw block data that the `tree` file contains the hashes and metadata for.
 
-#### File Descriptions
+### File Descriptions
 
-##### key
+#### key
 
 The public key used to verify the signatures in the `signatures` file. Stored in binary as a single buffer written to disk. To find out what format of key is stored in this file, read the header of `signatures`. In Dat, it's always a ed25519 public key, but other implementations can specify other key types using a string value in that header.
 
-##### tree
+#### tree
 
 A SLEEP formatted 32 byte header with data entries representing a serialized merkle tree based on the data in the data storage layer. All the fixed size nodes written in in-order tree notation. The header algorithm string for `tree` files is `BLAKE2b`. The entry size is 40 bytes. Entries are formatted like this:
 
@@ -376,41 +376,9 @@ The reason the tree entries contain data lengths is to allow for sparse mode rep
 
 The tree file corresponds directly to the `data` file.
 
-##### data
+##### Merkle roots
 
-The `data` file is only included in the SLEEP format for the `metadata.*` prefixed files which contains filesystem metadata and not actual file data. For the `content.*` files, the data is stored externally (in Dat it is stored as normal files on the filesystem and not in a SLEEP file). However you can configure Dat to use a `content.data` file if you want and it will still work.
-
-The `data` file does not contain a SLEEP file header. It just contains a bunch of concatenated data entries. Entries are written in the same order as they appear in the `tree` file. To read a `data` file, first decode the `tree` file and for every leaf in the `tree` file you can calculate a data offset for the data described by that leaf node in the `data` file.
-
-For example, if we wanted to seek to a specific entry offset (say entry 42):
-
-- First, read the header of the `tree` file and get the entry size, then do `32 + entrySize * 42` to get the raw tree index: `32 + (40 * 42)`
-- Since we want the leaf entry (even node in the in-order layout), we multiply the entry index by 2:
- `32 + (40 * (42 * 2))`
-- Read the 40 bytes at that offset in the `tree` file to get the leaf node entry.
-- Read the last 8 bytes of the entry to get the length of the data entry
-- To calculate the offset of where in the `data` file your entry begins, you need to sum all the lengths of all the earlier entries in the tree. The most efficient way to do this is to sum all the previous parent node (non-leaf) entry lengths. You can also sum all leaf node lengths, but parent nodes contain the sum of their childrens lengths so it's more efficient to use parents. During Dat replication, these nodes are fetched as part of the Merkle tree verification so you will already have them locally. This is a log(N) operation where N is the entry index. Entries are also small and therefore easily cacheable.
-- Once you get the offset, you use the length you decoded above and read N bytes (where N is the decoded length) at the offset in the `data` file. You can verify the data integrity using the 32 byte hash from the `tree` entry.
-
-Using this scheme, if you write 4GB of data using on average 64KB data chunks (note: chunks can be variable length and do not need to be the same size), your tree file will be around 5MB (0.00125% overhead).
-
-#####  signatures
-
-A SLEEP formatted 32 byte header with data entries being 64 byte signatures.
-
-```
-<32 byte header>
-  <4 byte magic string: 0x05025701>
-  <1 byte version number: 0>
-  <2 byte entry size: 64>
-  <1 byte algorithm name length prefix: 7>
-  <7 byte algorithm name: Ed25519>
-  <17 zeroes>
-<64 byte entries>
-  <64 byte Ed25519 signature>
-```
-
-Every time the tree is updated we sign the current roots of the Merkle tree, and append them to the signatures file. It is possible for the in-order Merkle tree to have multiple roots at once. A root is defined as a parent node with a full set of child node slots filled below it.
+It is possible for the in-order Merkle tree to have multiple roots at once. A root is defined as a parent node with a full set of child node slots filled below it.
 
 For example, this tree hash 2 roots (1 and 4)
 
@@ -442,7 +410,54 @@ This one has one root (1):
 2
 ```
 
-The signatures file starts with no entries. Each time a new leaf is appended to the `tree` file (aka whenever data is added to a Dat), we take all root hashes at the current state of the Merkle tree and hash and sign them, then append them as a new entry to the signatures file.
+##### data
+
+The `data` file is only included in the SLEEP format for the `metadata.*` prefixed files which contains filesystem metadata and not actual file data. For the `content.*` files, the data is stored externally (in Dat it is stored as normal files on the filesystem and not in a SLEEP file). However you can configure Dat to use a `content.data` file if you want and it will still work.
+
+The `data` file does not contain a SLEEP file header. It just contains a bunch of concatenated data entries. Entries are written in the same order as they appear in the `tree` file. To read a `data` file, first decode the `tree` file and for every leaf in the `tree` file you can calculate a data offset for the data described by that leaf node in the `data` file.
+
+##### Index Lookup
+
+For example, if we wanted to seek to a specific entry offset (say entry 42):
+
+- First, read the header of the `tree` file and get the entry size, then do `32 + entrySize * 42` to get the raw tree index: `32 + (40 * 42)`
+- Since we want the leaf entry (even node in the in-order layout), we multiply the entry index by 2:
+ `32 + (40 * (42 * 2))`
+- Read the 40 bytes at that offset in the `tree` file to get the leaf node entry.
+- Read the last 8 bytes of the entry to get the length of the data entry
+- To calculate the offset of where in the `data` file your entry begins, you need to sum all the lengths of all the earlier entries in the tree. The most efficient way to do this is to sum all the previous parent node (non-leaf) entry lengths. You can also sum all leaf node lengths, but parent nodes contain the sum of their childrens lengths so it's more efficient to use parents. During Dat replication, these nodes are fetched as part of the Merkle tree verification so you will already have them locally. This is a log(N) operation where N is the entry index. Entries are also small and therefore easily cacheable.
+- Once you get the offset, you use the length you decoded above and read N bytes (where N is the decoded length) at the offset in the `data` file. You can verify the data integrity using the 32 byte hash from the `tree` entry.
+
+##### Byte Lookup
+
+The above method illustrates how to resolve a block position index to a byte offset. You can also do the reverse operation, resolving a byte offset to a block position index. This is used to stream arbitrary random access regions of files in sparse replication scenarios.
+
+- First, you start by calculating the current Merkle roots
+- Each node in the tree (including these root nodes) stores the aggregate file size of all byte sizes of the nodes below it. So the roots cumulatively will describe all possible byte ranges for this repository.
+- Find the root that contains the byte range of the offset you are looking for and get the node information for all of that nodes children using the Index Lookup method, and recursively repeat this step until you find the lowest down child node that describes this byte range.
+- The block described by this child node will contain the byte range you are looking for. You can use the `byteOffset` property in the `Stat` metadata object to seek into the right position in the content for the start of this block.
+
+##### Metadata Overhead
+
+Using this scheme, if you write 4GB of data using on average 64KB data chunks (note: chunks can be variable length and do not need to be the same size), your tree file will be around 5MB (0.00125% overhead).
+
+####  signatures
+
+A SLEEP formatted 32 byte header with data entries being 64 byte signatures.
+
+```
+<32 byte header>
+  <4 byte magic string: 0x05025701>
+  <1 byte version number: 0>
+  <2 byte entry size: 64>
+  <1 byte algorithm name length prefix: 7>
+  <7 byte algorithm name: Ed25519>
+  <17 zeroes>
+<64 byte entries>
+  <64 byte Ed25519 signature>
+```
+
+Every time the tree is updated we sign the current roots of the Merkle tree, and append them to the signatures file. The signatures file starts with no entries. Each time a new leaf is appended to the `tree` file (aka whenever data is added to a Dat), we take all root hashes at the current state of the Merkle tree and hash and sign them, then append them as a new entry to the signatures file.
 
 ```
 Ed25519 sign(
@@ -460,7 +475,7 @@ Ed25519 sign(
 
 The reason we hash all the root nodes is that the BLAKE2b hash above is only calculateable if you have all of the pieces of data required to generate all the intermediate hashes. This is the crux of Dat's data integrity guarantees.
 
-##### bitfield
+#### bitfield
 
 A SLEEP formatted 32 byte header followed by a series of 3328 byte long entries.
 
@@ -657,3 +672,190 @@ These are the field defintions:
   - `mtime` - posix modified_at time
   - `mtime` - posix created_at time
 
+#### Replication
+
+The above file formats are designed to allow for sparse replication, meaning you can efficiently download only the metadata and data required to resolve a single byte region of a single file, which makes Dat suitable for a wide variety of streaming, real time and large dataset use cases.
+
+##### Replication Protocol
+
+The Dat replication protocol is message based and stateless, making it possible to implement on a variety of network transport protocols including UDP and TCP. Both metadata and content feeds in SLEEP share the exact same replication protocol.
+
+Individual messages are encoded using Protocol Buffers and there are ten message types using the following schema:
+
+##### Wire Protocol
+
+Over the wire messages are packed in the following lightweight container format
+
+```
+<varint - length of rest of message>
+  <varint - header>
+  <message>
+```
+
+The `header` value is a single varint that has two pieces of information, the integer `type` that declares a 4-bit message type (used below), and a channel identifier, `0` for metadata and `1` for content. 
+
+To generate this varint, you bitshift the 4-bit type integer onto the end of the channel identifier, e.g. `channel << 4 | <4-bit-type>`.
+
+##### Feed
+
+Type 0, should be the first message sent on a channel.
+
+- `discoveryKey` - A BLAKE2b keyed hash of the string 'hypercore' using the public key of the metadata feed as the key.
+- `nonce` - 32 bytes of random binary data, used in our encryption scheme
+
+```
+message Feed {
+  required bytes discoveryKey = 1;
+  optional bytes nonce = 2;
+}
+```
+
+##### Handshake
+
+Type 1. Overall connection handshake. Should be sent just after the feed message on the first channel only (metadata).
+
+- `id` - 32 byte random data used as a identifier for this peer on the network, useful for checking if you are connected to yourself or another peer more than once
+- `live` - Whether or not you want to operate in live (continuous) replication mode or end after the initial sync
+
+```
+message Handshake {
+  optional bytes id = 1;
+  optional bool live = 2;
+}
+```
+
+##### Status
+
+Type 2. Message indicating state changes. Used to indicate whether you are uploading and/or downloading.
+
+Initial state for uploading/downloading is true. If both ends are not downloading and not live it is safe to consider the stream ended.
+
+```
+message Status {
+  optional bool uploading = 1;
+  optional bool downloading = 2;
+}
+```
+
+##### Have
+
+Type 3. How you tell the other peer what blocks of data you have or don't have. You should only send Have messages to peers who have expressed interest in this region with Want messages.
+
+- `start` - If you only specify `start`, it means you are telling the other side you only have 1 block at the position at the value in `start`.
+- `length` - If you specify length, you can describe a range of values that you have all of, starting from `start`.
+- `bitfield` - If you would like to send a range of sparse data about haves/don't haves via bitfield, relative to `start`.
+
+```
+message Have {
+  required uint64 start = 1;
+  optional uint64 length = 2 [default = 1]; // defaults to 1
+  optional bytes bitfield = 3;
+}
+```
+
+When sending bitfields you must run length encode them. The encoded bitfield is a series of compressed and uncompressed bit sequences. All sequences start with a header that is a varint.
+
+If the last bit is set in the varint (it is an odd number) then a header represents a compressed bit sequence.
+
+```
+compressed-sequence = varint(byte-length-of-sequence << 2 | bit << 1 | 1)
+```
+
+If the last bit is *not* set then a header represents an non compressed sequence
+
+```
+uncompressed-sequence = varint(byte-length-of-bitfield << 1 | 0) + (bitfield)
+```
+
+##### Unhave
+
+Type 4. How you communicate that you deleted or removed a block you used to have.
+
+
+```
+message Unhave {
+  required uint64 start = 1;
+  optional uint64 length = 2 [default = 1]; // defaults to 1
+}
+```
+
+##### Want
+
+Type 5. How you ask the other peer to subscribe you to Have messages for a region of blocks
+
+```
+message Want {
+  required uint64 start = 1;
+  optional uint64 length = 2; // defaults to Infinity or feed.length (if not live)
+}
+```
+
+##### Unwant
+
+Type 6. How you ask to unsubscribe from Have messages for a region of blocks from the other peer. You should only Unwant previously Wanted regions, but if you do Unwant something that hasn't been Wanted it won't have any effect.
+
+```
+message Unwant {
+  required uint64 start = 1;
+  optional uint64 length = 2; // defaults to Infinity or feed.length (if not live)
+}
+```
+
+##### Request
+
+Type 7. Request a single block of data.
+
+- `index` - The block index for the block you want. You should only ask for indexes that you have received the Have messages for.
+- `bytes` - You can also optimistically specify a byte offset, and in the case the remote is able to resolve the block for this byte offset depending on their Merkle tree state, they will ignore the `index` and send the block that resolves for this byte offset instead. But if they cannot resolve the byte request, `index` will be used.
+- `hash` - If you only want the hash of the block and not the block data itself.
+- `nodes` - A 64 bit long bitfield representing which parent nodes you have.
+
+The `nodes` bitfield is an optional optimization to reduce the amount of duplicate nodes exchanged during the replication lifecycle. It indicates which parents you have or don't have. You have a maximum of 64 parents you can specify. Because `uint64` in Protocol Buffers is implemented as a varint, over the wire this does not take up 64 bits in most cases. The first bit is reserved to signify whether or not you need a signature in response. The rest of the bits represent whether or not you have (`1`) or don't have (`0`) the information at this node already. The ordering is determined by walking parent, sibling up the tree all the way to the root.
+
+```
+message Request {
+  required uint64 index = 1;
+  optional uint64 bytes = 2;
+  optional bool hash = 3;
+  optional uint64 nodes = 4;
+}
+```
+
+##### Cancel
+
+Type 8. Cancel a previous Request message that you haven't received yet.
+
+```
+message Cancel {
+  required uint64 index = 1;
+  optional uint64 bytes = 2;
+  optional bool hash = 3;
+}
+```
+
+##### Data
+
+Type 9. Sends a single block of data to the other peer. You can send it in response to a Request or unsolicited on it's own as a friendly gift. The data includes all of the Merkle tree parent nodes needed to verify the hash chain all the way up to the Merkle roots for this block. Because you can produce the direct parents by hashing the block, only the roots and 'uncle' hashes are included (the siblings to all of the parent nodes).
+
+- `index` - The block position for this block.
+- `value` - The block binary data. Empty if you are sending only the hash.
+- `Node.index` - The index for this block in in-order 
+- `Node.hash` - The hash of this block
+- `Node.size`- The aggregate block size for all children below this node (The sum of all block sizes of all children)
+- `signature` - If you are sending a root node, all root nodes must have the signature included.
+
+
+```
+message Data {
+  required uint64 index = 1;
+  optional bytes value = 2;
+  repeated Node nodes = 3;
+  optional bytes signature = 4;
+  
+  message Node {
+    required uint64 index = 1;
+    required bytes hash = 2;
+    required uint64 size = 3;
+  }
+}
+```

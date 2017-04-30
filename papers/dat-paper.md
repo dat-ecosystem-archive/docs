@@ -518,7 +518,7 @@ The Index itself is an in-order binary tree, not a traditional bitfield. To gene
 
 ```
 // for e.g. 16 bytes (8 tuples) of
-// sparsely replicated data (some 1's, some 0's)
+// sparsely replicated data
 0 - [00 00 00 00]
 1 -     [10 10 10 10]
 2 - [11 11 11 11]
@@ -748,7 +748,7 @@ Type 3. How you tell the other peer what blocks of data you have or don't have. 
 ```
 message Have {
   required uint64 start = 1;
-  optional uint64 length = 2 [default = 1]; // defaults to 1
+  optional uint64 length = 2 [default = 1];
   optional bytes bitfield = 3;
 }
 ```
@@ -758,13 +758,18 @@ When sending bitfields you must run length encode them. The encoded bitfield is 
 If the last bit is set in the varint (it is an odd number) then a header represents a compressed bit sequence.
 
 ```
-compressed-sequence = varint(byte-length-of-sequence << 2 | bit << 1 | 1)
+compressed-sequence = varint(
+  byte-length-of-sequence
+  << 2 | bit << 1 | 1
+)
 ```
 
 If the last bit is *not* set then a header represents an non compressed sequence
 
 ```
-uncompressed-sequence = varint(byte-length-of-bitfield << 1 | 0) + (bitfield)
+uncompressed-sequence = varint(
+  byte-length-of-bitfield << 1 | 0
+) + (bitfield)
 ```
 
 ##### Unhave
@@ -775,29 +780,29 @@ Type 4. How you communicate that you deleted or removed a block you used to have
 ```
 message Unhave {
   required uint64 start = 1;
-  optional uint64 length = 2 [default = 1]; // defaults to 1
+  optional uint64 length = 2 [default = 1];
 }
 ```
 
 ##### Want
 
-Type 5. How you ask the other peer to subscribe you to Have messages for a region of blocks
+Type 5. How you ask the other peer to subscribe you to Have messages for a region of blocks. The `length` value defaults to Infinity or feed.length (if not live).
 
 ```
 message Want {
   required uint64 start = 1;
-  optional uint64 length = 2; // defaults to Infinity or feed.length (if not live)
+  optional uint64 length = 2;
 }
 ```
 
 ##### Unwant
 
-Type 6. How you ask to unsubscribe from Have messages for a region of blocks from the other peer. You should only Unwant previously Wanted regions, but if you do Unwant something that hasn't been Wanted it won't have any effect.
+Type 6. How you ask to unsubscribe from Have messages for a region of blocks from the other peer. You should only Unwant previously Wanted regions, but if you do Unwant something that hasn't been Wanted it won't have any effect. The `length` value defaults to Infinity or feed.length (if not live).
 
 ```
 message Unwant {
   required uint64 start = 1;
-  optional uint64 length = 2; // defaults to Infinity or feed.length (if not live)
+  optional uint64 length = 2;
 }
 ```
 

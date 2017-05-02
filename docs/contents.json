@@ -6,6 +6,7 @@
     "FAQ": "faq.md"
   },
   "Cookbook": {
+    "On a Server": "cookbook/server.md",
     "In the Browser": "cookbook/browser.md",
     "Do-it-yourself": "cookbook/diy-dat.md"
   },

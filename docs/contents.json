@@ -8,7 +8,7 @@
   "Cookbook": {
     "On a Server": "cookbook/server.md",
     "In the Browser": "cookbook/browser.md",
-    "Do-it-yourself": "cookbook/diy-dat.md"
+    "Under the Hood": "cookbook/diy-dat.md"
   },
   "Ecosystem": {
     "Overview": "ecosystem.md",

@@ -1,3 +1,10 @@
+---
+title: "Dat - Distributed Dataset Synchronization And Versioning"
+date: "May 2017"
+author: "Maxwell Ogden, Karissa McKelvey, Mathias Buus Madsen, Code for Science"
+---
+
+
 # Abstract
 
 Dat is a protocol designed for syncing folders of data, even if they are large or changing constantly. Dat uses a cryptographically secure register of changes to prove that the requested data version is distributed. A byte range of any file's version can be efficiently streamed from a Dat repository over a network connection. Consumers can choose to fully or partially replicate the contents of a remote Dat repository, and can also subscribe to live changes. To ensure writer and reader privacy, Dat uses public key cryptography to encrypt network traffic. A group of Dat clients can connect to each other to form a public or private decentralized network to exchange data between each other. A reference implementation is provided in JavaScript.
@@ -27,11 +34,11 @@ Content integrity means being able to verify the data you received is the exact 
 
 Link rot, when links online stop resolving, and content drift, when data changes but the link to the data remains the same, are two common issues in data analysis. For example, one day a file called data.zip might change, but a typical HTTP link to the file does not include a hash of the content, or provide a way to get updated metadata, so clients that only have the HTTP link have no way to check if the file changed without downloading the entire file again. Referring to a file by the hash of its content is called content addressability, and lets users not only verify that the data they receive is the version of the data they want, but also lets people cite specific versions of the data by referring to a specific hash.
 
-Dat uses BLAKE2b cryptographically secure hashes to address content. Hashes are arranged in a Merkle tree, a tree where each non-leaf node is the hash of all child nodes. Leaf nodes contain pieces of the dataset. Due to the properties of secure cryptographic hashes the top hash can only be produced if all data below it matches exactly. If two trees have matching top hashes then you know that all other nodes in the tree must match as well, and you can conclude that your dataset is synchronized. Trees are chosen as the primary data structure in Dat as they have a number of properties that allow for efficient access to subsets of the metadata, which allows Dat to work efficiently over a network connection.
+Dat uses BLAKE2b [@aumasson2013blake2] cryptographically secure hashes to address content. Hashes are arranged in a Merkle tree [@mykletun2003providing], a tree where each non-leaf node is the hash of all child nodes. Leaf nodes contain pieces of the dataset. Due to the properties of secure cryptographic hashes the top hash can only be produced if all data below it matches exactly. If two trees have matching top hashes then you know that all other nodes in the tree must match as well, and you can conclude that your dataset is synchronized. Trees are chosen as the primary data structure in Dat as they have a number of properties that allow for efficient access to subsets of the metadata, which allows Dat to work efficiently over a network connection.
 
 ### Dat Links
 
-Dat links are Ed25519 public keys which have a length of 32 bytes (64 characters when Hex encoded). You can represent your Dat link in the following ways and Dat clients will be able to understand them:
+Dat links are Ed25519 [@bernstein2012high] public keys which have a length of 32 bytes (64 characters when Hex encoded). You can represent your Dat link in the following ways and Dat clients will be able to understand them:
 
 - The standalone public key:
 
@@ -89,7 +96,7 @@ Additional discovery networks can be implemented as needed. We chose the above t
 
 ### Peer Connections
 
-After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either TCP, [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol), or HTTP. UTP is designed to not take up all available bandwidth on a network (e.g. so that other people sharing wifi can still use the Internet), and is still based on UDP so works with NAT traversal techniques like UDP hole punching. HTTP is support for compatibility with static file servers and web browser clients. Note that these are the protocols we support in the reference Dat implementation, but the Dat protocol itself is transport agnostic.
+After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either TCP, HTTP or [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) [@rossi2010ledbat]. UTP uses LEDBAT which is designed to not take up all available bandwidth on a network (e.g. so that other people sharing wifi can still use the Internet), and is still based on UDP so works with NAT traversal techniques like UDP hole punching. HTTP is support for compatibility with static file servers and web browser clients. Note that these are the protocols we support in the reference Dat implementation, but the Dat protocol itself is transport agnostic.
 
 If an HTTP source is specified Dat will prefer that one over other sources. Otherwise when Dat gets the IP and port for a potential TCP or UTP source it tries to connect using both protocols. If one connects first, Dat aborts the other one. If none connect, Dat will try again until it decides that source is offline or unavailable and then stops trying to connect to them. Sources Dat is able to connect to go into a list of known good sources, so that the Internet connection goes down Dat can use that list to reconnect to known good sources again quickly.
 
@@ -591,7 +598,7 @@ The format of the `metadata.data` file is as follows:
 <Node N>
 ```
 
-Each entry in the file is encoded using Protocol Buffers.
+Each entry in the file is encoded using Protocol Buffers [@varda2008protocol].
 
 The first message we write to the file is of a type called Header which uses this schema:
 
@@ -872,7 +879,7 @@ Another drawback of BitTorrent is due to the way clients advertise and discover 
 
 ## Kademlia Distributed Hash Table
 
-Kademlia is a distributed hash table, a distributed key/value store that can serve a similar purpose to DNS servers but has no hard coded server addresses. All clients in Kademlia are also servers. As long as you know at least one address of another peer in the network, you can ask them for the key you are trying to find and they will either have it or give you some other people to talk to that are more likely to have it.
+Kademlia [@maymounkov2002kademlia] is a distributed hash table, a distributed key/value store that can serve a similar purpose to DNS servers but has no hard coded server addresses. All clients in Kademlia are also servers. As long as you know at least one address of another peer in the network, you can ask them for the key you are trying to find and they will either have it or give you some other people to talk to that are more likely to have it.
 
 If you don't have an initial peer to talk to you, most clients use a bootstrap server that randomly gives you a peer in the network to start with. If the bootstrap server goes down, the network still functions as long as other methods can be used to bootstrap new peers (such as sending them peer addresses through side channels like how .torrent files include tracker addresses to try in case Kademlia finds no peers).
 
@@ -882,7 +889,7 @@ Due to the simplicity in the original Kademlia design a number of attacks such a
 
 ## Peer to Peer Streaming Peer Protocol (PPSPP)
 
-PPSPP ([IETF RFC 7574](https://datatracker.ietf.org/doc/rfc7574/?include_text=1)) is a protocol for live streaming content over a peer to peer network. In it they define a specific type of Merkle Tree that allows for subsets of the hashes to be requested by a peer in order to reduce the time-till-playback for end users. BitTorrent for example transfers all hashes up front, which is not suitable for live streaming.
+PPSPP ([IETF RFC 7574](https://datatracker.ietf.org/doc/rfc7574/?include_text=1), [@bakker2015peer]) is a protocol for live streaming content over a peer to peer network. In it they define a specific type of Merkle Tree that allows for subsets of the hashes to be requested by a peer in order to reduce the time-till-playback for end users. BitTorrent for example transfers all hashes up front, which is not suitable for live streaming.
 
 Their Merkle trees are ordered using a scheme they call "bin numbering", which is a method for deterministically arranging an append-only log of leaf nodes into an in-order layout tree where non-leaf nodes are derived hashes. If you want to verify a specific node, you only need to request its sibling's hash and all its uncle hashes. PPSPP is very concerned with reducing round trip time and time-till-playback by allowing for many kinds of optimizations, such as to pack as many hashes into datagrams as possible when exchanging tree information with peers.
 
@@ -902,7 +909,7 @@ IPFS is a family of application and network protocols that have peer to peer fil
 
 The UK Government Digital Service have developed the concept of a register which they define as a digital public ledger you can trust. In the UK government registers are beginning to be piloted as a way to expose essential open data sets in a way where consumers can verify the data has not been tampered with, and allows the data publishers to update their data sets over time.
 
-The design of registers was inspired by the infrastructure backing the Certificate Transparency project, initated at Google, which provides a service on top of SSL certificates that enables service providers to write certificates to a distributed public ledger. Anyone client or service provider can verify if a certificate they received is in the ledger, which protects against so called "rogue certificates".
+The design of registers was inspired by the infrastructure backing the Certificate Transparency [@laurie2013certificate] project, initated at Google, which provides a service on top of SSL certificates that enables service providers to write certificates to a distributed public ledger. Anyone client or service provider can verify if a certificate they received is in the ledger, which protects against so called "rogue certificates".
 
 # 6. Reference Implementation
 
@@ -913,3 +920,5 @@ Our implementation of source discovery is called [discovery-channel](https://npm
 # Acknowledgements
 
 This work was made possible through grants from the John S. and James L. Knight and Alfred P. Sloan Foundations.
+
+# References

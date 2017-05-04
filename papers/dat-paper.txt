@@ -21,8 +21,10 @@
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage{hyperref}
-\hypersetup{unicode=true,
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={Dat - Distributed Dataset Synchronization And Versioning},
+            pdfauthor={Maxwell Ogden, Karissa McKelvey, Mathias Buus Madsen, Code for Science},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -46,9 +48,15 @@
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
 \title{Dat - Distributed Dataset Synchronization And Versioning}
-\author{Maxwell Ogden, Karissa McKelvey, Mathias Buus Madsen}
-\date{April 2017, Code for Science}
+\author{Maxwell Ogden, Karissa McKelvey, Mathias Buus Madsen, Code for Science}
+\date{May 2017}
 
 \begin{document}
 \maketitle
@@ -146,11 +154,12 @@ verify that the data they receive is the version of the data they want,
 but also lets people cite specific versions of the data by referring to
 a specific hash.
 
-Dat uses BLAKE2b cryptographically secure hashes to address content.
-Hashes are arranged in a Merkle tree, a tree where each non-leaf node is
-the hash of all child nodes. Leaf nodes contain pieces of the dataset.
-Due to the properties of secure cryptographic hashes the top hash can
-only be produced if all data below it matches exactly. If two trees have
+Dat uses BLAKE2b (Aumasson et al. 2013) cryptographically secure hashes
+to address content. Hashes are arranged in a Merkle tree (Mykletun,
+Narasimha, and Tsudik 2003), a tree where each non-leaf node is the hash
+of all child nodes. Leaf nodes contain pieces of the dataset. Due to the
+properties of secure cryptographic hashes the top hash can only be
+produced if all data below it matches exactly. If two trees have
 matching top hashes then you know that all other nodes in the tree must
 match as well, and you can conclude that your dataset is synchronized.
 Trees are chosen as the primary data structure in Dat as they have a
@@ -160,9 +169,10 @@ connection.
 
 \subsubsection{Dat Links}\label{dat-links}
 
-Dat links are Ed25519 public keys which have a length of 32 bytes (64
-characters when Hex encoded). You can represent your Dat link in the
-following ways and Dat clients will be able to understand them:
+Dat links are Ed25519 (Bernstein et al. 2012) public keys which have a
+length of 32 bytes (64 characters when Hex encoded). You can represent
+your Dat link in the following ways and Dat clients will be able to
+understand them:
 
 \begin{itemize}
 \tightlist
@@ -303,15 +313,15 @@ used, and instead only that one HTTPS server is used as the only peer.
 \subsubsection{Peer Connections}\label{peer-connections}
 
 After the discovery phase, Dat should have a list of potential data
-sources to try and contact. Dat uses either TCP,
-\href{https://en.wikipedia.org/wiki/Micro_Transport_Protocol}{UTP}, or
-HTTP. UTP is designed to not take up all available bandwidth on a
-network (e.g.~so that other people sharing wifi can still use the
-Internet), and is still based on UDP so works with NAT traversal
-techniques like UDP hole punching. HTTP is support for compatibility
-with static file servers and web browser clients. Note that these are
-the protocols we support in the reference Dat implementation, but the
-Dat protocol itself is transport agnostic.
+sources to try and contact. Dat uses either TCP, HTTP or
+\href{https://en.wikipedia.org/wiki/Micro_Transport_Protocol}{UTP}
+(Rossi et al. 2010). UTP uses LEDBAT which is designed to not take up
+all available bandwidth on a network (e.g.~so that other people sharing
+wifi can still use the Internet), and is still based on UDP so works
+with NAT traversal techniques like UDP hole punching. HTTP is support
+for compatibility with static file servers and web browser clients. Note
+that these are the protocols we support in the reference Dat
+implementation, but the Dat protocol itself is transport agnostic.
 
 If an HTTP source is specified Dat will prefer that one over other
 sources. Otherwise when Dat gets the IP and port for a potential TCP or
@@ -1187,7 +1197,7 @@ The format of the \texttt{metadata.data} file is as follows:
 <Node N>
 \end{verbatim}
 
-Each entry in the file is encoded using Protocol Buffers.
+Each entry in the file is encoded using Protocol Buffers (Varda 2008).
 
 The first message we write to the file is of a type called Header which
 uses this schema:
@@ -1635,12 +1645,13 @@ browsing privacy functions as systems like SSL.
 \subsection{Kademlia Distributed Hash
 Table}\label{kademlia-distributed-hash-table}
 
-Kademlia is a distributed hash table, a distributed key/value store that
-can serve a similar purpose to DNS servers but has no hard coded server
-addresses. All clients in Kademlia are also servers. As long as you know
-at least one address of another peer in the network, you can ask them
-for the key you are trying to find and they will either have it or give
-you some other people to talk to that are more likely to have it.
+Kademlia (Maymounkov and Mazieres 2002) is a distributed hash table, a
+distributed key/value store that can serve a similar purpose to DNS
+servers but has no hard coded server addresses. All clients in Kademlia
+are also servers. As long as you know at least one address of another
+peer in the network, you can ask them for the key you are trying to find
+and they will either have it or give you some other people to talk to
+that are more likely to have it.
 
 If you don't have an initial peer to talk to you, most clients use a
 bootstrap server that randomly gives you a peer in the network to start
@@ -1672,11 +1683,12 @@ limitations.
 
 PPSPP
 (\href{https://datatracker.ietf.org/doc/rfc7574/?include_text=1}{IETF
-RFC 7574}) is a protocol for live streaming content over a peer to peer
-network. In it they define a specific type of Merkle Tree that allows
-for subsets of the hashes to be requested by a peer in order to reduce
-the time-till-playback for end users. BitTorrent for example transfers
-all hashes up front, which is not suitable for live streaming.
+RFC 7574}, (Bakker, Petrocco, and Grishchenko 2015)) is a protocol for
+live streaming content over a peer to peer network. In it they define a
+specific type of Merkle Tree that allows for subsets of the hashes to be
+requested by a peer in order to reduce the time-till-playback for end
+users. BitTorrent for example transfers all hashes up front, which is
+not suitable for live streaming.
 
 Their Merkle trees are ordered using a scheme they call ``bin
 numbering'', which is a method for deterministically arranging an
@@ -1727,11 +1739,12 @@ data has not been tampered with, and allows the data publishers to
 update their data sets over time.
 
 The design of registers was inspired by the infrastructure backing the
-Certificate Transparency project, initated at Google, which provides a
-service on top of SSL certificates that enables service providers to
-write certificates to a distributed public ledger. Anyone client or
-service provider can verify if a certificate they received is in the
-ledger, which protects against so called ``rogue certificates''.
+Certificate Transparency (Laurie, Langley, and Kasper 2013) project,
+initated at Google, which provides a service on top of SSL certificates
+that enables service providers to write certificates to a distributed
+public ledger. Anyone client or service provider can verify if a
+certificate they received is in the ledger, which protects against so
+called ``rogue certificates''.
 
 \section{6. Reference Implementation}\label{reference-implementation}
 
@@ -1761,5 +1774,48 @@ IP/ports).
 
 This work was made possible through grants from the John S. and James L.
 Knight and Alfred P. Sloan Foundations.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\hypertarget{refs}{}
+\hypertarget{ref-aumasson2013blake2}{}
+Aumasson, Jean-Philippe, Samuel Neves, Zooko Wilcox-O'Hearn, and
+Christian Winnerlein. 2013. ``BLAKE2: Simpler, Smaller, Fast as Md5.''
+In \emph{International Conference on Applied Cryptography and Network
+Security}, 119--35. Springer.
+
+\hypertarget{ref-bakker2015peer}{}
+Bakker, A, R Petrocco, and V Grishchenko. 2015. ``Peer-to-Peer Streaming
+Peer Protocol (Ppspp).''
+
+\hypertarget{ref-bernstein2012high}{}
+Bernstein, Daniel J, Niels Duif, Tanja Lange, Peter Schwabe, and Bo-Yin
+Yang. 2012. ``High-Speed High-Security Signatures.'' \emph{Journal of
+Cryptographic Engineering}. Springer, 1--13.
+
+\hypertarget{ref-laurie2013certificate}{}
+Laurie, Ben, Adam Langley, and Emilia Kasper. 2013. ``Certificate
+Transparency.''
+
+\hypertarget{ref-maymounkov2002kademlia}{}
+Maymounkov, Petar, and David Mazieres. 2002. ``Kademlia: A Peer-to-Peer
+Information System Based on the Xor Metric.'' In \emph{International
+Workshop on Peer-to-Peer Systems}, 53--65. Springer.
+
+\hypertarget{ref-mykletun2003providing}{}
+Mykletun, Einar, Maithili Narasimha, and Gene Tsudik. 2003. ``Providing
+Authentication and Integrity in Outsourced Databases Using Merkle Hash
+Trees.'' \emph{UCI-SCONCE Technical Report}.
+
+\hypertarget{ref-rossi2010ledbat}{}
+Rossi, Dario, Claudio Testa, Silvio Valenti, and Luca Muscariello. 2010.
+``LEDBAT: The New Bittorrent Congestion Control Protocol.'' In
+\emph{ICCCN}, 1--6.
+
+\hypertarget{ref-varda2008protocol}{}
+Varda, Kenton. 2008. ``Protocol Buffers: Google's Data Interchange
+Format.'' \emph{Google Open Source Blog, Available at Least as Early as
+Jul}.
 
 \end{document}

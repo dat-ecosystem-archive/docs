@@ -19,7 +19,7 @@ Distributed file sharing tools can become faster as files become more popular, r
 
 # 2. Dat
 
-Dat is a dataset synchronization protocol that does not assume a dataset is static or that the entire dataset will be downloaded. The main reference implementation is available from from npm as `npm install dat -g`.
+Dat is a dataset synchronization protocol that does not assume a dataset is static or that the entire dataset will be downloaded. The main reference implementation is available from npm as `npm install dat -g`.
 
 The protocol is agnostic to the underlying transport e.g. you could implement Dat over carrier pigeon. The key properties of the Dat design are explained in this section.
 

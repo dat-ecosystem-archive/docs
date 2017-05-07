@@ -498,7 +498,7 @@ It is possible for the in-order Merkle tree to have multiple roots at
 once. A root is defined as a parent node with a full set of child node
 slots filled below it.
 
-For example, this tree hash 2 roots (1 and 4)
+For example, this tree has 2 roots (1 and 4)
 
 \begin{verbatim}
 0
@@ -508,7 +508,7 @@ For example, this tree hash 2 roots (1 and 4)
 4
 \end{verbatim}
 
-This tree hash one root (3):
+This tree has one root (3):
 
 \begin{verbatim}
 0

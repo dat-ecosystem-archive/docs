@@ -87,7 +87,7 @@ scientific literature}.
 
 Cloud storage services like S3 ensure availability of data, but they
 have a centralized hub-and-spoke networking model and are therefore
-limited by their bandwidth, meaning popular files can be come very
+limited by their bandwidth, meaning popular files can become very
 expensive to share. Services like Dropbox and Google Drive provide
 version control and synchronization on top of cloud storage services
 which fixes many issues with broken links but rely on proprietary code
@@ -203,7 +203,7 @@ able to discover or communicate with any member of the swarm for that
 Dat. Anyone with the public key can verify that messages (such as
 entries in a Dat Stream) were created by a holder of the private key.
 
-Every Dat repository has corresponding a private key that kept in your
+Every Dat repository has a corresponding private key that is kept in your
 home folder and never shared. Dat never exposes either the public or
 private key over the network. During the discovery phase the BLAKE2b
 hash of the public key is used as the discovery key. This means that the
@@ -327,7 +327,7 @@ UTP source it tries to connect using both protocols. If one connects
 first, Dat aborts the other one. If none connect, Dat will try again
 until it decides that source is offline or unavailable and then stops
 trying to connect to them. Sources Dat is able to connect to go into a
-list of known good sources, so that the Internet connection goes down
+list of known good sources, so that if the Internet connection goes down
 Dat can use that list to reconnect to known good sources again quickly.
 
 If Dat gets a lot of potential sources it picks a handful at random to
@@ -392,7 +392,7 @@ of a repository, and data is stored as normal files in the root folder.
 \subsubsection{Metadata Versioning}\label{metadata-versioning}
 
 Dat tries as much as possible to act as a one-to-one mirror of the state
-of a folder and all it's contents. When importing files, Dat uses a
+of a folder and all its contents. When importing files, Dat uses a
 sorted depth-first recursion to list all the files in the tree. For each
 file it finds, it grabs the filesystem metadata (filename, Stat object,
 etc) and checks if there is already an entry for this filename with this
@@ -421,7 +421,7 @@ for old versions in \texttt{.dat}. Git for example stores all previous
 content versions and all previous metadata versions in the \texttt{.git}
 folder. Because Dat is designed for larger datasets, if it stored all
 previous file versions in \texttt{.dat}, then the \texttt{.dat} folder
-could easily fill up the users hard drive inadverntently. Therefore Dat
+could easily fill up the user's hard drive inadvertently. Therefore Dat
 has multiple storage modes based on usage.
 
 Hypercore registers include an optional \texttt{data} file that stores
@@ -441,7 +441,7 @@ you know the server has the full history.
 Registers in Dat use a specific method of encoding a Merkle tree where
 hashes are positioned by a scheme called binary in-order interval
 numbering or just ``bin'' numbering. This is just a specific,
-deterministic way of laying out the nodes in a tree. For example a tree
+deterministic way of laying out the nodes in a tree. For example, a tree
 with 7 nodes will always be arranged like this:
 
 \begin{verbatim}
@@ -554,7 +554,7 @@ process. The seven chunks get sorted into a list like this:
 bat-1
 bat-2
 bat-3
-cat-1 
+cat-1
 cat-2
 cat-3
 \end{verbatim}
@@ -583,7 +583,7 @@ for this Dat.
 
 This tree is for the hashes of the contents of the photos. There is also
 a second Merkle tree that Dat generates that represents the list of
-files and their metadata and looks something like this (the metadata
+files and their metadata, and looks something like this (the metadata
 register):
 
 \begin{verbatim}
@@ -984,7 +984,7 @@ Ed25519 sign(
 \end{verbatim}
 
 The reason we hash all the root nodes is that the BLAKE2b hash above is
-only calculateable if you have all of the pieces of data required to
+only calculable if you have all of the pieces of data required to
 generate all the intermediate hashes. This is the crux of Dat's data
 integrity guarantees.
 
@@ -1022,7 +1022,7 @@ Each entry contains three objects:
 \begin{itemize}
 \tightlist
 \item
-  Data Bitfield (1024 bytes) - 1 bit for for each data entry that you
+  Data Bitfield (1024 bytes) - 1 bit for each data entry that you
   have synced (1 for every entry in \texttt{data}).
 \item
   Tree Bitfield (2048 bytes) - 1 bit for every tree entry (all nodes in
@@ -1040,8 +1040,8 @@ filesystem. The Tree and Index sizes are based on the Data size (the
 Tree has twice the entries as the Data, odd and even nodes vs just even
 nodes in \texttt{tree}, and Index is always 1/4th the size).
 
-To generate the Index, you pairs of 2 bytes at a time from the Data
-Bitfield, check if all bites in the 2 bytes are the same, and generate 4
+To generate the Index, you pair 2 bytes at a time from the Data
+Bitfield, check if all bits in the 2 bytes are the same, and generate 4
 bits of Index metadata~for every 2 bytes of Data (hence how 1024 bytes
 of Data ends up as 256 bytes of Index).
 
@@ -1103,7 +1103,7 @@ the SLEEP files.
 
 The contents of this file is a series of versions of the Dat filesystem
 tree. As this is a hypercore data feed, it's just an append only log of
-binary data entries. The challenge is representing a tree in an one
+binary data entries. The challenge is representing a tree in a one
 dimensional way to make it representable as a Hypercore register. For
 example, imagine three files:
 
@@ -1368,7 +1368,7 @@ register message on the first channel only (metadata).
 \begin{itemize}
 \tightlist
 \item
-  \texttt{id} - 32 byte random data used as a identifier for this peer
+  \texttt{id} - 32 byte random data used as an identifier for this peer
   on the network, useful for checking if you are connected to yourself
   or another peer more than once
 \item
@@ -1548,7 +1548,7 @@ message Cancel {
 \subsubsection{Data}\label{data-1}
 
 Type 9. Sends a single chunk of data to the other peer. You can send it
-in response to a Request or unsolicited on it's own as a friendly gift.
+in response to a Request or unsolicited on its own as a friendly gift.
 The data includes all of the Merkle tree parent nodes needed to verify
 the hash chain all the way up to the Merkle roots for this chunk.
 Because you can produce the direct parents by hashing the chunk, only
@@ -1580,7 +1580,7 @@ message Data {
   optional bytes value = 2;
   repeated Node nodes = 3;
   optional bytes signature = 4;
-  
+
   message Node {
     required uint64 index = 1;
     required bytes hash = 2;
@@ -1611,7 +1611,7 @@ like Git-LFS solve this by using HTTP to download large files, rather
 than the Git protocol. GitHub offers Git-LFS hosting but charges
 repository owners for bandwidth on popular files. Building a distributed
 distribution layer for files in a Git repository is difficult due to
-design of Git Packfiles which are delta compressed repository states
+design of Git Packfiles, which are delta compressed repository states
 that do not easily support random access to byte ranges in previous file
 versions.
 
@@ -1704,7 +1704,7 @@ very desirable for many other types of datasets.
 
 \subsection{WebTorrent}\label{webtorrent}
 
-With WebRTC browsers can now make peer to peer connections directly to
+With WebRTC, browsers can now make peer to peer connections directly to
 other browsers. BitTorrent uses UDP sockets which aren't available to
 browser JavaScript, so can't be used as-is on the Web.
 
@@ -1722,7 +1722,7 @@ System}\label{interplanetary-file-system}
 IPFS is a family of application and network protocols that have peer to
 peer file sharing and data permanence baked in. IPFS abstracts network
 protocols and naming systems to provide an alternative application
-delivery platform to todays Web. For example, instead of using HTTP and
+delivery platform to today's Web. For example, instead of using HTTP and
 DNS directly, in IPFS you would use LibP2P streams and IPNS in order to
 gain access to the features of the IPFS platform.
 
@@ -1731,7 +1731,7 @@ Registers}\label{certificate-transparencysecure-registers}
 
 The UK Government Digital Service have developed the concept of a
 register which they define as a digital public ledger you can trust. In
-the UK government registers are beginning to be piloted as a way to
+the UK, government registers are beginning to be piloted as a way to
 expose essential open data sets in a way where consumers can verify the
 data has not been tampered with, and allows the data publishers to
 update their data sets over time.
@@ -1740,7 +1740,7 @@ The design of registers was inspired by the infrastructure backing the
 Certificate Transparency (Laurie, Langley, and Kasper 2013) project,
 initated at Google, which provides a service on top of SSL certificates
 that enables service providers to write certificates to a distributed
-public ledger. Anyone client or service provider can verify if a
+public ledger. Any client or service provider can verify if a
 certificate they received is in the ledger, which protects against so
 called ``rogue certificates''.
 
@@ -1763,7 +1763,7 @@ they need to), as well as a
 \href{https://github.com/bittorrent/bootstrap-dht}{DHT bootstrap}
 server. These discovery servers are the only centralized infrastructure
 we need for Dat to work over the Internet, but they are redundant,
-interchangeable, never see the actual data being shared, anyone can run
+interchangeable, never see the actual data being shared, and anyone can run
 their own and Dat will still work even if they all are unavailable. If
 this happens discovery will just be manual (e.g.~manually sharing
 IP/ports).

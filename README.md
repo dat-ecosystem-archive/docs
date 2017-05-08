@@ -10,6 +10,22 @@ Repository for the documentation of the Dat Project ecosystem. View the docs at 
 
 [See docs folder](docs/readme.md) for information on editing and adding docs. Once you finish editing the docs, send a PR to the `deploy` branch to get the edits automatically deployed.
 
+### Creating + Generating Paper from Markdown
+
+[See this gist](https://gist.github.com/maxogden/97190db73ac19fc6c1d9beee1a6e4fc8) for more information on how the paper is created with a basic example.
+
+To generate the paper again, make sure you have `pandoc` and `pandoc-citeproc`:
+
+```
+brew install pandoc pandoc-citeproc
+```
+
+Then run the npm script:
+
+```
+npm run paper
+```
+
 ## Development
 
 This documentation uses [minidocs](https://github.com/freeman-lab/minidocs) for layout, [ecosystem-docs](https://github.com/hughsk/ecosystem-docs) to get documentation from other modules, and ideas from [pull-stream-docs](https://github.com/pull-stream/pull-stream-docs) for auto travis deployment.

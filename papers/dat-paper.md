@@ -252,8 +252,8 @@ This tree is for the hashes of the contents of the photos. There is also a secon
 ```
 0 - hash({contentRegister: '9e29d624...'})
   1 - hash(0 + 2)
-2 - hash({"bat.png", first: 0, last: 3})
-4 - hash({"cat.png", first: 3, last: 3})
+2 - hash({"bat.png", first: 0, length: 3})
+4 - hash({"cat.png", first: 3, length: 3})
 ```
 
 The first entry in this feed is a special metadata entry that tells Dat the address of the second feed (the content register). Note that node 3 is not included yet, because 3 is the hash of `1 + 5`, but 5 does not exist yet, so will be written at a later update.

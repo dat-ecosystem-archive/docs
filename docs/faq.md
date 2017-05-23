@@ -6,7 +6,9 @@
 
 Code for Science and Society (CSS), a US based 501(c)(3) not for profit organization set up to support the Dat project. CSS employs a Dat core development team. Dat is currently funded exclusively by philanthropic non-profit grants. The mission of CSS is to work with public institutions to produce open source infrastructure to improve the ability for researchers, civic hackers and journalists to find and use datasets. However, we actively welcome outside contributors and use cases beyond our own.
 
-### Sustainability, e.g. What happens if Dat (the organization/group) disappears? Will all my files get lost or be inaccessible? 
+### Sustainability
+
+#### What happens if Dat (the organization/group) disappears? Will all my files get lost or be inaccessible?
 
 Dat software is built with long-term sustainability as a focus. For us, this goes beyond financial sustainability.
 

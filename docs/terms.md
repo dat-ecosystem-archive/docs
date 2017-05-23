@@ -2,7 +2,7 @@
 
 ### dat, Dat archive, archive
 
-A dat, or Dat archive, is a set of files and special dat metadata ([SLEEP](#SLEEP). 
+A dat, or Dat archive, is a set of files and special dat metadata ([SLEEP](#sleep)).
 
 The folder can contain files of any type, which can be synced to other people on the distributed web. The metadata and files are both shared to peers.
 

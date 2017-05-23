@@ -4,13 +4,12 @@ In this guide, we will show how to develop applications with the Dat ecosystem. 
 
 This tutorial will follow the steps for sharing and downloading files using Dat. In practice, we implement these in [dat-node](https://github.com/datproject/dat-node), a high-level module for using Dat that provides easy access to the core Dat modules.
 
-For any Dat application, there are three essential modules you will start with:
+For any Dat application, there are two essential modules you will start with:
 
 1. [hyperdrive](https://npmjs.org/hyperdrive) for file synchronization and versioning
-2. [hyperdrive-archive-swarm](https://npmjs.org/hyperdrive-archive-swarm) helps discover and connect to peers over local networks and the internet
-3. A [LevelDB](https://npmjs.org/level) compatible database for storing metadata.
+2. [hyperdiscovery](https://npmjs.org/hyperdiscovery) helps discover and connect to peers over local networks and the internet
 
-The [Dat CLI](https://npmjs.org/dat) module itself combines these modules and wraps them in a command-line API. These modules can be swapped out for a similarly compatible module, such as switching LevelDb for [MemDB](https://github.com/juliangruber/memdb) (which we do in the first example). More details on how these module work together are available in [How Dat Works](how-dat-works.md).
+The [Dat CLI](https://npmjs.org/dat) module itself combines these modules and wraps them in a command-line API. We also use the [dat-storage](https://github.com/datproject/dat-storage) module to handle file and key storage. These modules can be swapped out for a similarly compatible module, such as switching storage for [random-access-memory](https://github.com/mafintosh/random-access-memory).
 
 ## Getting Started
 
@@ -18,116 +17,98 @@ You will need node and npm installed to build with Dat. [Read more](https://gith
 
 ## Download a File
 
-Our first module will download files from a Dat link entered by the user. View the code for this module on [Github](https://github.com/joehand/diy-dat-examples/tree/master/module-1).
+Our first module will download files from a Dat link entered by the user.
 
 ```bash
 mkdir module-1 && cd module-1
 npm init
-npm install --save hyperdrive memdb hyperdrive-archive-swarm
+npm install --save hyperdrive random-access-memory hyperdiscovery
 touch index.js
 ```
 
-For this example, we will use [memdb](https://github.com/juliangruber/memdb) for our database (keeping the metadata in memory rather than on the file system). In your `index.js` file, require the main modules and set them up:
+For this example, we will use random-access-memory for our database (keeping the metadata in memory rather than on the file system). In your `index.js` file, require the main modules and set them up:
 
 ```js
-var memdb = require('memdb')
-var Hyperdrive = require('hyperdrive')
-var Swarm = require('hyperdrive-archive-swarm')
+var ram = require('random-access-memory')
+var hyperdrive = require('hyperdrive')
+var discovery = require('hyperdiscovery')
 
 var link = process.argv[2] // user inputs the dat link
 
-var db = memdb()
-var drive = Hyperdrive(db)
-var archive = drive.createArchive(link)
-var swarm = Swarm(archive)
+var archive = hyperdrive(ram, link)
+archive.ready(function () {
+  discovery(archive)
+})
 ```
 
-Notice, the user will input the link for the second argument The easiest way to get a file from a hyperdrive archive is to make a read stream. `archive.createFileReadStream` accepts the index number of filename for the first argument. To display the file, we can create a file stream and pipe it to `process.stdout`.
+Notice, the user will input the link for the second argument The easiest way to get a file from a hyperdrive archive is to make a read stream. `archive.readFile` accepts the index number of filename for the first argument. To display the file, we can create a file stream and pipe it to `process.stdout`.
 
 ```js
-var stream = archive.createFileReadStream(0) // get the first file
-stream.pipe(process.stdout)
+// Make sure your archive has a dat.json file!
+var stream = archive.readFile('dat.json', 'utf-8', function (err, data) {
+  if (err) throw err
+  console.log(data)
+})
 ```
 
-Now, you can run the module! To download the first file from our docs Dat, run:
+Now, you can run the module! To download the `dat.json` file from an archive:
 
 ```
-node index.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2
+node index.js dat://<link>
 ```
 
-You should see the first file in our docs repo.
+You should see the `dat.json` file.
 
 #### Bonus: Display any file in the Dat
 
 With a few more lines of code, the user can enter a file to display from the Dat link.
 
-Challenge: create a module that will allow the user to input a Dat link and a filename: `node bonus.js <dat-link> <filename>`. The module will print out that file from the link, as we did above. To get a specific file you can change the file stream to use the filename instead of the index number:
+Challenge: create a module that will allow the user to input a Dat link and a filename: `node bonus.js <dat-link> <filename>`. The module will print out that file from the link, as we did above:
 
 ```js
-var stream = archive.createFileReadStream(fileName)
+var stream = archive.readFile(fileName)
 ```
 
 Once you are finished, see if you can view this file by running:
 
 ```bash
-node bonus.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2 cookbook/diy-dat.md
+node bonus.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2 readme.md
 ```
-
-[See how we coded it](https://github.com/joehand/diy-dat-examples/blob/master/module-1/bonus.js).
 
 ## Download all files to computer
 
-This module will build on the last module. Instead of displaying a single file, we will download all of the files from a Dat into a local directory. View the code for this module on [Github](https://github.com/joehand/diy-dat-examples/tree/master/module-2).
+This module will build on the last module. Instead of displaying a single file, we will download all of the files from a Dat into a local directory.
 
-To download the files to the file system, instead of to a database, we will use the `file` option in `hyperdrive` and the [random-access-file](http://npmjs.org/random-access-file) module. We will also learn two new archive functions that make handling all the files a bit easier than the file stream in module #1.
+To download the files to the file system, we are going to use [mirror-folder](https://github.com/mafintosh/mirror-folder). [Read more](/using-fs) about how mirror-folder works with hyperdrive.
 
-Setup will be the same as before (make sure you install random-access-file and stream-each this time):
+In practice, you should use [dat-storage](https://github.com/datproject/dat-storage) to do this as it'll be more efficient and keep the metadata on disk.
 
-```bash
-mkdir module-2 && cd module-2
-npm init
-npm install --save hyperdrive memdb hyperdrive-archive-swarm random-access-file stream-each
-touch index.js
-```
-
-The first part of the module will look the same. We will add random-access-file (and [stream-each](http://npmjs.org/stream-each) to make things easier). The only difference is that we have to specify the `file` option when creating our archive:
+Setup will be the same as before (make sure you install `mirror-folder`). The first part of the module will look the same.
 
 ```js
-var memdb = require('memdb')
-var Hyperdrive = require('hyperdrive')
-var Swarm = require('hyperdrive-archive-swarm')
-var raf = require('random-access-file') // this is new!
-var each = require('stream-each')
+var ram = require('random-access-memory')
+var hyperdrive = require('hyperdrive')
+var discovery = require('hyperdiscovery')
+var mirror = require('mirror-folder')
 
-var link = process.argv[2]
+var link = process.argv[2] // user inputs the dat link
+var dir = process.cwd() // download to cwd
 
-var db = memdb()
-var drive = Hyperdrive(db)
-var archive = drive.createArchive(link, {
-  file: function (name) {
-    return raf(path.join('download', name)) // download into a "download" dir
-  }
-})
-var swarm = Swarm(archive)
-```
+var archive = hyperdrive(ram, link)
+archive.ready(function () {
+  discovery(archive)
 
-Now that we are setup, we can work with the archive. The `archive.download` function downloads the file content (to wherever you specified in the file option). To download all the files, we will need a list of files and then we will call download on each of them. `archive.list` will give us the list of the files. We use the stream-each module to make it easy to iterate over each item in the archive, then exit when the stream is finished.
-
-```js
-var stream = archive.list({live: false}) // Use {live: false} for now to make the stream easier to handle.
-each(stream, function (entry, next) {
-  archive.download(entry, function (err) {
-    if (err) return console.error(err)
-    console.log('downloaded', entry.name)
-    next()
+  var progress = mirror({name: '/', fs: archive}, dir, function (err) {
+    console.log('done downloading!')
   })
-}, function () {
-  process.exit(0)
+  progress.on('put', function (src) {
+    console.log(src.name, 'downloaded')
+  })
 })
 ```
 
 You should be able to run the module and see all our docs files in the `download` folder:
 
 ```bash
-node index.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2
+node index.js dat://<link>
 ```

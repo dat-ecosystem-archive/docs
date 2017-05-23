@@ -1,14 +1,16 @@
 ## General Terminology
 
-### Dat archive
+### dat, Dat archive, archive
 
-A folder containing files of any type, which can be synced to other people on the distributed web. A Dat archive has content (files) and metadata, both shared to peers.
+A dat, or Dat archive, is a set of files and special dat metadata ([SLEEP](#SLEEP). 
 
-A Dat archive has a Dat link used to share with other people.
+The folder can contain files of any type, which can be synced to other people on the distributed web. The metadata and files are both shared to peers.
+
+A dat has a Dat link used to share with other people.
 
 ### Distributed Web
 
-In a Distributed Web (P2P) model, those who are downloading the data are also providing some of the bandwidth and storage to run it. Instead of one server, we have many. The more people or organizations that are involved in the Distributed Web, the more redundant, safe, and fast it will become.
+In a Distributed Web (P2P) model, those who are downloading the data also provide bandwidth and storage to share it. Instead of one server, we have many. The more people or organizations that are involved in the Distributed Web, the more redundant, safe, and fast it will become.
 
 Currently, the Web is centralized: if someone controls the hardware or the communication line, then they control all the uses of that website. [Read more here](http://brewster.kahle.org/2015/08/11/locking-the-web-open-a-call-for-a-distributed-web-2/).
 
@@ -18,23 +20,19 @@ A P2P software program searches for other connected computers on a P2P network t
 
 In Dat, peers only connect if they both have the same Dat link.
 
-### Peer
-
-Another user or server who has downloaded the data (or parts of it) and is uploading it to others in the Dat Swarm.
-
 ### Swarm or Network
 
 A group of peers that want or have downloaded data for a Dat archive and are connected to each other over the Distributed Web.
 
-### Owner
+### Writer
 
-User who owns a Dat archive. This user has the secret key on local machine allowing them to write data.
+User who can write to a Dat archive. This user has the secret key on local machine allowing them to write data. Currently, dats are single-writer.
 
 ### Collaborator
 
 User who are granted read access to a Dat archive by the owner. A collaborator can access a Dat archive if the owner or another collaborator sends the the Dat link.
 
-In the future, owners will be able to grant collaborators write access to the Dat archive, allowing them to modify and create files in the archive.
+In the future, users will be able to grant collaborators write access to the Dat archive, allowing them to modify and create files in the archive.
 
 ### Secure Register
 
@@ -42,19 +40,21 @@ A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-y
 
 ### Dat Link
 
-Identifier for a Dat archive, e.g. `dat://ab3ed4f...`. These are 64 character hashes with the `dat://` protocol prefix. Anyone with the Dat link can download and re-share files in a Dat archive.
-
-### Snapshot Archive
-
-A snapshot archive uses a content-based hash as the Dat link. This means that the link is unique for that set of files and content. Once the content changes, the link will change.
-
-Snapshot archives can be used as checkpoints or for publishing specific versions of datasets with guarantees that the content will not change.
+Identifier for a dat, e.g. `dat://ab3ed4f...`. These are 64 character hashes with the `dat://` protocol prefix. Anyone with the Dat link can download and re-share files in a dat.
 
 ### Beaker
 
 The [Beaker Browser](https://beakerbrowser.com/) is an experimental p2p browser that can view and publish dats alongside traditional web browsing.
 
 ## Technical Terms
+
+### SLEEP
+
+SLEEP is the the on-disk format that Dat produces and uses. It is a set of 9 files that hold all of the metadata needed to list the contents of a Dat repository and verify the integrity of the data you receive.
+
+The acronym SLEEP is a slumber related pun on REST and stands for Syncable Lightweight Event Emitting Persistence. The Event Emitting part refers to how SLEEP files are append-only in nature, meaning they grow over time and new updates can be subscribed to as a realtime feed of events through the Dat protocol.
+
+Read the full [SLEEP specification](https://github.com/datproject/docs/blob/master/papers/dat-paper.md#3-sleep-specification) in the dat whitepaper.
 
 ### Metadata
 
@@ -99,5 +99,3 @@ Hypercore instances can contain any number of feeds.
 ### Hyper- (modules)
 
 Modules that are use hyperdrive archives or hypercore feeds in a cross-compatible way, for example [hyperdiscovery](https://github.com/karissa/hyperdiscovery) or [hyperhealth](https://github.com/karissa/hyperhealth).
-
-If a module is only compatible with one one of hyperdrive or hypercore, they should be prefixed with that name, e.g. [hyperdrive-import-files](https://github.com/juliangruber/hyperdrive-import-files).

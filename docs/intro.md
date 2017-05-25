@@ -1,8 +1,10 @@
-# Dat Docs
+# Welcome to Dat!
 
 Dat is the distributed data tool.
 
-Share files with anyone using automatic version history, encryption, and live syncing. Dat connects users directly for quick file transfer and secure networking. Use Dat to distribute scientific data, browse remote files on demand, or run continuous file backup. **Secure**, **distributed**, **fast**.
+A new class of data management software puts advanced file syncing and archiving wherever you need it. Dat goes beyond fragile http, centralized storage, and vendor lock-in with radically improved data verification and networking. Sync files between your computer and the cloud with ease, but store them where you want.
+
+Share files anywhere using automatic version history, encryption, and live synchronization. Users connect directly for quick transfer and secure communication. Use Dat to distribute scientific data, browse remote files on demand, or run continuous file backup. **Secure**, **distributed**, **fast**.
 
 **Built for the Public Good**
 

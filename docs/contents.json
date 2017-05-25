@@ -1,5 +1,5 @@
 {
-  "Dat": {
+  "Using Dat": {
     "Introduction": "intro.md",
     "Overview & Tutorial": "overview.md",
     "Command Line": "modules/dat.md",
@@ -8,13 +8,14 @@
     "Terminology": "terms.md"
   },
   "Cookbook": {
-    "On a Server": "cookbook/server.md",
+    "Running a Dat Server": "cookbook/server.md",
     "In the Browser": "cookbook/browser.md",
-    "Under the Hood": "cookbook/diy-dat.md",
-    "Using the Hyperdrive FS": "cookbook/using-fs.md"
+    "DIY Dat": "cookbook/diy-dat.md",
+    "Using Hyperdrive FS": "cookbook/using-fs.md"
   },
-  "Building with Dat": {
-    "Open Source Tools": "ecosystem.md",
+  "Dat Technology": {
+    "Overview": "ecosystem.md",
+    "Built on Dat": "dat-powered.md",
     "dat-node": "modules/dat-node.md",
     "hyperdrive": "modules/hyperdrive.md",
     "hypercore": "modules/hypercore.md",

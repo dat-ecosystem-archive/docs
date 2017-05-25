@@ -1,14 +1,23 @@
 {
   "Dat": {
-    "Introduction": "modules/dat.md",
-    "Terminology": "terms.md",
+    "Introduction": "intro.md",
+    "Overview & Tutorial": "overview.md",
+    "Command Line": "modules/dat.md",
     "FAQ": "faq.md",
-    "Open Source Tools": "ecosystem.md"
+    "Troubleshooting": "troubleshooting.md",
+    "Terminology": "terms.md"
   },
   "Cookbook": {
     "On a Server": "cookbook/server.md",
     "In the Browser": "cookbook/browser.md",
     "Under the Hood": "cookbook/diy-dat.md",
     "Using the Hyperdrive FS": "cookbook/using-fs.md"
+  },
+  "Building with Dat": {
+    "Open Source Tools": "ecosystem.md",
+    "dat-node": "modules/dat-node.md",
+    "hyperdrive": "modules/hyperdrive.md",
+    "hypercore": "modules/hypercore.md",
+    "hyperdiscovery": "modules/hyperdiscovery.md"
   }
 }

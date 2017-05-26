@@ -2,9 +2,9 @@
 
 Dat is the distributed data tool.
 
-Dat's open source applications give you advanced file syncing and archiving wherever your need it. When you add a folder to Dat, friends can instantly see and download your files. Share data with anyone over a distributed network using encrypted connections. Dat brings a new ease to public data management with automatic version history, persistent links, and dynamic backups.
- 
-Use Dat to distribute scientific data, browse remote files on demand, or run continuous file archiving. Flexible storage options and publishing via http integrate into your existing work flow. Dat connects existing web infrastructure with a modern technological foundation. Integration with a decentralized network creates new opportunities for data publishing tools. User-first applications puts data preservation at your finger tips like never before. **Secure**, **distributed**, **fast**.
+Dat's open source applications offer a new experience in advanced file publishing and backup. Wherever your data goes, Dat uses innovative *in place archiving* to link your files. Share data with anyone over a distributed network using encrypted connections. Dat brings a new ease to public data management with automatic version history, persistent links, and dynamic storage.
+
+Use Dat to distribute scientific data, browse remote files on demand, or run continuous file archiving. Integrate into your existing work flow with flexible storage options and http publishing. Dat connects existing web infrastructure with a modern technological foundation. Built on a decentralized network, Dat creates new opportunities for existing data publishing tools. Put data preservation at your finger tips, like never before, with user-first applications. **Secure**, **distributed**, **fast**.
 
 <a href="https://datproject.org/install#desktop" target="_blank" title="Install Dat Desktop"><img src="/assets/install_desktop.png" alt="Install Dat Desktop" style="width:250px;"/></a>
 <a href="https://datproject.org/install#terminal" target="_blank" title="Install dat command line"><img src="/assets/install_cli.png" alt="Install dat command line" style="width:250px;"/></a>

@@ -15,7 +15,6 @@
   },
   "Dat Technology": {
     "Overview": "ecosystem.md",
-    "Built on Dat": "dat-powered.md",
     "dat-node": "modules/dat-node.md",
     "hyperdrive": "modules/hyperdrive.md",
     "hypercore": "modules/hypercore.md",

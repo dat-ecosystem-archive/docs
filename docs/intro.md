@@ -2,7 +2,7 @@
 
 Dat is the distributed data tool.
 
-Dat's open source applications offer a new experience in advanced file publishing and backup. Wherever your data goes, Dat uses innovative *in place archiving* to link your files. Share data with anyone over a distributed network using encrypted connections. Dat brings a new ease to public data management with automatic version history, persistent links, and dynamic storage.
+Dat's open source applications offer a new experience in advanced file syncing and publishing. Wherever your data goes, Dat uses innovative *in place archiving* to link your files. Share data with anyone over a distributed network using encrypted connections. Dat brings a new ease to public data management with automatic version history, persistent links, and dynamic storage.
 
 Use Dat to distribute scientific data, browse remote files on demand, or run continuous file archiving. Integrate into your existing work flow with flexible storage options and http publishing. Dat connects existing web infrastructure with a modern technological foundation. Built on a decentralized network, Dat creates new opportunities for existing data publishing tools. Put data preservation at your finger tips, like never before, with user-first applications. **Secure**, **distributed**, **fast**.
 

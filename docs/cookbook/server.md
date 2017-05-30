@@ -1,6 +1,8 @@
 # Dats on a Server
 
-Since Dat is a distributed (peer-to-peer) data sharing tool, a computer must be currently sharing the data for it to be available. If you're sharing a dat, you might want to set up a dedicated server that re-hosts your dat. This means that it'll still be available even after you turn off your personal computer.
+Since Dat is a distributed (peer-to-peer) data sharing tool, a computer must be actively sharing a dat for it to be available. If you're sharing files over Dat, you might want to set up a dedicated server that re-hosts your dat. This means that it'll still be available even after you turn off your personal computer.
+
+Running Dat on a server can also be used for live backups. As long as you are connected to your server and syncing changes, your server can backup all of your content history - allowing you to view old content later.
 
 ## Short Instructions
 
@@ -15,7 +17,7 @@ echo 'dat://another-dat-link-here' >> feeds
 hypercored
 ```
 
-That's it. Now it will download and host the data for the each dat in the `feeds` file.
+That's it. Now it will download and host the data for the each dat in the `feeds` file. Hypercored uses [hypercore-archiver](https://github.com/mafintosh/hypercore-archiver) for efficient sharing of many dats and full content history backup.
 
 See below for more detailed instructions.
 

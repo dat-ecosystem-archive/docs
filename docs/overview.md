@@ -1,10 +1,10 @@
-# Dat Overview & Tutorial
+# Dat Concept Overview
 
-This overview will introduce you to Dat, a new type of distributed data tool, and help you make the most of it. Dat uses modern cryptography, decentralized networks, and content versioning so you can share and publish data with ease. After covering the core concepts of Dat, a tutorial will get you sharing and downloading data with Dat Desktop or dat command line.
+This overview will introduce you to Dat, a new type of distributed data tool, and help you make the most of it. Dat uses modern cryptography, decentralized networks, and content versioning so you can share and publish data with ease.
 
-With Dat, we want to make data sharing, publishing, and archiving fit into your workflow. Dat's unique design works wherever you store your data. You can keep files synced whether they're on your laptop, a public data repository, or in a drawer of hard drives. Dat securely ties all these places together, creating a dynamic data archive. Spend less time managing files, more time digging into data (unfortunately we cannot sort your hard drive drawer, yet).
+With Dat, we want to make data sharing, publishing, and archiving fit into your workflow. Build with the needs of researchers, librarians, and developers in mind, Dat's unique design works wherever you store your data. You can keep files synced whether they're on your laptop, a public data repository, or in a drawer of hard drives. Dat securely ties all these places together, creating a dynamic data archive. Spend less time managing files, more time digging into data (unfortunately we cannot sort your hard drive drawer, yet).
 
-**Install Dat now.** Then it'll be ready to use when you get to the tutorial section, perfect!
+**Install Dat now.** Then you can play with Dat while learning how it works!
 
 <a href="https://datproject.org/install#desktop" target="_blank" title="Install Dat Desktop"><img src="/assets/install_desktop.png" alt="Install Dat Desktop" style="width:250px;"/></a>
 <a href="https://datproject.org/install#terminal" target="_blank" title="Install dat command line"><img src="/assets/install_cli.png" alt="Install dat command line" style="width:250px;"/></a>
@@ -29,24 +29,27 @@ To maintain privacy, the dat link controls access to your data. Any data shared 
 
 ## Version History
 
-TODO:
+Dat automatically maintains a built in version history whenever files are added. Dat uses this history to allow partial downloads of files, for example only getting the latest files. There are two types of versioning performed automatically by Dat. Metadata is stored in a folder called `.dat` in the main folder of a repository, and data is stored as normal files in the main folder.
 
-* append-only log
-* partial replication
+Dat uses append-only registers to store version history. This means all changes are written to the end of the file, growing over time.
 
-## Tutorial 
+### Metadata Versioning
 
-In this tutorial we will go through the two main ways to use Dat, sharing data and downloading data. If possible, this is great to go through with a partner to see how Dat works across computers. Get Dat [installed](intro#installation) and get started!
+Dat acts as a one-to-one mirror of the state of a folder and all it's contents. When importing files, Dat grabs the filesystem metadata for each file and checks if there is already an entry for this filename. If the file with this metadata matches exactly the newest version of the file metadata stored in Dat, then this file will be skipped (no change).
 
-Dat Desktop makes it easy for anyone to get started using Dat with user-friendly interface. If you are comfortable with the command line then you can install dat via npm. No pressure! You can always switch apps later and keep your dats the same. Dat can share your files to anyone without caring how they are using Dat.
+If the metadata differs or does not exist, then this new metadata entry will be appended as the new 'latest' version for this file in the append-only SLEEP metadata content register.
 
-### Sharing Data
+### Content Versioning
 
-We'll be creating a dat from a folder on your computer. If you are with a friend you can sync these files to their computer. Otherwise you can view them online via datproject.org to see how viewing a dat online works (datproject.org does only stores data as a temporary cache, not permanently). Any kind of files work with Dat but for now, make sure it's something you want to share with your friends. We like cat pictures.
+The metadata only tells you if or when a file is changed, now how it changed. In addition to the metadata, Dat tracks changes in the content in a similar manner.
 
-<img src="/assets/desktop_share.gif" alt="Share folder with Dat Desktop" style="width:500px;"/>
+The default storage system used in Dat stores the files as files. This has the advantage of being very straightforward for users to understand, but the downside of not storing old versions of content by default.
 
-#### Dat Privacy in Brief
+In contrast to other version control systems, like Git, Dat only stores the current set of files, not older versions. Git, for example, stores all previous content versions and all previous metadata versions in the `.git` folder. But Dat is designed for larger datasets. 
+
+Storing all history on content could easily fill up the users hard drive. Dat has multiple storage modes based on usage. With Dat's dynamic storage, you can store the content history on a local external hard drive or on a remote server (or both!).
+
+## Dat Privacy
 
 Files shared with Dat are encrypted (using the link) so *only* users with your unique link can access your files. The link acts as a kind of password meaning, generally, you should assume *anyone* with the link will have access to your files. 
 
@@ -54,15 +57,9 @@ The link allows users to download, and re-share, your files, whether you intende
 
 Make sure you are thoughtful about who you share links with and how. Dat ensures links cannot be intercepted through the Dat network. If you share your links over other channels, ensure the privacy & security matches or exceeds your data security needs. We try to limit times when Dat displays full links to avoid accidental sharing.
 
-### Downloading Data
+## dat:// links
 
-TODO
-
-***You are ready to get started! Visit the [installation page](intro#installation) to download Dat.***
-
-### Primer on `dat://` links
-
-If you want to learn a bit more, Dat links are a good topic! Dat links have some special properties that are helpful to understand.
+Dat links have some special properties that are helpful to understand.
 
 Traditionally, http links point to a specific server, e.g. datproject.org's server, and/or a specific resource on that server. Unfortunately, links often break or the content changes without notification (this makes it impossible to cite `nytimes.com`, for example, because the link is meaningless without a reference to what content was there at citation time).
 

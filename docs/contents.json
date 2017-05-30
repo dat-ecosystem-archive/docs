@@ -1,7 +1,7 @@
 {
   "Using Dat": {
     "Introduction": "intro.md",
-    "Overview & Tutorial": "overview.md",
+    "Dat Concepts": "overview.md",
     "Command Line": "modules/dat.md",
     "FAQ": "faq.md",
     "Troubleshooting": "troubleshooting.md",

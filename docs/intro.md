@@ -23,7 +23,7 @@ Code for Science & Society hosts other open science initiatives including [Scien
 
 ## Getting Started
 
-If you are new to Dat, welcome! You can learn more about Dat and how to use it in [the overview & tutorial](overview). Becoming familiar with core Dat concepts will help you when using Dat and reading our documentation.
+If you are new to Dat, welcome! You can learn more about Dat concepts in [the overview](overview). Becoming familiar with core Dat concepts will help you when using Dat and reading our documentation.
 
 If you are ready to get started, pick a Dat client and install!
 

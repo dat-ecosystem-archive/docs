@@ -8,9 +8,11 @@
     "Terminology": "terms.md"
   },
   "Cookbook": {
+    "Getting Started": "cookbook/tutorial.md",
+    "Sharing files over HTTP": "cookbook/http.md",
     "Running a Dat Server": "cookbook/server.md",
     "In the Browser": "cookbook/browser.md",
-    "DIY Dat": "cookbook/diy-dat.md",
+    "Using Dat in JS Apps": "cookbook/diy-dat.md",
     "Using Hyperdrive FS": "cookbook/using-fs.md"
   },
   "Dat Technology": {

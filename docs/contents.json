@@ -1,19 +1,25 @@
 {
-  "Dat": {
-    "Introduction": "modules/dat.md",
-    "How Dat Works": "how-dat-works.md",
-    "Terminology": "terms.md",
-    "FAQ": "faq.md"
+  "Using Dat": {
+    "Introduction": "intro.md",
+    "Dat Concepts": "overview.md",
+    "Command Line": "modules/dat.md",
+    "FAQ": "faq.md",
+    "Troubleshooting": "troubleshooting.md",
+    "Terminology": "terms.md"
   },
   "Cookbook": {
-    "On a Server": "cookbook/server.md",
+    "Getting Started": "cookbook/tutorial.md",
+    "Sharing files over HTTP": "cookbook/http.md",
+    "Running a Dat Server": "cookbook/server.md",
     "In the Browser": "cookbook/browser.md",
-    "Under the Hood": "cookbook/diy-dat.md"
+    "Using Dat in JS Apps": "cookbook/diy-dat.md",
+    "Using Hyperdrive FS": "cookbook/using-fs.md"
   },
-  "Ecosystem": {
+  "Dat Technology": {
     "Overview": "ecosystem.md",
-    "SLEEP": "sleep.md",
-    "Hyperdrive": "modules/hyperdrive.md",
-    "Hypercore": "modules/hypercore.md"
+    "dat-node": "modules/dat-node.md",
+    "hyperdrive": "modules/hyperdrive.md",
+    "hypercore": "modules/hypercore.md",
+    "hyperdiscovery": "modules/hyperdiscovery.md"
   }
 }

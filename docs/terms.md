@@ -1,6 +1,4 @@
-# Terminology
-
-## Dat Terms
+## Terminology
 
 Terms specific to the Dat software.
 
@@ -9,10 +7,6 @@ Terms specific to the Dat software.
 A dat, or Dat archive, is a set of files and dat metadata (see [SLEEP](#sleep)). A dat folder can contain files of any type, which can be synced to other users. A dat has a Dat link used to share with other people.
 
 When you create a dat, you're creating a `.dat` folder to hold the metadata and the dat keys (a public and secret key).
-
-### Dat Link or Dat Key
-
-Identifier for a dat, e.g. `dat://ab3ed4f...`. These are 64 character hashes with the `dat://` protocol prefix. Anyone with the Dat link can download and re-share files in a dat.
 
 ### Secret Key
 
@@ -82,7 +76,7 @@ The discovery key is a hashed public key. The discovery key is used to find peer
 
 A feed is a term we use interchangeably with the term "append-only log". It’s the lowest level component of Dat. For each Dat, there are two feeds - the metadata and the content.
 
-Feeds are created with hypercore. 
+Feeds are created with hypercore.
 
 ### Metadata Feed
 

@@ -1,10 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);
 
+@import "~dat-design/scss/base.scss";
 // ugly selector needed to overwrite default styles
-body #choo-root.minidocs {
-  @import '~dat-design/scss/variables/colors.scss';
-  @import '~dat-design/scss/variables/transitions.scss';
-  @import '~dat-design/scss/base/links.scss';
+#choo-root.minidocs {
 
   font-family: 'Source Sans Pro', 'Helvetica Neue', 'Lucida Grande', Arial, sans-serif;
   line-height: 1.5;
@@ -21,19 +19,19 @@ body #choo-root.minidocs {
     transition-timing-function: $transition-timing-function;
   }
 
-  .minidocs-header {
-    margin: 0;
-  }
+  // .minidocs-header {
+  //   margin: 0;
+  // }
 
-  .minidocs-logo {
-    max-height: 100px;
-    width: inherit;
-    display: block;
-  }
+  // .minidocs-logo {
+  //   max-height: 100px;
+  //   width: inherit;
+  //   display: block;
+  // }
 
   .minidocs-content {
-    padding-bottom: 50px;
-    max-width: 48em; // sets a max-width to avoid endless lines on wide screens
+    // padding-bottom: 50px;
+    // max-width: 48em; // sets a max-width to avoid endless lines on wide screens
   }
 
   .minidocs-sidebar {
@@ -45,15 +43,15 @@ body #choo-root.minidocs {
     .h1::before {
       display: none;
     }
-    .h1, .h2, .h3 {
-      font-weight: 400;
-    }
-    .h1, .h2 {
-      margin-bottom: 8px;
-    }
-    .h2 {
-      font-size: 1.4em;
-    }
+    // .h1, .h2, .h3 {
+    //   font-weight: 400;
+    // }
+    // .h1, .h2 {
+    //   margin-bottom: 8px;
+    // }
+    // .h2 {
+    //   font-size: 1.4em;
+    // }
     .content-link {
       transition-property: background-color, color, border-color, padding-left;
       color: $color-neutral--80;
@@ -67,6 +65,43 @@ body #choo-root.minidocs {
         padding-left: .65rem;
         border-left-color: $color-green--hover;
         background-color: #FFF;
+      }
+    }
+  }
+
+  .minidocs-header {
+    background-color: $color-neutral;
+  }
+
+  /* header */
+  .minidocs-header-link {
+    font-size: .875rem;
+    letter-spacing: 0.05em;
+    color: $color-neutral--30;
+    &:hover, &:focus {
+      color: $color-white;
+      text-decoration: none;
+    }
+  }
+
+  @media screen and (max-width: $sm) {
+    .hidden-on-mobile {
+      display: none;
+    }
+  }
+
+  .minidocs-header-logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $color-neutral--10;
+    letter-spacing: .025em;
+    img {
+      transition: transform .5s ease-in-out;
+    }
+    &:hover, &:focus {
+      // color: $color-green;
+      img {
+        transform: rotate(360deg);
       }
     }
   }

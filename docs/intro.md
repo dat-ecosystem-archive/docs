@@ -34,4 +34,4 @@ Dat is funded by [Code for Science & Society](https://codeforscience.org), a non
 
 [Still want to learn more? Check out our basic concepts in the How Dat Works section](/concepts) or get more technical by reading [the Dat whitepaper](https://github.com/datproject/docs/blob/master/papers/dat-paper.pdf)
 
-[Enough reading? Head over to Installation to get started.](/install)
+[Enough reading, more doing? Head over to Installation to get started.](/install)

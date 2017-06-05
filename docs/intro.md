@@ -1,6 +1,6 @@
 # Welcome to Dat
 
-Dat is the distributed data sharing tool. Dat has been designed for easily storing, tracking, and sharing your data over time, so that other people can instantly get the latest data and see the history of what you've done. Researchers, analysts, libraries, and universities are [already using dat](https://www.nytimes.com/2017/03/06/science/donald-trump-data-rescue-science.html) to archive and distribute important data. Developers are building applications on Dat's components for [browsing the web](beakerbrowser.com) and [offline editable maps](https://www.digital-democracy.org/blog/update-from-the-ecuadorian-amazon/). Regular people like you are sharing data easily using Dat and it's easy to get started using the desktop application, commandline, or javascript library.
+Dat is the distributed data sharing tool. Dat has been designed for easily storing, tracking, and sharing your data over time, so that other people can instantly get the latest data and see the history of what you've done. Researchers, analysts, libraries, and universities are [already using dat](https://www.nytimes.com/2017/03/06/science/donald-trump-data-rescue-science.html) to archive and distribute scientific data. Developers are building applications on Dat's components for [browsing the web](beakerbrowser.com) and [offline editable maps](https://www.digital-democracy.org/blog/update-from-the-ecuadorian-amazon/). Regular people like you are sharing data easily using Dat and it's easy to get started using the desktop application, commandline, or javascript library.
 
 [Ready to try it? Head over to Installation to get started.](/install)
 
@@ -26,7 +26,7 @@ Dat makes it easy for you to save old versions of files. With every file update,
 
 #### Security
 
-Dat transfers files over an encrypted connection. Only users with your unique link can access the files inside of a dat. Your `dat://` link allows users to download and re-share your files and no one needs permission to rehost your dat, so be careful with whom you share your link. Only the original owner can add files now, unless the secret key is shared, which we do not recommend ([learn more](/link-to-secret-key-info). Dat also verifies the hashes of files on download so no malicious content can be added.
+Dat transfers files over an encrypted connection. Only users with your unique link can access the files inside of a dat. Your `dat://` link allows users to download and re-share your files and no one needs permission to rehost your dat, so be careful with whom you share your link. Only the original creator of the dat can add files, unless the secret key is shared. Dat also verifies the hashes of files on download so no malicious content can be added.
 
 ## Who we are
 

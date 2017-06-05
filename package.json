@@ -8,8 +8,8 @@
     "update": "npm run update:list && npm run update:build",
     "update:list": "curl -Ssl https://raw.githubusercontent.com/datproject/awesome-dat/master/readme.md | grep '📔' | egrep -o 'github.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' | cut -f 2- -d / | uniq > repos.txt",
     "update:build": "cat repos.txt | ecosystem-docs sync && cat repos.txt | ecosystem-docs read | node scripts/build.js",
-    "build:local": "npm run build:css && minidocs docs -c docs/contents.json -o dist  -l ./node_modules/dat-design/public/img/dat-data-logo.svg -t 'Dat Documentation' -s assets/styles.css --assets assets --pushstate",
-    "build:deploy": "npm run build:css && minidocs docs -c docs/contents.json -o dist -l ./node_modules/dat-design/public/img/dat-data-logo.svg -t 'Dat Documentation' -s assets/styles.css --assets assets --full-html",
+    "build:local": "npm run build:css && minidocs docs -c docs/contents.json -o dist  -l ./node_modules/dat-design/public/img/dat-hexagon.svg -t 'Dat Documentation' -s assets/styles.css --assets assets --pushstate",
+    "build:deploy": "npm run build:css && minidocs docs -c docs/contents.json -o dist -l ./node_modules/dat-design/public/img/dat-hexagon.svg -t 'Dat Documentation' -s assets/styles.css --assets assets --full-html",
     "build:css": "node-sass --importer node_modules/node-sass-magic-importer assets/styles.scss assets/styles.css",
     "watch:css": "nodemon -e scss -x \"npm run build:local\"",
     "netlify": "npm run update:token && npm run build:deploy",
@@ -31,7 +31,7 @@
   "dependencies": {
     "dat-design": "^1.2.11",
     "gh-pages": "^0.11.0",
-    "minidocs": "^4.0.5",
+    "minidocs": "github:datproject/minidocs#dat-tachyons",
     "split2": "^2.1.0"
   },
   "devDependencies": {

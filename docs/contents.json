@@ -1,5 +1,6 @@
 {
   "Using Dat": {
+    "Introduction": "intro.md",
     "Installation": "install.md",
     "Getting Started": "tutorial.md",
     "Key Concepts": "concepts.md",

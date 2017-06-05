@@ -11,17 +11,17 @@ With Dat, we want to make data sharing, publishing, and archiving fit into your 
 
 ## In Place Archiving
 
-You can turn any folder on your computer into *a dat*. We call this *in place archiving*. A dat is a regular folder with some magic attached. The magic is a set of metadata files, in a `.dat` folder. Dat uses the metadata to track file history and securely share your files. Your files and the `.dat` folder can be instantly synced to anywhere.
+You can turn any folder on your computer into *a dat*. We call this *in place archiving*. A dat is a regular folder with some magic attached. The magic is a set of metadata files in a `.dat` folder. Dat uses the metadata to track file history and securely share your files. Your files and the `.dat` folder can be instantly synced to anywhere.
 
 <img src="/assets/dat_folder.png" alt="Create a dat with any folder" style="width:500px;"/>
 
-Once installing Dat, you can use a single command to live sync your files to friends, backup to an external drive, and publish to a website (so people can download over http too!). The cool part is this all happens at the same time. If you go offline for a bit, no worries. Dat shares the latest files and any saved history once you are back online. These data transfers happen between the computers, forgoing any centralized source.
+Once you have installed Dat, you can use a single command to live sync your files to friends, backup to an external drive, and publish to a website (so people can download over http too!). The cool part is this all happens at the same time. If you go offline for a bit, no worries. Dat shares the latest files and any saved history once you are back online. These data transfers happen between the computers, forgoing any centralized source.
 
 In place archiving in Dat really means **any place**. Dat seamlessly syncs your files where you want and when you want. Dat's decentralized technology and automatic versioning will improve data availability and data quality without sacrificing ease of use.
 
 ## Distributed Network
 
-Dat goes beyond regular archiving through it's *distributed network*. When you share data, Dat sends data to many download locations at once, and they can sync the same data with each other! By connecting users directly Dat transfers files faster, especially sharing on a local network. Distributed syncing allows robust global archiving for public data.
+Dat goes beyond regular archiving through its *distributed network*. When you share data, Dat sends data to many download locations at once, and they can sync the same data with each other! By connecting users directly Dat transfers files faster, especially sharing on a local network. Distributed syncing allows robust global archiving for public data.
 
 <img src="/assets/share_link.png" alt="Share unique dat link" style="width:500px;"/>
 
@@ -41,7 +41,7 @@ If the metadata differs or does not exist, then this new metadata entry will be 
 
 ### Content Versioning
 
-The metadata only tells you if or when a file is changed, now how it changed. In addition to the metadata, Dat tracks changes in the content in a similar manner.
+The metadata only tells you if or when a file is changed, not how it changed. In addition to the metadata, Dat tracks changes in the content in a similar manner.
 
 The default storage system used in Dat stores the files as files. This has the advantage of being very straightforward for users to understand, but the downside of not storing old versions of content by default.
 
@@ -63,7 +63,7 @@ Dat links have some special properties that are helpful to understand.
 
 Traditionally, http links point to a specific server, e.g. datproject.org's server, and/or a specific resource on that server. Unfortunately, links often break or the content changes without notification (this makes it impossible to cite `nytimes.com`, for example, because the link is meaningless without a reference to what content was there at citation time).
 
-You may have seen Dat links around:
+You may have seen dat links around:
 
 ```
 dat://ff34725120b2f3c5bd5028e4f61d14a45a22af48a7b12126d5d588becde88a93

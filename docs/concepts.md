@@ -1,6 +1,6 @@
 # How Dat Works
 
-These are key concepts used in Dat that you may not be familiar with.
+
 
 ## In Place Archiving
 

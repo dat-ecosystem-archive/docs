@@ -1,6 +1,4 @@
-# How Dat Works
-
-
+# Key Concepts
 
 ## In Place Archiving
 

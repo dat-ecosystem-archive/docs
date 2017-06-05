@@ -1,10 +1,6 @@
 # Welcome to Dat!
 
-Dat is a distributed data sharing tool. [The Dat Protocol](http://datprotocol.com) transfers files using a **secure**, **distributed**, and **fast** network. Unlike Dropbox, data doesn't travel to a third-party server before reaching it's destination. Use Dat to share directories, browse remote files on demand, or continuously archive entire filesystems.
-
-Dat has a Desktop client, a commandline tool, and a Node.js library. Install them below.
-
-If you'd like to read about how dat works, please [start with the Overview](/overview) and if you're still hungry for more learning, [read the Dat paper](/link-to-paper).
+Dat has a Desktop client, a commandline tool, and a Node.js library. If you'd like to read about how dat works, please [read how it works](/concepts) and if you're still hungry for more learning, [read the Dat paper](https://github.com/datproject/docs/blob/master/papers/dat-paper.pdf).
 
 Have questions or need some guidance? You can chat with us in IRC on [#dat](http://webchat.freenode.net/?channels=dat) or [Gitter](https://gitter.im/datproject/discussions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)!
 

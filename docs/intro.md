@@ -14,7 +14,7 @@ Having a history of data has become essential for collaboration and reproducibil
 
 #### Distributed Network
 
-Dat works on a distributed network unlike cloud services, such as Dropbox or Google Drive. This means Dat transfers files peer to peer, skipping centralized servers. Dat's network makes file transfers faster and more secure. You can even use Dat on local networks for offline file sharing or local backups. Dat reduces bandwidth costs on popular files, as downloads are *distributed* across all available computers, rather than centralized on a single host. This inverses the typical math where the more popular a download, the slower it is.
+Dat works on a distributed network unlike cloud services, such as Dropbox or Google Drive. This means Dat transfers files peer to peer, skipping centralized servers. Dat's network makes file transfers faster and more secure. You can even use Dat on local networks for offline file sharing or local backups. Dat reduces bandwidth costs on popular files, as downloads are *distributed* across all available computers, rather than centralized on a single host.
 
 #### Automatic Version Control
 
@@ -22,7 +22,7 @@ Dat makes it easy for you to save old versions of files. With every file update,
 
 #### Security
 
-Dat transfers files over an encrypted connection. Only users with your unique link can access the files inside of a dat. Your `dat://` link allows users to download and re-share your files and no one needs permission to rehost your dat, so be careful with whom you share your link. Only the original creator of the dat can add files, unless the secret key is shared. Dat also verifies the hashes of files on download so no malicious content can be added.
+Dat transfers files over an encrypted connection using state-of-the-art cryptography. Only users with your unique link can access your files. Your dat link allows users to download and re-share your files. To write updates to a dat, users must have the secret key. Dat also verifies the hashes of files on download so no malicious content can be added.
 
 ## Who we are
 

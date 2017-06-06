@@ -1,4 +1,4 @@
-## Terminology
+# Terminology
 
 Terms specific to the Dat software.
 

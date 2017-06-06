@@ -4,13 +4,13 @@ Ever tried moving large files and folders to other computers? Usually this invol
 
 Dat is free software built for the public by Code for Science & Society, a nonprofit. Researchers, analysts, libraries, and universities are [already using dat](https://www.nytimes.com/2017/03/06/science/donald-trump-data-rescue-science.html) to archive and distribute scientific data. Developers are building applications on Dat for [browsing peer-to-peer websites](beakerbrowser.com) and [offline editable maps](https://www.digital-democracy.org/blog/update-from-the-ecuadorian-amazon/).  Anyone can use Dat to backup files or share those cute cat pictures with a friend. Install and get started today by using the desktop application, command line, or JavaScript library.
 
-[Ready to try it? Head over to Installation to get started.](/install)
+Ready to try it? [Head over to Installation to get started.](/install)
 
 ## Why Dat?
 
 When sharing files, current tools have tradeoffs: lower costs and ease of use, or security and speed. Cloud services, such as Dropbox or GitHub, force users to store data on places outside of their control. Until now, it has been very difficult to avoid centralized servers without major sacrifices. Dat's unique distributed network allows users to store data where they want. By decentralizing storage, Dat also increases speeds by downloading from many sources at the same time.
 
-Having a history of data has become essential for collaboration and reproducibility. Git has been promoted as a solution for data history, but it becomes slow with large files and a high learning curve. Git was designed for editing source code, while Dat is designed for sharing files. With a few simple commands, you can version files of any size. People can instantly get the latest files or download previous versions.
+Having a history of how files have changed is essential for effective collaboration and reproducibility. Git has been promoted as a solution for history, but it becomes slow with large files and a high learning curve. Git is designed for editing source code, while Dat is designed for sharing files. With a few simple commands, you can version files of any size. People can instantly get the latest files or download previous versions.
 
 #### Distributed Network
 
@@ -24,10 +24,10 @@ Dat makes it easy for you to save old versions of files. With every file update,
 
 Dat transfers files over an encrypted connection using state-of-the-art cryptography. Only users with your unique link can access your files. Your dat link allows users to download and re-share your files. To write updates to a dat, users must have the secret key. Dat also verifies the hashes of files on download so no malicious content can be added.
 
+In sum, we've taken the best parts of Git, BitTorrent, and Dropbox to design Dat. Learn more about how it all works by learning our [key concerps](/concepts) or get more technical by reading [the Dat whitepaper](https://github.com/datproject/docs/blob/master/papers/dat-paper.pdf).
+
 ## Who we are
 
 Dat is funded by [Code for Science & Society](https://codeforscience.org), a nonprofit supporting open source tools that benefit science and society. Dat also has a vibrant global community of developers building apps on the Dat protocol.
 
-[Still want to learn more? Check out our basic concepts in the How Dat Works section](/concepts) or get more technical by reading [the Dat whitepaper](https://github.com/datproject/docs/blob/master/papers/dat-paper.pdf)
-
-[Enough reading, more doing? Head over to Installation to get started.](/install)
+Enough reading, more doing? [Head over to Installation to get started.](/install)

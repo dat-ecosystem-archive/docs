@@ -20,7 +20,9 @@ Dat works on a distributed network unlike cloud services, such as Dropbox or Goo
 
 #### Data History
 
-Dat makes it easy for you to save old versions of files. With every file update, Dat automatically tracks your changes. You can even direct these backups to be stored efficiently on an external hard drive or a cloud server by using [our archiver](/on-a-server).
+Dat makes it easy for you to save old versions of files. With every file
+update, Dat automatically tracks your changes. You can even direct these
+backups to be stored efficiently on an external hard drive or a cloud serve by using [our archiver](/server).
 
 #### Security
 

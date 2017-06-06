@@ -35,7 +35,7 @@
   }
 
   .minidocs-sidebar {
-    background-color: $color-neutral--10;
+    background-color: $color-neutral-10;
   }
 
   .minidocs-menu {
@@ -54,7 +54,7 @@
     // }
     .content-link {
       transition-property: background-color, color, border-color, padding-left;
-      color: $color-neutral--80;
+      color: $color-neutral-80;
       &:hover, &:focus {
         color: $color-neutral;
         border-left-color: transparent;
@@ -63,7 +63,7 @@
       }
       &.active {
         padding-left: .65rem;
-        border-left-color: $color-green--hover;
+        border-left-color: $color-green-hover;
         background-color: #FFF;
       }
     }
@@ -77,7 +77,7 @@
   .minidocs-header-link {
     font-size: .875rem;
     letter-spacing: 0.05em;
-    color: $color-neutral--30;
+    color: $color-neutral-30;
     &:hover, &:focus {
       color: $color-white;
       text-decoration: none;
@@ -93,7 +93,7 @@
   .minidocs-header-logo {
     font-size: 1.5rem;
     font-weight: 600;
-    color: $color-neutral--10;
+    color: $color-neutral-10;
     letter-spacing: .025em;
     img {
       transition: transform .5s ease-in-out;

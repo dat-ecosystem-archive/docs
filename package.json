@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/datproject/docs#readme",
   "dependencies": {
-    "dat-design": "^1.2.11",
+    "dat-design": "^5.0.1",
     "gh-pages": "^0.11.0",
     "minidocs": "github:datproject/minidocs#dat-tachyons",
     "split2": "^2.1.0"

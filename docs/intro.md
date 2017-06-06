@@ -12,19 +12,19 @@ When sharing files, current tools have tradeoffs: lower costs and ease of use, o
 
 Having a history of how files have changed is essential for effective collaboration and reproducibility. Git has been promoted as a solution for history, but it becomes slow with large files and a high learning curve. Git is designed for editing source code, while Dat is designed for sharing files. With a few simple commands, you can version files of any size. People can instantly get the latest files or download previous versions.
 
+In sum, we've taken the best parts of Git, BitTorrent, and Dropbox to design Dat. Learn more about how it all works by learning our [key concepts](/concepts) or get more technical by reading [the Dat whitepaper](https://github.com/datproject/docs/blob/master/papers/dat-paper.pdf).
+
 #### Distributed Network
 
 Dat works on a distributed network unlike cloud services, such as Dropbox or Google Drive. This means Dat transfers files peer to peer, skipping centralized servers. Dat's network makes file transfers faster and more secure. You can even use Dat on local networks for offline file sharing or local backups. Dat reduces bandwidth costs on popular files, as downloads are *distributed* across all available computers, rather than centralized on a single host.
 
-#### Automatic Version Control
+#### Data History
 
-Dat makes it easy for you to save old versions of files. With every file update, Dat automatically tracks your changes. You can store the contents of your dat anytime you want by using a simple command. You can even direct these backups to be stored efficiently on an external hard drive or a cloud server by using [our archiver](/on-a-server).
+Dat makes it easy for you to save old versions of files. With every file update, Dat automatically tracks your changes. You can even direct these backups to be stored efficiently on an external hard drive or a cloud server by using [our archiver](/on-a-server).
 
 #### Security
 
 Dat transfers files over an encrypted connection using state-of-the-art cryptography. Only users with your unique link can access your files. Your dat link allows users to download and re-share your files. To write updates to a dat, users must have the secret key. Dat also verifies the hashes of files on download so no malicious content can be added.
-
-In sum, we've taken the best parts of Git, BitTorrent, and Dropbox to design Dat. Learn more about how it all works by learning our [key concerps](/concepts) or get more technical by reading [the Dat whitepaper](https://github.com/datproject/docs/blob/master/papers/dat-paper.pdf).
 
 ## Who we are
 

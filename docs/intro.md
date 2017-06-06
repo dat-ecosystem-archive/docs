@@ -1,20 +1,16 @@
 # Welcome to Dat
 
-Dat is the distributed data sharing tool. Dat has been designed for easily storing, tracking, and sharing your data over time, so that other people can instantly get the latest data and see the history of what you've done. Researchers, analysts, libraries, and universities are [already using dat](https://www.nytimes.com/2017/03/06/science/donald-trump-data-rescue-science.html) to archive and distribute scientific data. Developers are building applications on Dat's components for [browsing the web](beakerbrowser.com) and [offline editable maps](https://www.digital-democracy.org/blog/update-from-the-ecuadorian-amazon/). Regular people like you are sharing data easily using Dat -- get started using the desktop application, commandline, or javascript library.
+Ever tried moving large files and folders to other computers? Usually this involves one of a few strategies: being in the same location (usb stick), using a cloud service (Dropbox), or using old but reliable technical tools (rsync). None of these easily store, track, and share your data securely over time. People often are stuck choosing between security, speed, or ease of use. Dat provides all three by using a state of the art technical foundation and user friendly tools for fast and secure file sharing that you control.
+
+Dat is free software built for the public by Code for Science & Society, a nonprofit. Researchers, analysts, libraries, and universities are [already using dat](https://www.nytimes.com/2017/03/06/science/donald-trump-data-rescue-science.html) to archive and distribute scientific data. Developers are building applications on Dat for [browsing peer-to-peer websites](beakerbrowser.com) and [offline editable maps](https://www.digital-democracy.org/blog/update-from-the-ecuadorian-amazon/).  Anyone can use Dat to backup files or share those cute cat pictures with a friend. Install and get started today by using the desktop application, command line, or JavaScript library.
 
 [Ready to try it? Head over to Installation to get started.](/install)
 
 ## Why Dat?
 
-It is surprisingly difficult to share data between many computers, especially if data is large and changes often. As a solution, people often use a centralized service such as Dropbox or NextCloud to share data. This is a relatively easy solution, but there are many problems with centralized servers:
+When sharing files, current tools have tradeoffs: lower costs and ease of use, or security and speed. Cloud services, such as Dropbox or GitHub, force users to store data on places outside of their control. Until now, it has been very difficult to avoid centralized servers without major sacrifices. Dat's unique distributed network allows users to store data where they want. By decentralizing storage, Dat also increases speeds by downloading from many sources at the same time.
 
-  * It can be too slow because data is uploaded to a remote computer before it is sent to downloaders
-  * It requires all parties involved to trust it to manage your data.
-  * It becomes slow or expensive to download data if there are many downloads at the same time.
-
-As an alternative, many people have begun to use Git when their data changes often and is small enough. However, when the data becomes large, Git becomes quite slow and difficult to manage. Git also has a high learning curve, so we've been prioritizing usability in our development of Dat.
-
-With Dat, we tried to merge concepts from Git, Dropbox, and BitTorrent to build a secure, fast, and distributed data sharing tool that puts you in control of your data. You can turn any folder on your computer into a Dat, and people you trust can subscribe to updates. As more computers download and host the data, downloading the data becomes faster, not slower. Dat has only a few simple commands and no messy merges.
+Having a history of data has become essential for collaboration and reproducibility. Git has been promoted as a solution for data history, but it becomes slow with large files and a high learning curve. Git was designed for editing source code, while Dat is designed for sharing files. With a few simple commands, you can version files of any size. People can instantly get the latest files or download previous versions.
 
 #### Distributed Network
 

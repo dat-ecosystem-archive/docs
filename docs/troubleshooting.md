@@ -62,17 +62,10 @@ For direct connection tests, the doctor will print out a command to run on the o
 
 ## Installation Troubleshooting
 
-### Dat Desktop 
-
-TODO
-
-### Command Line
-
-To use the Dat command line tool you will need to have [node and npm installed](https://docs.npmjs.com/getting-started/installing-node). Make sure those are installed correctly before installing Dat. Dat only supports Node versions 4 and above. You can check the version of each:
+To use the Dat command line tool you will need to have [node and npm installed](https://docs.npmjs.com/getting-started/installing-node). Make sure those are installed correctly before installing Dat. Dat only supports Node versions 4 and above.
 
 ```
 node -v
-npm -v
 ```
 
 #### Global Install

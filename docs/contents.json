@@ -1,14 +1,15 @@
 {
   "Using Dat": {
     "Introduction": "intro.md",
-    "Dat Concepts": "overview.md",
-    "Command Line": "modules/dat.md",
-    "FAQ": "faq.md",
+    "Installation": "install.md",
+    "Getting Started": "tutorial.md",
+    "Key Concepts": "concepts.md",
+    "Terminology": "terms.md",
+    "Frequently Asked Questions": "faq.md",
     "Troubleshooting": "troubleshooting.md",
-    "Terminology": "terms.md"
+    "About The Project": "overview.md"
   },
   "Cookbook": {
-    "Getting Started": "cookbook/tutorial.md",
     "Sharing files over HTTP": "cookbook/http.md",
     "Running a Dat Server": "cookbook/server.md",
     "In the Browser": "cookbook/browser.md",
@@ -17,6 +18,7 @@
   },
   "Dat Technology": {
     "Overview": "ecosystem.md",
+    "Command Line": "modules/dat.md",
     "dat-node": "modules/dat-node.md",
     "hyperdrive": "modules/hyperdrive.md",
     "hypercore": "modules/hypercore.md",

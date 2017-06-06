@@ -1,8 +1,8 @@
 # How Dat Works
 
-Note this is about Dat 2.0 and later. For historical info about earlier incarnations of Dat (Alpha, Beta) check out [this post](http://dat-data.com/blog/2016-01-19-brief-history-of-dat).
+Note this is about Dat 2.0 and later. 
 
-Read the [dat whitepaper](https://github.com/datproject/docs/tree/master/papers) for technical details.
+Read the [dat whitepaper](https://github.com/datproject/docs/tree/master/papers/dat-paper.md) for technical details.
 
 When someone starts downloading data with the [Dat command-line tool](https://github.com/datproject/dat), here's what happens:
 

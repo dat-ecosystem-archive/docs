@@ -219,7 +219,7 @@ cat.jpg
 
 To send these files to another machine using Dat, you would first add them to a Dat repository by splitting them into chunks and constructing SLEEP files representing the chunks and filesystem metadata.
 
-Let's assume `cat.jpg` produces three chunks, and `bat.jpg` produces four chunks, each around 64KB. Dat stores in a representation called SLEEP, but here we will show a pseudo-representation for the purposes of illustrating the replication process. The seven chunks get sorted into a list like this:
+Let's assume `bat.jpg` and `cat.jpg` both produce three chunks, each around 64KB. Dat stores in a representation called SLEEP, but here we will show a pseudo-representation for the purposes of illustrating the replication process. The seven chunks get sorted into a list like this:
 
 ```
 bat-1
@@ -233,16 +233,16 @@ cat-3
 These chunks then each get hashed, and the hashes get arranged into a Merkle tree (the content register):
 
 ```
-0 - hash(bat-1)
-    1 - hash(0 + 2)
-2 - hash(bat-2)
-        3 - hash(1 + 5)
-4 - hash(bat-3)
-    5 - hash(4 + 6)
-6 - hash(cat-1)
-8 - hash(cat-2)
-    9 - hash()
-10 - hash(cat-3)
+0          - hash(bat-1)
+    1      - hash(0 + 2)
+2          - hash(bat-2)
+        3  - hash(1 + 5)
+4          - hash(bat-3)
+    5      - hash(4 + 6)
+6          - hash(cat-1)
+8          - hash(cat-2)
+    9      - hash()
+10         - hash(cat-3)
 ```
 
 Next we calculate the root hashes of our tree, in this case 3 and 9. We then hash them together, and cryptographically sign the hash. This signed hash now can be used to verify all nodes in the tree, and the signature proves it was produced by us, the holder of the private key for this Dat.
@@ -252,8 +252,8 @@ This tree is for the hashes of the contents of the photos. There is also a secon
 ```
 0 - hash({contentRegister: '9e29d624...'})
   1 - hash(0 + 2)
-2 - hash({"bat.png", first: 0, length: 3})
-4 - hash({"cat.png", first: 3, length: 3})
+2 - hash({"bat.jpg", first: 0, length: 3})
+4 - hash({"cat.jpg", first: 3, length: 3})
 ```
 
 The first entry in this feed is a special metadata entry that tells Dat the address of the second feed (the content register). Note that node 3 is not included yet, because 3 is the hash of `1 + 5`, but 5 does not exist yet, so will be written at a later update.
@@ -570,7 +570,7 @@ To do this, we convert the filesystem metadata into entries in a feed like this:
   sequence: 1
 }
 {
-  "path": "/figures/graph2",
+  "path": "/figures/graph2.png",
   children: [[0], [1]],
   sequence: 2
 }

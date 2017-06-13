@@ -6,8 +6,7 @@
     "Key Concepts": "concepts.md",
     "Terminology": "terms.md",
     "Frequently Asked Questions": "faq.md",
-    "Troubleshooting": "troubleshooting.md",
-    "About The Project": "overview.md"
+    "Troubleshooting": "troubleshooting.md"
   },
   "Cookbook": {
     "Sharing files over HTTP": "cookbook/http.md",

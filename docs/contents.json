@@ -11,9 +11,9 @@
   "Cookbook": {
     "Sharing files over HTTP": "cookbook/http.md",
     "Running a Dat Server": "cookbook/server.md",
-    "In the Browser": "cookbook/browser.md",
-    "Using Dat in JS Apps": "cookbook/diy-dat.md",
-    "Using Hyperdrive FS": "cookbook/using-fs.md"
+    "For the Browser": "cookbook/browser.md",
+    "Building Node.js Apps": "cookbook/diy-dat.md",
+    "Lower Level: Hyperdrive": "cookbook/using-fs.md"
   },
   "Dat Technology": {
     "Overview": "ecosystem.md",

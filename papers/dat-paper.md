@@ -13,7 +13,7 @@ Dat is a protocol designed for syncing folders of data, even if they are large o
 
 Many datasets are shared online today using HTTP and FTP, which lack built in support for version control or content addressing of data. This results in link rot and content drift as files are moved, updated or deleted, leading to an alarming rate of disappearing data references in areas such as [published scientific literature](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0115253).
 
-Cloud storage services like S3 ensure availability of data, but they have a centralized hub-and-spoke networking model and are therefore limited by their bandwidth, meaning popular files can be come very expensive to share. Services like Dropbox and Google Drive provide version control and synchronization on top of cloud storage services which fixes many issues with broken links but rely on proprietary code and services requiring users to store their data on centralized cloud infrastructure which has implications on cost, transfer speeds, vendor lock-in and user privacy.
+Cloud storage services like S3 ensure availability of data, but they have a centralized hub-and-spoke networking model and are therefore limited by their bandwidth, meaning popular files can become very expensive to share. Services like Dropbox and Google Drive provide version control and synchronization on top of cloud storage services which fixes many issues with broken links but rely on proprietary code and services requiring users to store their data on centralized cloud infrastructure which has implications on cost, transfer speeds, vendor lock-in and user privacy.
 
 Distributed file sharing tools can become faster as files become more popular, removing the bandwidth bottleneck and making file distribution cheaper. They also use link resolution and discovery systems which can prevent broken links meaning if the original source goes offline other backup sources can be automatically discovered. However these file sharing tools today are not supported by Web browsers, do not have good privacy guarantees, and do not provide a mechanism for updating files without redistributing a new dataset which could mean entire redownloading data you already have.
 
@@ -24,13 +24,13 @@ Dat is a dataset synchronization protocol that does not assume a dataset is stat
 The protocol is agnostic to the underlying transport e.g. you could implement Dat over carrier pigeon. The key properties of the Dat design are explained in this section.
 
 - 2.1 **Content Integrity** - Data and publisher integrity is verified through use of signed hashes of the content.
-- 2.2 **Decentralized Mirroring** - Users sharing the same Dat automatically discover each other and exhange data in a swarm.
+- 2.2 **Decentralized Mirroring** - Users sharing the same Dat automatically discover each other and exchange data in a swarm.
 - 2.3 **Network Privacy** - Dat provides certain privacy guarantees including end-to-end encryption.
 - 2.4 **Incremental Versioning** - Datasets can be efficiently synced, even in real time, to other peers.
 
 ## 2.1 Content Integrity
 
-Content integrity means being able to verify the data you received is the exact same version of the data that you expected. This is imporant in a distributed system as this mechanism will catch incorrect data sent by bad peers. It also has implications for reproducibility as it lets you refer to a specific version of a dataset.
+Content integrity means being able to verify the data you received is the exact same version of the data that you expected. This is important in a distributed system as this mechanism will catch incorrect data sent by bad peers. It also has implications for reproducibility as it lets you refer to a specific version of a dataset.
 
 Link rot, when links online stop resolving, and content drift, when data changes but the link to the data remains the same, are two common issues in data analysis. For example, one day a file called data.zip might change, but a typical HTTP link to the file does not include a hash of the content, or provide a way to get updated metadata, so clients that only have the HTTP link have no way to check if the file changed without downloading the entire file again. Referring to a file by the hash of its content is called content addressability, and lets users not only verify that the data they receive is the version of the data they want, but also lets people cite specific versions of the data by referring to a specific hash.
 
@@ -54,7 +54,7 @@ Dat links are Ed25519 [@bernstein2012high] public keys which have a length of 32
 
 All messages in the Dat protocol are encrypted and signed using the public key during transport. This means that unless you know the public key (e.g. unless the Dat link was shared with you) then you will not be able to discover or communicate with any member of the swarm for that Dat. Anyone with the public key can verify that messages (such as entries in a Dat Stream) were created by a holder of the private key.
 
-Every Dat repository has corresponding a private key that kept in your home folder and never shared. Dat never exposes either the public or private key over the network. During the discovery phase the BLAKE2b hash of the public key is used as the discovery key. This means that the original key is impossible to discover (unless it was shared publicly through a separate channel) since only the hash of the key is exposed publicly.
+Every Dat repository has a corresponding private key which is kept in your home folder and never shared. Dat never exposes either the public or private key over the network. During the discovery phase the BLAKE2b hash of the public key is used as the discovery key. This means that the original key is impossible to discover (unless it was shared publicly through a separate channel) since only the hash of the key is exposed publicly.
 
 Dat does not provide an authentication mechanism at this time. Instead it provides a capability system. Anyone with the Dat link is currently considered able to discover and access data. Do not share your Dat links publicly if you do not want them to be accessed.
 
@@ -66,7 +66,7 @@ Dat has a layered abstraction so that users can use Hypercore directly to have f
 
 ### Hypercore Registers
 
-Hypercore Registers are the core mechanism used in Dat. They are binary append-only streams whose contents are cryptographically hashed and signed and therefore can be verified by anyone with access to the public key of the writer. They are an implemenation of the concept known as a register, a digital ledger you can trust
+Hypercore Registers are the core mechanism used in Dat. They are binary append-only streams whose contents are cryptographically hashed and signed and therefore can be verified by anyone with access to the public key of the writer. They are an implementation of the concept known as a register, a digital ledger you can trust
 
 Dat uses two registers, `content` and `metadata`. The `content` register contains the files in your repository and `metadata` contains the metadata about the files including name, size, last modified time, etc. Dat replicates them both when synchronizing with another peer.
 
@@ -132,7 +132,7 @@ If the metadata differs from the current existing one (or there are no entries f
 
 In addition to storing a historical record of filesystem metadata, the content of the files themselves are also capable of being stored in a version controlled manner. The default storage system used in Dat stores the files as files. This has the advantage of being very straightforward for users to understand, but the downside of not storing old versions of content by default.
 
-In contrast to other version control systems like Git, Dat by default only stores the current set of checked out files on disk in the repository folder, not old versions. It does store all previous metadata for old versions in `.dat`. Git for example stores all previous content versions and all previous metadata versions in the `.git` folder. Because Dat is designed for larger datasets, if it stored all previous file versions in `.dat`, then the `.dat` folder could easily fill up the users hard drive inadverntently. Therefore Dat has multiple storage modes based on usage.
+In contrast to other version control systems like Git, Dat by default only stores the current set of checked out files on disk in the repository folder, not old versions. It does store all previous metadata for old versions in `.dat`. Git for example stores all previous content versions and all previous metadata versions in the `.git` folder. Because Dat is designed for larger datasets, if it stored all previous file versions in `.dat`, then the `.dat` folder could easily fill up the users hard drive inadvertently. Therefore Dat has multiple storage modes based on usage.
 
 Hypercore registers include an optional `data` file that stores all chunks of data. In Dat, only the `metadata.data` file is used, but the `content.data` file is not used. The default behavior is to store the current files only as normal files. If you want to run an 'archival' node that keeps all previous versions, you can configure Dat to use the `content.data` file instead. For example, on a shared server with lots of storage you probably want to store all versions. However on a workstation machine that is only accessing a subset of one version, the default mode of storing all metadata plus the current set of downloaded files is acceptable, because you know the server has the full history.
 
@@ -219,7 +219,7 @@ cat.jpg
 
 To send these files to another machine using Dat, you would first add them to a Dat repository by splitting them into chunks and constructing SLEEP files representing the chunks and filesystem metadata.
 
-Let's assume `cat.jpg` produces three chunks, and `bat.jpg` produces four chunks, each around 64KB. Dat stores in a representation called SLEEP, but here we will show a pseudo-representation for the purposes of illustrating the replication process. The seven chunks get sorted into a list like this:
+Let's assume `bat.jpg` and `cat.jpg` both produce three chunks, each around 64KB. Dat stores in a representation called SLEEP, but here we will show a pseudo-representation for the purposes of illustrating the replication process. The seven chunks get sorted into a list like this:
 
 ```
 bat-1
@@ -233,16 +233,16 @@ cat-3
 These chunks then each get hashed, and the hashes get arranged into a Merkle tree (the content register):
 
 ```
-0 - hash(bat-1)
-    1 - hash(0 + 2)
-2 - hash(bat-2)
-        3 - hash(1 + 5)
-4 - hash(bat-3)
-    5 - hash(4 + 6)
-6 - hash(cat-1)
-8 - hash(cat-2)
-    9 - hash()
-10 - hash(cat-3)
+0          - hash(bat-1)
+    1      - hash(0 + 2)
+2          - hash(bat-2)
+        3  - hash(1 + 5)
+4          - hash(bat-3)
+    5      - hash(4 + 6)
+6          - hash(cat-1)
+8          - hash(cat-2)
+    9      - hash()
+10         - hash(cat-3)
 ```
 
 Next we calculate the root hashes of our tree, in this case 3 and 9. We then hash them together, and cryptographically sign the hash. This signed hash now can be used to verify all nodes in the tree, and the signature proves it was produced by us, the holder of the private key for this Dat.
@@ -252,8 +252,8 @@ This tree is for the hashes of the contents of the photos. There is also a secon
 ```
 0 - hash({contentRegister: '9e29d624...'})
   1 - hash(0 + 2)
-2 - hash({"bat.png", first: 0, length: 3})
-4 - hash({"cat.png", first: 3, length: 3})
+2 - hash({"bat.jpg", first: 0, length: 3})
+4 - hash({"cat.jpg", first: 3, length: 3})
 ```
 
 The first entry in this feed is a special metadata entry that tells Dat the address of the second feed (the content register). Note that node 3 is not included yet, because 3 is the hash of `1 + 5`, but 5 does not exist yet, so will be written at a later update.
@@ -266,7 +266,7 @@ Now Alice has the full list of files in the Dat, but decides they only want to d
 
 This section is a technical description of the SLEEP format intended for implementers. SLEEP is the the on-disk format that Dat produces and uses. It is a set of 9 files that hold all of the metadata needed to list the contents of a Dat repository and verify the integrity of the data you receive. SLEEP is designed to work with REST, allowing servers to be plain HTTP file servers serving the static SLEEP files, meaning you can implement a Dat protocol client using HTTP with a static HTTP file server as the backend.
 
-SLEEP files contain metadata about the data inside a Dat repository, including cryptographic hashes, cryptographic signatures, filenames and file permissions. The SLEEP format is specifically engineered to allow efficient access to subsets of the metadat and/or data in the repository, even on very large repositories, which enables Dat's peer to peer networking to be fast.
+SLEEP files contain metadata about the data inside a Dat repository, including cryptographic hashes, cryptographic signatures, filenames and file permissions. The SLEEP format is specifically engineered to allow efficient access to subsets of the metadata and/or data in the repository, even on very large repositories, which enables Dat's peer to peer networking to be fast.
 
 The acronym SLEEP is a slumber related pun on REST and stands for Syncable Lightweight Event Emitting Persistence. The Event Emitting part refers to how SLEEP files are append-only in nature, meaning they grow over time and new updates can be subscribed to as a realtime feed of events through the Dat protocol.
 
@@ -330,7 +330,7 @@ The public key used to verify the signatures in the `signatures` file. Stored in
 
 #### tree
 
-A SLEEP formatted 32 byte header with data entries representing a serialized merkle tree based on the data in the data storage layer. All the fixed size nodes written in in-order tree notation. The header algorithm string for `tree` files is `BLAKE2b`. The entry size is 40 bytes. Entries are formatted like this:
+A SLEEP formatted 32 byte header with data entries representing a serialized Merkle tree based on the data in the data storage layer. All the fixed size nodes written in in-order tree notation. The header algorithm string for `tree` files is `BLAKE2b`. The entry size is 40 bytes. Entries are formatted like this:
 
 ```
 <32 byte header>
@@ -404,7 +404,7 @@ Then we take this 32 byte hash and write it to the tree as 40 bytes like this:
   left child length + right child length
 ```
 
-The reason the tree entries contain data lengths is to allow for sparse mode replication. Encoding lengths (and including lengths in all hashes) means you can verify the merkle subtrees independent of the rest of the tree, which happens during sparse replication scenarios.
+The reason the tree entries contain data lengths is to allow for sparse mode replication. Encoding lengths (and including lengths in all hashes) means you can verify the Merkle subtrees independent of the rest of the tree, which happens during sparse replication scenarios.
 
 The tree file corresponds directly to the `data` file.
 
@@ -423,7 +423,7 @@ For example, if we wanted to seek to a specific entry offset (say entry 42):
  `32 + (40 * (42 * 2))`
 - Read the 40 bytes at that offset in the `tree` file to get the leaf node entry.
 - Read the last 8 bytes of the entry to get the length of the data entry
-- To calculate the offset of where in the `data` file your entry begins, you need to sum all the lengths of all the earlier entries in the tree. The most efficient way to do this is to sum all the previous parent node (non-leaf) entry lengths. You can also sum all leaf node lengths, but parent nodes contain the sum of their childrens lengths so it's more efficient to use parents. During Dat replication, these nodes are fetched as part of the Merkle tree verification so you will already have them locally. This is a log(N) operation where N is the entry index. Entries are also small and therefore easily cacheable.
+- To calculate the offset of where in the `data` file your entry begins, you need to sum all the lengths of all the earlier entries in the tree. The most efficient way to do this is to sum all the previous parent node (non-leaf) entry lengths. You can also sum all leaf node lengths, but parent nodes contain the sum of their children's lengths so it's more efficient to use parents. During Dat replication, these nodes are fetched as part of the Merkle tree verification so you will already have them locally. This is a log(N) operation where N is the entry index. Entries are also small and therefore easily cacheable.
 - Once you get the offset, you use the length you decoded above and read N bytes (where N is the decoded length) at the offset in the `data` file. You can verify the data integrity using the 32 byte hash from the `tree` entry.
 
 ##### Byte Lookup
@@ -471,7 +471,7 @@ Ed25519 sign(
 )
 ```
 
-The reason we hash all the root nodes is that the BLAKE2b hash above is only calculateable if you have all of the pieces of data required to generate all the intermediate hashes. This is the crux of Dat's data integrity guarantees.
+The reason we hash all the root nodes is that the BLAKE2b hash above is only calculable if you have all of the pieces of data required to generate all the intermediate hashes. This is the crux of Dat's data integrity guarantees.
 
 #### bitfield
 
@@ -570,7 +570,7 @@ To do this, we convert the filesystem metadata into entries in a feed like this:
   sequence: 1
 }
 {
-  "path": "/figures/graph2",
+  "path": "/figures/graph2.png",
   children: [[0], [1]],
   sequence: 2
 }
@@ -582,7 +582,7 @@ Each sequence represents adding one of the files to the register, so at sequence
 
 To look up a file by filename, you fetch the latest entry in the log, then use the `children` metadata in that entry to look up the longest common ancestor based on the parent folders of the filename you are querying. You can then recursively repeat this operation until you find the `path` entry you are looking for (or you exhaust all options which means the file does not exist). This is a `O(number of slashes in your path)` operation.
 
-For example, if you wanted to look up `/results.csv` given the above register, you would start by grabbing the metadata at sequence 2. The longest common ancestor between `/results.csv` and `/figures/graph2` is `/`. You then grab the corresponding entry in the children array for `/`, which in this case is the first entry, `[0]`. You then repeat this with all of the chilren entries until you find a child that is closer to the entry you are looking for. In this example, the first entry happens to be the match we are looking for.
+For example, if you wanted to look up `/results.csv` given the above register, you would start by grabbing the metadata at sequence 2. The longest common ancestor between `/results.csv` and `/figures/graph2` is `/`. You then grab the corresponding entry in the children array for `/`, which in this case is the first entry, `[0]`. You then repeat this with all of the children entries until you find a child that is closer to the entry you are looking for. In this example, the first entry happens to be the match we are looking for.
 
 You can also perform lookups relative to a point in time by starting from a specific sequence number in the register. For example to get the state of some file relative to an old sequence number, similar to checking out an old version of a repository in Git.
 
@@ -656,17 +656,17 @@ message Stat {
 }
 ```
 
-These are the field defintions:
+These are the field definitions:
 
-  - `mode` - posix file mode bitmask
-  - `uid` - posix user id
-  - `gid` - posix group id
+  - `mode` - POSIX file mode bitmask
+  - `uid` - POSIX user id
+  - `gid` - POSIX group id
   - `size` - file size in bytes
   - `blocks` - number of data chunks that make up this file
   - `offset` - the data feed entry index for the first chunk in this file
   - `byteOffset` - the data feed file byte offset for the first chunk in this file
-  - `mtime` - posix modified_at time
-  - `mtime` - posix created_at time
+  - `mtime` - POSIX modified_at time
+  - `mtime` - POSIX created_at time
 
 ## 4. Dat Network Protocol
 
@@ -873,7 +873,7 @@ Decentralized version control tools for source code like Git provide a protocol 
 
 BitTorrent implements a swarm based file sharing protocol for static datasets. Data is split into fixed sized chunks, hashed, and then that hash is used to discover peers that have the same data. An advantage of using BitTorrent for dataset transfers is that download bandwidth can be fully saturated. Since the file is split into pieces, and peers can efficiently discover which pieces each of the peers they are connected to have, it means one peer can download non-overlapping regions of the dataset from many peers at the same time in parallel, maximizing network throughput.
 
-Fixed sized chunking has drawbacks for data that changes (see LBFS above). BitTorrent assumes all metadata will be transferred up front which makes it impractical for streaming or updating content. Most BitTorrent clients divide data into 1024 pieces meaning large datasets could have a very large chunk size which impacts random access performance (e.g. for streaming video).
+Fixed sized chunking has drawbacks for data that changes. BitTorrent assumes all metadata will be transferred up front which makes it impractical for streaming or updating content. Most BitTorrent clients divide data into 1024 pieces meaning large datasets could have a very large chunk size which impacts random access performance (e.g. for streaming video).
 
 Another drawback of BitTorrent is due to the way clients advertise and discover other peers in absence of any protocol level privacy or trust. From a user privacy standpoint, BitTorrent leaks what users are accessing or attempting to access, and does not provide the same browsing privacy functions as systems like SSL.
 
@@ -909,7 +909,7 @@ IPFS is a family of application and network protocols that have peer to peer fil
 
 The UK Government Digital Service have developed the concept of a register which they define as a digital public ledger you can trust. In the UK government registers are beginning to be piloted as a way to expose essential open data sets in a way where consumers can verify the data has not been tampered with, and allows the data publishers to update their data sets over time.
 
-The design of registers was inspired by the infrastructure backing the Certificate Transparency [@laurie2013certificate] project, initated at Google, which provides a service on top of SSL certificates that enables service providers to write certificates to a distributed public ledger. Anyone client or service provider can verify if a certificate they received is in the ledger, which protects against so called "rogue certificates".
+The design of registers was inspired by the infrastructure backing the Certificate Transparency [@laurie2013certificate] project, initiated at Google, which provides a service on top of SSL certificates that enables service providers to write certificates to a distributed public ledger. Anyone client or service provider can verify if a certificate they received is in the ledger, which protects against so called "rogue certificates".
 
 # 6. Reference Implementation
 

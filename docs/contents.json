@@ -10,6 +10,7 @@
   },
   "Cookbook": {
     "Sharing files over HTTP": "cookbook/http.md",
+    "Publishing": "cookbook/publish.md",
     "Running a Dat Server": "cookbook/server.md",
     "For the Browser": "cookbook/browser.md",
     "Building Node.js Apps": "cookbook/diy-dat.md",

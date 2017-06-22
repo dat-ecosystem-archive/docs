@@ -1,4 +1,4 @@
-# Welcome to Dat!
+# Installation
 
 Dat has a Desktop client, a commandline tool, and a Node.js library. If you'd like to read about how dat works, please [read how it works](/concepts) and if you're still hungry for more learning, [read the Dat paper](https://github.com/datproject/docs/blob/master/papers/dat-paper.pdf).
 

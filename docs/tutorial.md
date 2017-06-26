@@ -63,7 +63,7 @@ dat share
 
 As long as this process is running, you can share the link with your friend and they can instantly start downloading your files.
 
-If you don't want the other person to download dat, you can also send them a link and they can see the contents in the browser. Go to [http://datproject.org](https://datproject.org) and enter your link to preview on the top right. *(Some users, including me when writing this, may have trouble connecting to datproject.org initially. It might take some time to initially connect, but if you wait and refresh it should view the files. We are actively working on improving this performance. Thanks.)*
+If you don't want the other person to download dat, you can also send them a link and they can see the contents in the browser. Go to [http://datproject.org](https://datproject.org) and enter your link to preview on the upper left. *(Some users, including me when writing this, may have trouble connecting to datproject.org initially. It might take some time to initially connect, but if you wait and refresh it should view the files. We are actively working on improving this performance. Thanks.)*
 
 ## Keeping data alive
 

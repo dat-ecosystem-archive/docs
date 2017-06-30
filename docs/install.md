@@ -19,14 +19,14 @@ If you don't want to use the terminal, you can use our desktop application on Ma
 
 Dat can be installed in the terminal using `node`. Follow the instructions below to get started.
 
-1. **Install Node.** Dat requires Node version 4.0 or higher; however, we recommend the latest version. If you don't have node, [go to their website at nodejs.org and pick your platform.](https://nodejs.org/en/download/) If node is installed, you should be able to type the following to see which version you have:
+**Install Node.** Dat requires Node version 4.0 or higher; however, we recommend the latest version. If you don't have node, [go to their website at nodejs.org and pick your platform.](https://nodejs.org/en/download/) If node is installed, you should be able to type the following to see which version you have:
 
 ```
 $ node -v
 8.0.0
 ```
 
-2. **Install Dat.** Dat is distributed using `npm`, the package manager for Node.js. Type the following command to install dat:
+**Install Dat.** Dat is distributed using `npm`, the package manager for Node.js. Type the following command to install dat:
 
 ```
 npm install -g dat

@@ -101,7 +101,7 @@ var archive = hyperdrive()
 var link = archive.discoveryKey.toString('hex')
 
 var swarm = webrtc(signalhub(link, DEFAULT_SIGNALHUBS))
-swarm.on('peer', function (peer) {
+swarm.on('peer', function (conn) {
   var peer = archive.replicate({
     upload: true,
     download: true

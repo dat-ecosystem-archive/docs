@@ -8,7 +8,7 @@ Repository for the documentation of the Dat Project ecosystem. View the docs at 
 
 ## Writing & Editing Docs
 
-[See docs folder](docs/readme.md) for information on editing and adding docs. Once you finish editing the docs, send a PR to the `deploy` branch to get the edits automatically deployed.
+[See docs folder](docs/readme.md) for information on editing and adding docs. Once you finish editing the docs, send a PR to the `master` branch to get the edits automatically deployed.
 
 ### Creating + Generating Paper from Markdown
 

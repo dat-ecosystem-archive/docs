@@ -10,5 +10,5 @@ This documentation uses [minidocs](https://github.com/freeman-lab/minidocs).
 ## Deploying to Website
 
 1. Write documentation
-2. Open PR to the `deploy` branch
+2. Open PR to the `master` branch
 3. When PR is merged, Travis will automatically deploy the docs!

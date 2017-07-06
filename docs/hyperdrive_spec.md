@@ -10,7 +10,7 @@ The goal of hypercore is to distribute append-only logs across a network of peer
 
 A core goal is to be as simple and pragmatic as possible. This allows for easier implementations of clients which is an often overlooked property when implementing distributed systems. First class browser support is also an important goal as p2p data sharing in browsers is becoming more viable every day as WebRTC matures.
 
-It also tries to be modular and export responsibilities to external modules whenever possible. Peer discovery is a good example of this as it handled by 3rd party modules that wasn't written with hyperdrive in mind. A benefit of this is a much smaller core implementation that can focus on smaller and simpler problems.
+It also tries to be modular and export responsibilities to external modules whenever possible. Peer discovery is a good example of this as it handled by 3rd party modules that weren't written with hyperdrive in mind. A benefit of this is a much smaller core implementation that can focus on smaller and simpler problems.
 
 Prioritized synchronization of parts of a feed is also at the heart of hyperdrive as this allows for fast streaming with low latency of data such as structured datasets (wikipedia, genomic datasets), linux containers, audio, videos, and much more. To allow for low latency streaming another goal is also to keep verifiable block sizes as small as possible - even with huge data feeds.
 
@@ -179,13 +179,13 @@ This means that if two datasets share a similar sequence of data the merkle tree
 
 ## Signed Merkle Trees
 
-As described above the top hash of a merkle tree is the hash of all its content. This has both advantages and disadvanteges.
+As described above the top hash of a merkle tree is the hash of all its content. This has both advantages and disadvantages.
 
 An advantage is that you can always reproduce a merkle tree simply by having the data contents of a merkle tree.
 
-A disadvantage is every time you add content to your data set your merkle tree hash changes and you'll need to re-distribute the new hash.
+A disadvantage is that every time you add content to your data set your merkle tree hash changes and you'll need to re-distribute the new hash.
 
-However Using a bit of cryptography we can make our merkle tree appendable. First generate a cryptographic key pair that can be used to sign data using [ed25519](https://ed25519.cr.yp.to/) keys, as they are compact in size (32 byte public keys). A key pair (public key, secret key) can be used to sign data. Signing data means that if you trust a public key and you receive data and a signature for that data you can verify that a signature was generated with the corresponding secret key.
+However by using a bit of cryptography we can make our merkle tree appendable. First generate a cryptographic key pair that can be used to sign data using [ed25519](https://ed25519.cr.yp.to/) keys, as they are compact in size (32 byte public keys). A key pair (public key, secret key) can be used to sign data. Signing data means that if you trust a public key and you receive data and a signature for that data you can verify that a signature was generated with the corresponding secret key.
 
 How does this relate to merkle trees? Instead of distributing the hash of a merkle tree we can distribute our public key instead. We then use our secret key to continously sign the merkle trees of our data set every time we append to it.
 
@@ -276,7 +276,7 @@ Hypercore feeds are append-only and totally-ordered. They are not allowed to hav
 
 ## Hypercore Replication Protocol
 
-Lets assume two peers have the identifier for a hypercore feed. This could either be the hash of the merkle tree roots described above or a public key if they want to share a signed merkle tree. The two peers wants to exchange the data verified by this tree. Lets assume the two peers have somehow connected to each other.
+Let's assume two peers have the identifier for a hypercore feed. This could either be the hash of the merkle tree roots described above or a public key if they want to share a signed merkle tree. The two peers wants to exchange the data verified by this tree. Lets assume the two peers have somehow connected to each other.
 
 Hypercore uses a message based protocol to exchange data. All messages sent are encoded to binary values using Protocol Buffers. Protocol Buffers are a widely supported schema based encoding support. A Protocol Buffers implementation is available on npm through the [protocol-buffers](https://github.com/mafintosh/protocol-buffers) module.
 

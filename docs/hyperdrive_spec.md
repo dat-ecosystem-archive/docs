@@ -389,3 +389,74 @@ An empty message that tells the other peer that they should stop requesting new 
 #### `7` Resume
 
 An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
+
+
+## Hyperdrive
+
+Hyperdrive builds on Hypercore's feeds to create a files archive. It provides the operations and abstractions which mainly define the Dat protocol.
+
+Each Hyperdrive archive uses two feeds: the Content Feed, which contains the actual file data, and the Metadata Feed, which defines the file boundaries, names, creation/modification times, and etc. The Metadata Feed is the "main" feed of the archive, and its entries reference blocks in the Content Feed.
+
+Archives are addressed using the public key of the Metadata Feed.
+
+### Rabin Chunking
+
+For each file in the archive we use a technique called Rabin fingerprinting to break the file up into blocks. This is a scheme first popularized by LBFS, the "Low Bandwidth Network Filesystem." The size of the blocks vary within a configurable window (currently 8kb - 32kb).
+
+From the [Wikipedia article](https://en.wikipedia.org/wiki/Rabin_fingerprint):
+
+> The basic idea is that the filesystem computes the cryptographic hash of each block in a file. To save on transfers between the client and server, they compare their checksums and only transfer blocks whose checksums differ. But one problem with this scheme is that a single insertion at the beginning of the file will cause every checksum to change if fixed-sized (e.g. 4 KB) blocks are used. So the idea is to select blocks not based on a specific offset but rather by some property of the block contents. LBFS does this by sliding a 48 byte window over the file and computing the Rabin fingerprint of each window. When the low 13 bits of the fingerprint are zero LBFS calls those 48 bytes a breakpoint and ends the current block and begins a new one. Since the output of Rabin fingerprints are pseudo-random the probability of any given 48 bytes being a breakpoint is `2^-13`. This has the effect of shift-resistant variable size blocks.
+
+### Metadata Feed
+
+The Metadata Feed is a history of all changes to the archive. Whereas the Content Feed will only change when new data is added, the Metadata Feed will change to reflect all operations, including "moves" or "deletes."
+
+The number of operations that the Metadata Feed supports is still growing. For instance, at present, it does not support deletions. This merely reflects the stage of development, not a technical challenge in the protocol's design.
+
+These are the types of messages written to the hypercore feed.
+
+#### `0` Index
+
+The first message in every Metadata Feed. Provides the public key of the Content Feed.
+
+``` protobuf
+message Index {
+  optional bytes content = 1;
+}
+```
+
+#### `1` File
+
+Defines a file-entry in the archive. The `Content` section indicates the range in the Content Feed where the file's blocks may be found.
+
+``` protobuf
+message Entry {
+  message Content {
+    required uint64 blockOffset = 1;
+    required uint64 bytesOffset = 2;
+  }
+
+  required string name = 1;
+  optional string linkname = 2;
+  optional uint64 length = 3;
+  optional uint64 blocks = 4;
+  optional uint32 mode = 5;
+  optional uint32 uid = 6;
+  optional uint32 gid = 7;
+  optional uint64 mtime = 8;
+  optional uint64 ctime = 9;
+  optional Content content = 10;
+}
+```
+
+#### `2` Directory
+
+Defines a directory-entry in the archive. This has the same schema as 'file'.
+
+#### `3` Symlink
+
+Defines a symbolic-link-entry in the archive. This has the same schema as 'file'. (This operation is not yet implemented.)
+
+#### `4` Hardlink
+
+Defines a hard-link-entry in the archive. This has the same schema as 'file'. (This operation is not yet implemented.)

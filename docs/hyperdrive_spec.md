@@ -260,7 +260,26 @@ These digests are very compact in size, only `(log2(number-of-blocks) + 2) / 8` 
 
 ### Bitfield Run length Encoding
 
-(talk about rle)
+
+During hypercore replication, bitfields are transmitted between peers to communicate which blocks they have in their local cache. A feed with 80 blocks will result in a buffer 80 bits in length (10 bytes).
+
+It is common for these bitfields to have long contiguous regions of data, the most common case being the author of a hypercore, in which case the bitfield will contain all `1`s. Therefore, run-length encoding is used to compress the data in transit, compressing our 80-bit example down to two bytes: one byte for a header, and another byte for the data. Hypercore's encoder is smart enough to only RLE segments which will create a smaller output.
+
+The encoding uses the varint from protobufs. It is arranged as follows:
+
+```
+varint(number of deltas)
+varint(delta 1 start)
+varint(delta 1 length)
+varint(delta 2 start)
+varint(delta 2 length)
+...
+varint(delta n start)
+varint(delta n length)
+bitfield
+```
+
+The encoding is expanded by iterating through the deltas, finding the bit referred to by the `start`, and then expanding it to the length provided by `length`. For added compression, the `starts` are relative to the previous delta. Therefore, if `delta 1 start = 5` and `delta 2 start = 6` then the actual start of of the second delta is `11` (`5 + 6`).
 
 ### Basic Privacy
 

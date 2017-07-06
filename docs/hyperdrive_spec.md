@@ -1,8 +1,8 @@
-# Hyperdrive + Hypercore Specification
+# Dat (Hyperdrive + Hypercore) Specification
 
 ## DRAFT Version 1
 
-Hyperdrive is the peer-to-peer data distribution protocol that powers Dat. It consists of two parts. First there is hypercore which is the core protocol and swarm that handles distributing append-only logs of any binary data. The second part is hyperdrive which adds a filesystem specific protocol on top of hypercore.
+Dat is a peer-to-peer data distribution protocol. It consists of two parts. First there is hypercore, which is the core protocol that handles distributing append-only logs of binary data. The second part is hyperdrive which adds a filesystem specific protocol on top of hypercore.
 
 ## Hypercore
 
@@ -10,7 +10,7 @@ The goal of hypercore is to distribute append-only logs across a network of peer
 
 A core goal is to be as simple and pragmatic as possible. This allows for easier implementations of clients which is an often overlooked property when implementing distributed systems. First class browser support is also an important goal as p2p data sharing in browsers is becoming more viable every day as WebRTC matures.
 
-It also tries to be modular and export responsibilities to external modules whenever possible. Peer discovery is a good example of this as it handled by 3rd party modules that wasn't written with hyperdrive in mind. A benefit of this is a much smaller core implementation that can focus on smaller and simpler problems.
+It also tries to be modular and export responsibilities to external modules whenever possible. Peer discovery is a good example of this as it handled by 3rd party modules. A benefit of this is a much smaller core implementation that can focus on smaller and simpler problems.
 
 Prioritized synchronization of parts of a feed is also at the heart of hyperdrive as this allows for fast streaming with low latency of data such as structured datasets (wikipedia, genomic datasets), linux containers, audio, videos, and much more. To allow for low latency streaming another goal is also to keep verifiable block sizes as small as possible - even with huge data feeds.
 
@@ -73,7 +73,7 @@ The roots spanning all the above leafs are 3 an 9. Throughout this document we'l
 * `sibling` - the other node with whom a node has a mutual parent
 * `uncle` - a parent's sibling
 
-## Merkle Trees
+### Merkle Trees
 
 A merkle tree is a binary tree where every leaf is a hash of a data block and every parent is the hash of both of its children.
 
@@ -136,11 +136,11 @@ Using these hashes we can reproduce `hash1` in the following way:
 
 If `h(uint64be(#3) + 3) == hash1` then we know that data we received from the other person is correct. They sent us `a` and the corresponding hashes.
 
-Since we only need uncle hashes to verify the block. The number of hashes we need is at worst `log2(number-of-blocks)` and the roots of the merkle trees which has the same complexity.
+Since we only need uncle hashes to verify the block, the number of hashes we need is at worst `log2(number-of-blocks)` and the roots of the merkle trees which has the same complexity.
 
 A merkle tree generator is available on npm through the [merkle-tree-stream](https://github.com/mafintosh/merkle-tree-stream) module.
 
-## Merkle Tree Deduplication
+### Merkle Tree Deduplication
 
 Merkle trees have another great property. They make it easy to deduplicate content that is similar.
 
@@ -167,7 +167,7 @@ However if we look a the flat-tree notation for the two trees:
 8
 ```
 
-We'll notice that the hash stored at 3 will be the same for both trees since the first four blocks are the same. Since we also send uncle hashes when sending a block of data we'll receive the hash for 3 when we request any block. If we maintain a simple index that maps a hash into the range of data it covers we can detect that we already have the data spanning 3 and we won't need to re-download that from another person.
+We'll notice that the hash stored at 3 will be the same for both trees since the first four blocks are the same. Since we also send uncle hashes when sending a block of data, we'll receive the hash for 3 when we request any block. If we maintain a simple index that maps a hash into the range of data it covers we can detect that we already have the data spanning 3 and we won't need to re-download that from another person.
 
 ```
 1 -> (a, b)
@@ -177,7 +177,7 @@ We'll notice that the hash stored at 3 will be the same for both trees since the
 
 This means that if two datasets share a similar sequence of data the merkle tree helps you detect that.
 
-## Signed Merkle Trees
+### Signed Merkle Trees
 
 As described above the top hash of a merkle tree is the hash of all its content. This has both advantages and disadvanteges.
 
@@ -205,13 +205,13 @@ If we append a new item to our data set we simply do the same thing:
 (a, b)
 ```
 
-Notice that all new signatures verify the entire dataset since they all sign a merkle tree that spans all data. This serves two purposes. First of all it makes sure that the dataset publisher cannot change old data. It also ensures that the publisher cannot share different versions of the same dataset to different persons without the other people noticing it (at some point they'll get a signature for the same node index that has different hashes if they talk to multiple people).
+Notice that all new signatures verify the entire dataset since they all sign a merkle tree that spans all data. If a signed update ever conflicts against previously-verified trees, suggesting a change in the history of data, the feed is considered corrupt and replication will stop. This serves two purposes. First of all it makes sure that the dataset publisher cannot change old data. It also ensures that the publisher cannot share different versions of the same dataset to different persons without the other people noticing it (at some point they'll get a signature for the same node index that has different hashes if they talk to multiple people).
 
-This technique has the added benefit that you can always convert a signed merkle tree to a normal unsigned one if you wish (or turn an unsigned tree into a signed tree).
+These techniques have the added benefit that you can always convert a signed merkle tree to a normal unsigned one if you wish (or turn an unsigned tree into a signed tree).
 
 In general you should send an as wide as possible signed tree back when using signed merkle trees as that lowers the amount of signatures the other person needs to verify which has a positive performance impact for some platforms. It will also allow other users to more quickly detect if a tree has duplicated content.
 
-## Block Tree Digest
+### Block Tree Digest
 
 When asking for a block of data we want to reduce the amount of duplicate hashes that are sent back.
 
@@ -233,7 +233,7 @@ Now if we ask for block `1` afterwards (`2` in flat tree notation) the other per
 
 If we only use non-signed merkle trees the other person can easily calculate which hashes we already have if we tell them which blocks we've got.
 
-This however isn't always possible if we use a signed merkle tree since the roots are changing. In general it also useful to be able to communicate that you have some hashes already without disclosing all the blocks you have.
+This however isn't always possible if we use a signed merkle tree since the roots are changing. In general it's also useful to be able to communicate that you have some hashes already without disclosing all the blocks you have.
 
 To communicate which hashes we have just have to communicate two things: which uncles we have and whether or not we have any parent node that can verify the tree.
 
@@ -369,7 +369,7 @@ message Data {
   repeated Node nodes = 3;
   optional bytes signature = 4;
 }
-````
+```
 
 #### `5` Cancel
 
@@ -389,3 +389,29 @@ An empty message that tells the other peer that they should stop requesting new 
 #### `7` Resume
 
 An empty message that tells the other peer that they can continue requesting new blocks of data. It has type `7`.
+
+#### `8` End
+
+An empty message that tells the other peer that they can close the connection gracefully. It has type `8`.
+
+#### `9` Unhave
+
+Cancel a previously-sent 'have'. It has type `9`.
+
+``` protobuf
+message Unhave {
+  required uint64 start = 1;
+  optional uint64 end = 2;
+}
+```
+
+#### `10` Unwant
+
+Cancel a previously-sent 'want'. It has type `10`.
+
+``` protobuf
+message Unwant {
+  required uint64 start = 1;
+  optional uint64 end = 2;
+}
+```

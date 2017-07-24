@@ -15,7 +15,7 @@ Many datasets are shared online today using HTTP and FTP, which lack built in su
 
 Cloud storage services like S3 ensure availability of data, but they have a centralized hub-and-spoke networking model and are therefore limited by their bandwidth, meaning popular files can become very expensive to share. Services like Dropbox and Google Drive provide version control and synchronization on top of cloud storage services which fixes many issues with broken links but rely on proprietary code and services requiring users to store their data on centralized cloud infrastructure which has implications on cost, transfer speeds, vendor lock-in and user privacy.
 
-Distributed file sharing tools can become faster as files become more popular, removing the bandwidth bottleneck and making file distribution cheaper. They also use link resolution and discovery systems which can prevent broken links meaning if the original source goes offline other backup sources can be automatically discovered. However these file sharing tools today are not supported by Web browsers, do not have good privacy guarantees, and do not provide a mechanism for updating files without redistributing a new dataset which could mean entire redownloading data you already have.
+Distributed file sharing tools can become faster as files become more popular, removing the bandwidth bottleneck and making file distribution cheaper. They also use link resolution and discovery systems which can prevent broken links meaning if the original source goes offline other backup sources can be automatically discovered. However these file sharing tools today are not supported by Web browsers, do not have good privacy guarantees, and do not provide a mechanism for updating files without redistributing a new dataset which could mean entirely redownloading data you already have.
 
 # 2. Dat
 
@@ -66,11 +66,11 @@ Dat has a layered abstraction so that users can use Hypercore directly to have f
 
 ### Hypercore Registers
 
-Hypercore Registers are the core mechanism used in Dat. They are binary append-only streams whose contents are cryptographically hashed and signed and therefore can be verified by anyone with access to the public key of the writer. They are an implementation of the concept known as a register, a digital ledger you can trust
+Hypercore Registers are the core mechanism used in Dat. They are binary append-only streams whose contents are cryptographically hashed and signed and therefore can be verified by anyone with access to the public key of the writer. They are an implementation of the concept known as a register, a digital ledger you can trust.
 
 Dat uses two registers, `content` and `metadata`. The `content` register contains the files in your repository and `metadata` contains the metadata about the files including name, size, last modified time, etc. Dat replicates them both when synchronizing with another peer.
 
-When files are added to Dat, each file gets split up into some number of chunks, and the chunks are then arranged into a Merkle tree, which is used later for version control and replication processed.
+When files are added to Dat, each file gets split up into some number of chunks, and the chunks are then arranged into a Merkle tree, which is used later for version control and replication processes.
 
 ## 2.2 Decentralized Mirroring
 
@@ -84,7 +84,7 @@ Source discovery can happen over many kinds of networks, as long as you can mode
 
 - `join(key, [port])` - Begin performing regular lookups on an interval for `key`. Specify `port` if you want to announce that you share `key` as well.
 - `leave(key, [port])` - Stop looking for `key`. Specify `port` to stop announcing that you share `key` as well.
-- `foundpeer(key, ip, port)` - Called when a peer is found by a lookup
+- `foundpeer(key, ip, port)` - Called when a peer is found by a lookup.
 
 In the Dat implementation we implement the above actions on top of three types of discovery networks:
 
@@ -96,13 +96,13 @@ Additional discovery networks can be implemented as needed. We chose the above t
 
 ### Peer Connections
 
-After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either TCP, HTTP or [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) [@rossi2010ledbat]. UTP uses LEDBAT which is designed to not take up all available bandwidth on a network (e.g. so that other people sharing wifi can still use the Internet), and is still based on UDP so works with NAT traversal techniques like UDP hole punching. HTTP is support for compatibility with static file servers and web browser clients. Note that these are the protocols we support in the reference Dat implementation, but the Dat protocol itself is transport agnostic.
+After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either TCP, HTTP or [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) [@rossi2010ledbat]. UTP uses LEDBAT which is designed to not take up all available bandwidth on a network (e.g. so that other people sharing wifi can still use the Internet), and is still based on UDP so works with NAT traversal techniques like UDP hole punching. HTTP is supported for compatibility with static file servers and web browser clients. Note that these are the protocols we support in the reference Dat implementation, but the Dat protocol itself is transport agnostic.
 
-If an HTTP source is specified Dat will prefer that one over other sources. Otherwise when Dat gets the IP and port for a potential TCP or UTP source it tries to connect using both protocols. If one connects first, Dat aborts the other one. If none connect, Dat will try again until it decides that source is offline or unavailable and then stops trying to connect to them. Sources Dat is able to connect to go into a list of known good sources, so that the Internet connection goes down Dat can use that list to reconnect to known good sources again quickly.
+If an HTTP source is specified Dat will prefer that one over other sources. Otherwise when Dat gets the IP and port for a potential TCP or UTP source it tries to connect using both protocols. If one connects first, Dat aborts the other one. If none connect, Dat will try again until it decides that source is offline or unavailable and then stops trying to connect to them. Sources Dat is able to connect to go into a list of known good sources, so that if/when the Internet connection goes down Dat can use that list to reconnect to known good sources again quickly.
 
 If Dat gets a lot of potential sources it picks a handful at random to try and connect to and keeps the rest around as additional sources to use later in case it decides it needs more sources.
 
-Once a duplex binary connection to a remote source is open Dat then layers on the Hypercore protocol, a message based replication protocol that allows two peers to communicate over a stateless channel to request and exchange data. You open separate replication channels with many peers at once which allows clients to parallelize data requests across the entire pool of peers they have established connections with.
+Once a duplex binary connection to a remote source is open Dat then layers on the Hypercore protocol, a message-based replication protocol that allows two peers to communicate over a stateless channel to request and exchange data. You open separate replication channels with many peers at once which allows clients to parallelize data requests across the entire pool of peers they have established connections with.
 
 ## 2.3 Network Privacy
 
@@ -118,13 +118,13 @@ A client could choose to only use discovery networks with certain privacy guaran
 
 Given a stream of binary data, Dat splits the stream into chunks, hashes each chunk, and arranges the hashes in a specific type of Merkle tree that allows for certain replication properties.
 
-Dat is also able to fully or partially synchronize streams in a distributed setting even if the stream is being appended to. This is accomplished by using the messaging protocol to traverse the Merkle tree of remote sources and fetch a strategic set of nodes. Due to the low level message oriented design of the replication protocol different node traversal strategies can be implemented.
+Dat is also able to fully or partially synchronize streams in a distributed setting even if the stream is being appended to. This is accomplished by using the messaging protocol to traverse the Merkle tree of remote sources and fetch a strategic set of nodes. Due to the low-level, message-oriented design of the replication protocol, different node traversal strategies can be implemented.
 
 There are two types of versioning performed automatically by Dat. Metadata is stored in a folder called `.dat` in the root folder of a repository, and data is stored as normal files in the root folder.
 
 ### Metadata Versioning
 
-Dat tries as much as possible to act as a one-to-one mirror of the state of a folder and all it's contents. When importing files, Dat uses a sorted depth-first recursion to list all the files in the tree. For each file it finds, it grabs the filesystem metadata (filename, Stat object, etc) and checks if there is already an entry for this filename with this exact metadata already represented in the Dat repository metadata. If the file with this metadata matches exactly the newest version of the file metadata stored in Dat, then this file will be skipped (no change).
+Dat tries as much as possible to act as a one-to-one mirror of the state of a folder and all its contents. When importing files, Dat uses a sorted, depth-first recursion to list all the files in the tree. For each file it finds, it grabs the filesystem metadata (filename, Stat object, etc) and checks if there is already an entry for this filename with this exact metadata already represented in the Dat repository metadata. If the file with this metadata matches exactly the newest version of the file metadata stored in Dat, then this file will be skipped (no change).
 
 If the metadata differs from the current existing one (or there are no entries for this filename at all in the history), then this new metadata entry will be appended as the new 'latest' version for this file in the append-only SLEEP metadata content register (described below).
 
@@ -219,7 +219,7 @@ cat.jpg
 
 To send these files to another machine using Dat, you would first add them to a Dat repository by splitting them into chunks and constructing SLEEP files representing the chunks and filesystem metadata.
 
-Let's assume `bat.jpg` and `cat.jpg` both produce three chunks, each around 64KB. Dat stores in a representation called SLEEP, but here we will show a pseudo-representation for the purposes of illustrating the replication process. The seven chunks get sorted into a list like this:
+Let's assume `bat.jpg` and `cat.jpg` both produce three chunks, each around 64KB. Dat stores in a representation called SLEEP, but here we will show a pseudo-representation for the purposes of illustrating the replication process. The six chunks get sorted into a list like this:
 
 ```
 bat-1
@@ -258,7 +258,7 @@ This tree is for the hashes of the contents of the photos. There is also a secon
 
 The first entry in this feed is a special metadata entry that tells Dat the address of the second feed (the content register). Note that node 3 is not included yet, because 3 is the hash of `1 + 5`, but 5 does not exist yet, so will be written at a later update.
 
-Now we're ready to send our metadata to the other peer. The first message is a `Register` message with the key that was shared for this Dat. Let's call ourselves Alice and the other peer Bob. Alice sends Bob a `Want` message that declares they want all nodes in the file list (the metadata register). Bob replies with a single `Have` message that indicates he has 2 nodes of data. Alice sends three `Request` messages, one for each leaf node (`0, 2, 4`). Bob sends back three `Data` messages. The first `Data` message contains the content register key, the hash of the sibling, in this case node `2`, the hash of the uncle root `4`, as well as a signature for the root hashes (in this case `1, 4`). Alice verifies the integrity of this first `Data` message by hashing the metadata received for the content register metadata to produce the hash for node `0`. They then hash the hash `0` with the hash `2` that was included to reproduce hash `1`, and hashes their `1` with the value for `4` they received which they can use the signature they received to verify it was the same data. When the next `Data` message is received, a similar process is performed to verify the content.
+Now we're ready to send our metadata to the other peer. The first message is a `Register` message with the key that was shared for this Dat. Let's call ourselves Alice and the other peer Bob. Alice sends Bob a `Want` message that declares they want all nodes in the file list (the metadata register). Bob replies with a single `Have` message that indicates he has 2 nodes of data. Alice sends three `Request` messages, one for each leaf node (`0, 2, 4`). Bob sends back three `Data` messages. The first `Data` message contains the content register key, the hash of the sibling, in this case node `2`, the hash of the uncle root `4`, as well as a signature for the root hashes (in this case `1, 4`). Alice verifies the integrity of this first `Data` message by hashing the metadata received for the content register metadata to produce the hash for node `0`. They then hash the hash `0` with the hash `2` that was included to reproduce hash `1`, and hashes their `1` with the value for `4` they received, which they can use the received signature to verify it was the same data. When the next `Data` message is received, a similar process is performed to verify the content.
 
 Now Alice has the full list of files in the Dat, but decides they only want to download `cat.png`. Alice knows they want blocks 3 through 6 from the content register. First Alice sends another `Register` message with the content key to open a new replication channel over the connection. Then Alice sends three `Request` messages, one for each of blocks `4, 5, 6`. Bob sends back three `Data` messages with the data for each block, as well as the hashes needed to verify the content in a way similar to the process described above for the metadata feed.
 
@@ -292,7 +292,7 @@ The files prefixed with `content` store metadata about the primary data in a Dat
 
 ### SLEEP File Headers
 
-The following structured binary format is used for `signatures`, `bitfield`, and `tree` files. The header contains metadata as well as information needed to decode the rest of the files after the header. SLEEP files are designed to be easy to append new data to at the end, easy to read arbitrary byte offsets in the middle, and are relatively flat, simple files that rely on the filesystem for the heavy lifting.
+The following structured binary format is used for `signatures`, `bitfield`, and `tree` files. The header contains metadata as well as information needed to decode the rest of the files after the header. SLEEP files are designed to be easy to append new data, easy to read arbitrary byte offsets in the middle, and are relatively flat, simple files that rely on the filesystem for the heavy lifting.
 
 SLEEP files are laid out like this:
 
@@ -326,7 +326,7 @@ As mentioned above, `signatures`, `bitfield` and `tree` are the three SLEEP file
 
 #### key
 
-The public key used to verify the signatures in the `signatures` file. Stored in binary as a single buffer written to disk. To find out what format of key is stored in this file, read the header of `signatures`. In Dat, it's always a ed25519 public key, but other implementations can specify other key types using a string value in that header.
+The public key used to verify the signatures in the `signatures` file, stored in binary as a single buffer written to disk. To find out what format of key is stored in this file, read the header of `signatures`. In Dat, it's always a ed25519 public key, but other implementations can specify other key types using a string value in that header.
 
 #### tree
 
@@ -500,7 +500,7 @@ Each entry contains three objects:
 
 The Data Bitfield is 1Kb somewhat arbitrarily, but the idea is that because most filesystems work in 4Kb chunk sizes, we can fit the Data, Tree and Index in less then 4Kb of data for efficient writes to the filesystem. The Tree and Index sizes are based on the Data size (the Tree has twice the entries as the Data, odd and even nodes vs just even nodes in `tree`, and Index is always 1/4th the size).
 
-To generate the Index, you pairs of 2 bytes at a time from the Data Bitfield, check if all bites in the 2 bytes are the same, and generate 4 bits of Index metadata for every 2 bytes of Data (hence how 1024 bytes of Data ends up as 256 bytes of Index).
+To generate the Index, you take pairs of 2 bytes at a time from the Data Bitfield, check if all bits in the 2 bytes are the same, and generate 4 bits of Index metadata for every 2 bytes of Data (hence how 1024 bytes of Data ends up as 256 bytes of Index).
 
 First you generate a 2 bit tuple for the 2 bytes of Data:
 
@@ -542,7 +542,7 @@ If you write 4GB of data using on average 64KB data chunk size, your bitfield wi
 
 This file is used to store content described by the rest of the `metadata.*` hypercore SLEEP files. Whereas the `content.*` SLEEP files describe the data stored in the actual data cloned in the Dat repository filesystem, the `metadata` data feed is stored inside the `.dat` folder along with the rest of the SLEEP files.
 
-The contents of this file is a series of versions of the Dat filesystem tree. As this is a hypercore data feed, it's just an append only log of binary data entries. The challenge is representing a tree in an one dimensional way to make it representable as a Hypercore register. For example, imagine three files:
+The contents of this file is a series of versions of the Dat filesystem tree. As this is a hypercore data feed, it's just an append only log of binary data entries. The challenge is representing a tree in a one-dimensional way to make it representable as a Hypercore register. For example, imagine three files:
 
 ```
 ~/dataset $ ls
@@ -672,7 +672,7 @@ These are the field definitions:
 
 The SLEEP format is designed to allow for sparse replication, meaning you can efficiently download only the metadata and data required to resolve a single byte region of a single file, which makes Dat suitable for a wide variety of streaming, real time and large dataset use cases.
 
-To take advantage of this, Dat includes a network protocol. It is message based and stateless, making it possible to implement on a variety of network transport protocols including UDP and TCP. Both metadata and content registers in SLEEP share the exact same replication protocol.
+To take advantage of this, Dat includes a network protocol. It is message-based and stateless, making it possible to implement on a variety of network transport protocols including UDP and TCP. Both metadata and content registers in SLEEP share the exact same replication protocol.
 
 Individual messages are encoded using Protocol Buffers and there are ten message types using the following schema:
 
@@ -686,7 +686,7 @@ Over the wire messages are packed in the following lightweight container format
   <message>
 ```
 
-The `header` value is a single varint that has two pieces of information, the integer `type` that declares a 4-bit message type (used below), and a channel identifier, `0` for metadata and `1` for content. 
+The `header` value is a single varint that has two pieces of information: the integer `type` that declares a 4-bit message type (used below), and a channel identifier, `0` for metadata and `1` for content. 
 
 To generate this varint, you bitshift the 4-bit type integer onto the end of the channel identifier, e.g. `channel << 4 | <4-bit-type>`.
 
@@ -758,7 +758,7 @@ compressed-sequence = varint(
 )
 ```
 
-If the last bit is *not* set then a header represents an non compressed sequence
+If the last bit is *not* set then a header represents a non-compressed sequence.
 
 ```
 uncompressed-sequence = varint(
@@ -834,7 +834,7 @@ message Cancel {
 
 ### Data
 
-Type 9. Sends a single chunk of data to the other peer. You can send it in response to a Request or unsolicited on it's own as a friendly gift. The data includes all of the Merkle tree parent nodes needed to verify the hash chain all the way up to the Merkle roots for this chunk. Because you can produce the direct parents by hashing the chunk, only the roots and 'uncle' hashes are included (the siblings to all of the parent nodes).
+Type 9. Sends a single chunk of data to the other peer. You can send it in response to a Request or unsolicited on its own as a friendly gift. The data includes all of the Merkle tree parent nodes needed to verify the hash chain all the way up to the Merkle roots for this chunk. Because you can produce the direct parents by hashing the chunk, only the roots and 'uncle' hashes are included (the siblings to all of the parent nodes).
 
 - `index` - The chunk position for this chunk.
 - `value` - The chunk binary data. Empty if you are sending only the hash.
@@ -897,19 +897,19 @@ Although PPSPP was designed with streaming video in mind, the ability to request
 
 ## WebTorrent
 
-With WebRTC browsers can now make peer to peer connections directly to other browsers. BitTorrent uses UDP sockets which aren't available to browser JavaScript, so can't be used as-is on the Web.
+With WebRTC, browsers can now make peer to peer connections directly to other browsers. BitTorrent uses UDP sockets which aren't available to browser JavaScript, so can't be used as-is on the Web.
 
 WebTorrent implements the BitTorrent protocol in JavaScript using WebRTC as the transport. This includes the BitTorrent block exchange protocol as well as the tracker protocol implemented in a way that can enable hybrid nodes, talking simultaneously to both BitTorrent and WebTorrent swarms (if a client is capable of making both UDP sockets as well as WebRTC sockets, such as Node.js). Trackers are exposed to web clients over HTTP or WebSockets.
 
 ## InterPlanetary File System
 
-IPFS is a family of application and network protocols that have peer to peer file sharing and data permanence baked in. IPFS abstracts network protocols and naming systems to provide an alternative application delivery platform to todays Web. For example, instead of using HTTP and DNS directly, in IPFS you would use LibP2P streams and IPNS in order to gain access to the features of the IPFS platform.
+IPFS is a family of application and network protocols that have peer to peer file sharing and data permanence baked in. IPFS abstracts network protocols and naming systems to provide an alternative application delivery platform to today's Web. For example, instead of using HTTP and DNS directly, in IPFS you would use LibP2P streams and IPNS in order to gain access to the features of the IPFS platform.
 
 ## Certificate Transparency/Secure Registers
 
 The UK Government Digital Service have developed the concept of a register which they define as a digital public ledger you can trust. In the UK government registers are beginning to be piloted as a way to expose essential open data sets in a way where consumers can verify the data has not been tampered with, and allows the data publishers to update their data sets over time.
 
-The design of registers was inspired by the infrastructure backing the Certificate Transparency [@laurie2013certificate] project, initiated at Google, which provides a service on top of SSL certificates that enables service providers to write certificates to a distributed public ledger. Anyone client or service provider can verify if a certificate they received is in the ledger, which protects against so called "rogue certificates".
+The design of registers was inspired by the infrastructure backing the Certificate Transparency [@laurie2013certificate] project, initiated at Google, which provides a service on top of SSL certificates that enables service providers to write certificates to a distributed public ledger. Any client or service provider can verify if a certificate they received is in the ledger, which protects against so called "rogue certificates".
 
 # 6. Reference Implementation
 

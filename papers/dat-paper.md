@@ -690,15 +690,15 @@ The `header` value is a single varint that has two pieces of information, the in
 
 To generate this varint, you bitshift the 4-bit type integer onto the end of the channel identifier, e.g. `channel << 4 | <4-bit-type>`.
 
-### Register
+### Feed
 
-Type 0, should be the first message sent on a channel.
+Type 0. Should be the first message sent on a channel.
 
 - `discoveryKey` - A BLAKE2b keyed hash of the string 'hypercore' using the public key of the metadata register as the key.
 - `nonce` - 32 bytes of random binary data, used in our encryption scheme
 
 ```
-message Register {
+message Feed {
   required bytes discoveryKey = 1;
   optional bytes nonce = 2;
 }
@@ -706,26 +706,30 @@ message Register {
 
 ### Handshake
 
-Type 1. Overall connection handshake. Should be sent just after the register message on the first channel only (metadata).
+Type 1. Overall connection handshake. Should be sent just after the feed message on the first channel only (metadata).
 
 - `id` - 32 byte random data used as a identifier for this peer on the network, useful for checking if you are connected to yourself or another peer more than once
 - `live` - Whether or not you want to operate in live (continuous) replication mode or end after the initial sync
+- `userData` - User-specific metadata encoded as a byte sequence
+- `extensions` - List of extensions that are supported on this Feed
 
 ```
 message Handshake {
   optional bytes id = 1;
   optional bool live = 2;
+  optional bytes userData = 3;
+  repeated string extensions = 4;
 }
 ```
 
-### Status
+### Info
 
 Type 2. Message indicating state changes. Used to indicate whether you are uploading and/or downloading.
 
 Initial state for uploading/downloading is true. If both ends are not downloading and not live it is safe to consider the stream ended.
 
 ```
-message Status {
+message Info {
   optional bool uploading = 1;
   optional bool downloading = 2;
 }

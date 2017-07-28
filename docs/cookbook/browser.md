@@ -4,7 +4,11 @@ Dat is written in JavaScript, so naturally, it can work entirely in the browser!
 
 This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dat links can be rendered live and read dynamically, whereas BitTorrent links are static. The original owner can update the files in the directory and all peers will receive the updates automatically.
 
-Because dat-js uses webrtc, it can only connect to other browser clients. It is not possible for the dat-js library to connect to the UTP and UDP clients used in the Node.js versions.
+## WebRTC Usage Notes
+
+**Important**: dat-js uses WebRTC, so it can only connect to other WebRTC clients. It is not possible for the dat-js library to connect directly clients using other protocols. All other Dat applications use non-WebRTC protocols ([see this FAQ for more info](https://docs.datproject.org/faq#does-dat-use-webrtc)). Non-browser clients can connect dats peer-to-peer via webrtc modules, such as [electron-webrtc](https://github.com/mappum/electron-webrtc), or use proxies via websockets, http, or other client-server protocols.
+
+Due to WebRTC's less than stellar performance - Dat has focused on creating solid networking using other protocols. We may integrate WebRTC if performance improves and it becomes easier to run in non-browser interfaces (though we'd prefer using [more performant options](https://github.com/noffle/web-udp) in the browser, if they develop).
 
 OK, now for the goods.
 

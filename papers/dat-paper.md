@@ -618,27 +618,38 @@ message Node {
   required string path = 1;
   optional Stat value = 2;
   optional bytes children = 3;
+  repeated Writer writers = 4;
+  optional uint64 writersSequence = 5;
+}
+
+message Writer {
+  required bytes publicKey = 1;
+  optional string permission = 2;
 }
 ```
 
-The `Node` object has three fields
+The `Node` object has five fields
 
   - `path` - the string of the absolute file path of this file. 
   - `Stat` - a Stat encoded object representing the file metadata
   - `children` - a compressed list of the sequence numbers as described earlier
+  - `writers` - a list of the writers who are allowed to write to this dat
+  - `writersSequence` - a reference to the last sequence where the writers array was modified. you can use this to quickly find the value of the writers keys.
 
-The `children` value is encoded by starting with the nested array of sequence numbers, e.g. `[[3], [2, 1]]`. You then sort the individual arrays, in this case resulting in `[[3], [1, 2]]`. You then delta compress each subarray by storing the difference between each integer. In this case it would be `[[3], [1, 1]]` because `3` is 3 more than 0, `1` is 1 more than than 0, and `2` is 1 more than `1`.
+The `children` value is encoded by starting with the nested array of sequence numbers, e.g. `[[[0, 3]], [[0, 2], [0, 1]]]`. Each entry is a tuple where the first item is the index of the feed in the `writers` array and the second value is the sequence number. Finally you prepend the children value with a version number varint.
 
-When we write these delta compressed subarrays we write them using variable width integers (varints), using a repeating pattern like this, one for each array:
+To write these subarrays we use variable width integers (varints), using a repeating pattern like this, one for each array:
 
 ```
-<varint of first subarray element length>
-<varint of the first delta in this array>
-<varint of the next delta ...>
-<varint of the last delta>
+<varint of 0>
+<varint of 3>
+<varint of 0>
+<varint of 2>
+<varint of 0>
+<varint of 1>
 ```
 
-This encoding is designed for efficiency as it reduces the filesystem path metadata down to a series of small integers.
+This encoding is designed for efficiency as it reduces the filesystem path + feed index metadata down to a series of small integers.
 
 The `Stat` objects use this encoding:
 
@@ -863,7 +874,21 @@ message Data {
 }
 ```
 
-# 5. Existing Work
+# 5. Multi-Writer
+
+The design of Dat up to this point assumes you have a single keyholder writing and signing data and appending it to the metadata and content feed. However having the ability for multiple keyholders to be able to write to a single repository allows for many interesting use cases such as forking and collaborative workflows.
+
+In order to do this, we use one `metadata.data` feed for each writer. Each writer kets their own keypair. Each writer is responsible for storing their private key. To add a new writer to your feed, you include their key in a metadata feed entry.
+
+For example, if Alice wants to add Bob to have write access to a Dat repository, Alice would take Bob's public key and writes it to the 'local' metadata feed (the feed that Alice owns, e.g. the original feed). Now anyone else who replicates from Alice will find Bob's key in the history. If in the future Bob distributes a version of the Dat that he added new data to, everyone who has a copy of the Dat from Alice will have a copy of Bob's key that they can use to verify that Bob's writes are valid.
+
+On disk, each users feed is stored in a separate hyperdrive. The original hyperdrive (owned by Alice) is called the 'local' hyperdrive. Bob's hyperdrive would be stored separately in the SLEEP folder addressed by Bob's public key.
+
+In case Bob and Alice write different values for the same file (e.g. Bob creates a "fork"), when they sync up with each other replication will still work, but for the forked value the Dat client will return an array of values for that key instead of just one value. The values are linked to the writer that wrote them, so in the case of receiving multiple values, clients can choose to choose the value from Alice, or Bob, or the latest value, or whatever other strategy they prefer.
+
+If a writer updates the value of a forked key with new value they are performing a merge.
+
+# 6. Existing Work
 
 Dat is inspired by a number of features from existing systems.
 
@@ -915,7 +940,7 @@ The UK Government Digital Service have developed the concept of a register which
 
 The design of registers was inspired by the infrastructure backing the Certificate Transparency [@laurie2013certificate] project, initiated at Google, which provides a service on top of SSL certificates that enables service providers to write certificates to a distributed public ledger. Any client or service provider can verify if a certificate they received is in the ledger, which protects against so called "rogue certificates".
 
-# 6. Reference Implementation
+# 7. Reference Implementation
 
 The connection logic is implemented in a module called [discovery-swarm](https://www.npmjs.com/package/discovery-swarm). This builds on discovery-channel and adds connection establishment, management and statistics. It provides statistics such as how many sources are currently connected, how many good and bad behaving sources have been talked to, and it automatically handles connecting and reconnecting to sources. UTP support is implemented in the module [utp-native](https://www.npmjs.com/package/utp-native).
 

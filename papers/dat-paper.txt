@@ -102,14 +102,14 @@ prevent broken links meaning if the original source goes offline other
 backup sources can be automatically discovered. However these file
 sharing tools today are not supported by Web browsers, do not have good
 privacy guarantees, and do not provide a mechanism for updating files
-without redistributing a new dataset which could mean entire
+without redistributing a new dataset which could mean entirely
 redownloading data you already have.
 
 \section{2. Dat}\label{dat}
 
 Dat is a dataset synchronization protocol that does not assume a dataset
 is static or that the entire dataset will be downloaded. The main
-reference implementation is available from from npm as
+reference implementation is available from npm as
 \texttt{npm\ install\ dat\ -g}.
 
 The protocol is agnostic to the underlying transport e.g.~you could
@@ -123,7 +123,7 @@ are explained in this section.
   verified through use of signed hashes of the content.
 \item
   2.2 \textbf{Decentralized Mirroring} - Users sharing the same Dat
-  automatically discover each other and exhange data in a swarm.
+  automatically discover each other and exchange data in a swarm.
 \item
   2.3 \textbf{Network Privacy} - Dat provides certain privacy guarantees
   including end-to-end encryption.
@@ -135,7 +135,7 @@ are explained in this section.
 \subsection{2.1 Content Integrity}\label{content-integrity}
 
 Content integrity means being able to verify the data you received is
-the exact same version of the data that you expected. This is imporant
+the exact same version of the data that you expected. This is important
 in a distributed system as this mechanism will catch incorrect data sent
 by bad peers. It also has implications for reproducibility as it lets
 you refer to a specific version of a dataset.
@@ -203,9 +203,9 @@ able to discover or communicate with any member of the swarm for that
 Dat. Anyone with the public key can verify that messages (such as
 entries in a Dat Stream) were created by a holder of the private key.
 
-Every Dat repository has a corresponding private key that is kept in your
-home folder and never shared. Dat never exposes either the public or
-private key over the network. During the discovery phase the BLAKE2b
+Every Dat repository has a corresponding private key which is kept in
+your home folder and never shared. Dat never exposes either the public
+or private key over the network. During the discovery phase the BLAKE2b
 hash of the public key is used as the discovery key. This means that the
 original key is impossible to discover (unless it was shared publicly
 through a separate channel) since only the hash of the key is exposed
@@ -236,8 +236,8 @@ is the main use case with Dat.
 Hypercore Registers are the core mechanism used in Dat. They are binary
 append-only streams whose contents are cryptographically hashed and
 signed and therefore can be verified by anyone with access to the public
-key of the writer. They are an implemenation of the concept known as a
-register, a digital ledger you can trust
+key of the writer. They are an implementation of the concept known as a
+register, a digital ledger you can trust.
 
 Dat uses two registers, \texttt{content} and \texttt{metadata}. The
 \texttt{content} register contains the files in your repository and
@@ -247,7 +247,7 @@ synchronizing with another peer.
 
 When files are added to Dat, each file gets split up into some number of
 chunks, and the chunks are then arranged into a Merkle tree, which is
-used later for version control and replication processed.
+used later for version control and replication processes.
 
 \subsection{2.2 Decentralized Mirroring}\label{decentralized-mirroring}
 
@@ -282,7 +282,7 @@ can model the following actions:
   as well.
 \item
   \texttt{foundpeer(key,\ ip,\ port)} - Called when a peer is found by a
-  lookup
+  lookup.
 \end{itemize}
 
 In the Dat implementation we implement the above actions on top of three
@@ -316,7 +316,7 @@ sources to try and contact. Dat uses either TCP, HTTP or
 (Rossi et al. 2010). UTP uses LEDBAT which is designed to not take up
 all available bandwidth on a network (e.g.~so that other people sharing
 wifi can still use the Internet), and is still based on UDP so works
-with NAT traversal techniques like UDP hole punching. HTTP is support
+with NAT traversal techniques like UDP hole punching. HTTP is supported
 for compatibility with static file servers and web browser clients. Note
 that these are the protocols we support in the reference Dat
 implementation, but the Dat protocol itself is transport agnostic.
@@ -327,15 +327,16 @@ UTP source it tries to connect using both protocols. If one connects
 first, Dat aborts the other one. If none connect, Dat will try again
 until it decides that source is offline or unavailable and then stops
 trying to connect to them. Sources Dat is able to connect to go into a
-list of known good sources, so that if the Internet connection goes down
-Dat can use that list to reconnect to known good sources again quickly.
+list of known good sources, so that if/when the Internet connection goes
+down Dat can use that list to reconnect to known good sources again
+quickly.
 
 If Dat gets a lot of potential sources it picks a handful at random to
 try and connect to and keeps the rest around as additional sources to
 use later in case it decides it needs more sources.
 
 Once a duplex binary connection to a remote source is open Dat then
-layers on the Hypercore protocol, a message based replication protocol
+layers on the Hypercore protocol, a message-based replication protocol
 that allows two peers to communicate over a stateless channel to request
 and exchange data. You open separate replication channels with many
 peers at once which allows clients to parallelize data requests across
@@ -381,9 +382,9 @@ that allows for certain replication properties.
 Dat is also able to fully or partially synchronize streams in a
 distributed setting even if the stream is being appended to. This is
 accomplished by using the messaging protocol to traverse the Merkle tree
-of remote sources and fetch a strategic set of nodes. Due to the low
-level message oriented design of the replication protocol different node
-traversal strategies can be implemented.
+of remote sources and fetch a strategic set of nodes. Due to the
+low-level, message-oriented design of the replication protocol,
+different node traversal strategies can be implemented.
 
 There are two types of versioning performed automatically by Dat.
 Metadata is stored in a folder called \texttt{.dat} in the root folder
@@ -393,12 +394,13 @@ of a repository, and data is stored as normal files in the root folder.
 
 Dat tries as much as possible to act as a one-to-one mirror of the state
 of a folder and all its contents. When importing files, Dat uses a
-sorted depth-first recursion to list all the files in the tree. For each
-file it finds, it grabs the filesystem metadata (filename, Stat object,
-etc) and checks if there is already an entry for this filename with this
-exact metadata already represented in the Dat repository metadata. If
-the file with this metadata matches exactly the newest version of the
-file metadata stored in Dat, then this file will be skipped (no change).
+sorted, depth-first recursion to list all the files in the tree. For
+each file it finds, it grabs the filesystem metadata (filename, Stat
+object, etc) and checks if there is already an entry for this filename
+with this exact metadata already represented in the Dat repository
+metadata. If the file with this metadata matches exactly the newest
+version of the file metadata stored in Dat, then this file will be
+skipped (no change).
 
 If the metadata differs from the current existing one (or there are no
 entries for this filename at all in the history), then this new metadata
@@ -421,7 +423,7 @@ for old versions in \texttt{.dat}. Git for example stores all previous
 content versions and all previous metadata versions in the \texttt{.git}
 folder. Because Dat is designed for larger datasets, if it stored all
 previous file versions in \texttt{.dat}, then the \texttt{.dat} folder
-could easily fill up the user's hard drive inadvertently. Therefore Dat
+could easily fill up the users hard drive inadvertently. Therefore Dat
 has multiple storage modes based on usage.
 
 Hypercore registers include an optional \texttt{data} file that stores
@@ -441,7 +443,7 @@ you know the server has the full history.
 Registers in Dat use a specific method of encoding a Merkle tree where
 hashes are positioned by a scheme called binary in-order interval
 numbering or just ``bin'' numbering. This is just a specific,
-deterministic way of laying out the nodes in a tree. For example, a tree
+deterministic way of laying out the nodes in a tree. For example a tree
 with 7 nodes will always be arranged like this:
 
 \begin{verbatim}
@@ -498,7 +500,7 @@ It is possible for the in-order Merkle tree to have multiple roots at
 once. A root is defined as a parent node with a full set of child node
 slots filled below it.
 
-For example, this tree has 2 roots (1 and 4)
+For example, this tree hash 2 roots (1 and 4)
 
 \begin{verbatim}
 0
@@ -508,7 +510,7 @@ For example, this tree has 2 roots (1 and 4)
 4
 \end{verbatim}
 
-This tree has one root (3):
+This tree hash one root (3):
 
 \begin{verbatim}
 0
@@ -544,17 +546,17 @@ To send these files to another machine using Dat, you would first add
 them to a Dat repository by splitting them into chunks and constructing
 SLEEP files representing the chunks and filesystem metadata.
 
-Let's assume \texttt{cat.jpg} produces three chunks, and
-\texttt{bat.jpg} produces four chunks, each around 64KB. Dat stores in a
-representation called SLEEP, but here we will show a
-pseudo-representation for the purposes of illustrating the replication
-process. The seven chunks get sorted into a list like this:
+Let's assume \texttt{bat.jpg} and \texttt{cat.jpg} both produce three
+chunks, each around 64KB. Dat stores in a representation called SLEEP,
+but here we will show a pseudo-representation for the purposes of
+illustrating the replication process. The six chunks get sorted into a
+list like this:
 
 \begin{verbatim}
 bat-1
 bat-2
 bat-3
-cat-1
+cat-1 
 cat-2
 cat-3
 \end{verbatim}
@@ -563,16 +565,16 @@ These chunks then each get hashed, and the hashes get arranged into a
 Merkle tree (the content register):
 
 \begin{verbatim}
-0 - hash(bat-1)
-    1 - hash(0 + 2)
-2 - hash(bat-2)
-        3 - hash(1 + 5)
-4 - hash(bat-3)
-    5 - hash(4 + 6)
-6 - hash(cat-1)
-8 - hash(cat-2)
-    9 - hash()
-10 - hash(cat-3)
+0          - hash(bat-1)
+    1      - hash(0 + 2)
+2          - hash(bat-2)
+        3  - hash(1 + 5)
+4          - hash(bat-3)
+    5      - hash(4 + 6)
+6          - hash(cat-1)
+8          - hash(cat-2)
+    9      - hash()
+10         - hash(cat-3)
 \end{verbatim}
 
 Next we calculate the root hashes of our tree, in this case 3 and 9. We
@@ -583,14 +585,14 @@ for this Dat.
 
 This tree is for the hashes of the contents of the photos. There is also
 a second Merkle tree that Dat generates that represents the list of
-files and their metadata, and looks something like this (the metadata
+files and their metadata and looks something like this (the metadata
 register):
 
 \begin{verbatim}
 0 - hash({contentRegister: '9e29d624...'})
   1 - hash(0 + 2)
-2 - hash({"bat.png", first: 0, last: 3})
-4 - hash({"cat.png", first: 3, last: 3})
+2 - hash({"bat.jpg", first: 0, length: 3})
+4 - hash({"cat.jpg", first: 3, length: 3})
 \end{verbatim}
 
 The first entry in this feed is a special metadata entry that tells Dat
@@ -614,10 +616,9 @@ of the sibling, in this case node \texttt{2}, the hash of the uncle root
 register metadata to produce the hash for node \texttt{0}. They then
 hash the hash \texttt{0} with the hash \texttt{2} that was included to
 reproduce hash \texttt{1}, and hashes their \texttt{1} with the value
-for \texttt{4} they received which they can use the signature they
-received to verify it was the same data. When the next \texttt{Data}
-message is received, a similar process is performed to verify the
-content.
+for \texttt{4} they received, which they can use the received signature
+to verify it was the same data. When the next \texttt{Data} message is
+received, a similar process is performed to verify the content.
 
 Now Alice has the full list of files in the Dat, but decides they only
 want to download \texttt{cat.png}. Alice knows they want blocks 3
@@ -643,7 +644,7 @@ file server as the backend.
 SLEEP files contain metadata about the data inside a Dat repository,
 including cryptographic hashes, cryptographic signatures, filenames and
 file permissions. The SLEEP format is specifically engineered to allow
-efficient access to subsets of the metadat and/or data in the
+efficient access to subsets of the metadata and/or data in the
 repository, even on very large repositories, which enables Dat's peer to
 peer networking to be fast.
 
@@ -687,10 +688,9 @@ registers.
 The following structured binary format is used for \texttt{signatures},
 \texttt{bitfield}, and \texttt{tree} files. The header contains metadata
 as well as information needed to decode the rest of the files after the
-header. SLEEP files are designed to be easy to append new data to at the
-end, easy to read arbitrary byte offsets in the middle, and are
-relatively flat, simple files that rely on the filesystem for the heavy
-lifting.
+header. SLEEP files are designed to be easy to append new data, easy to
+read arbitrary byte offsets in the middle, and are relatively flat,
+simple files that rely on the filesystem for the heavy lifting.
 
 SLEEP files are laid out like this:
 
@@ -751,7 +751,7 @@ contains the hashes and metadata for.
 \paragraph{key}\label{key}
 
 The public key used to verify the signatures in the \texttt{signatures}
-file. Stored in binary as a single buffer written to disk. To find out
+file, stored in binary as a single buffer written to disk. To find out
 what format of key is stored in this file, read the header of
 \texttt{signatures}. In Dat, it's always a ed25519 public key, but other
 implementations can specify other key types using a string value in that
@@ -760,7 +760,7 @@ header.
 \paragraph{tree}\label{tree}
 
 A SLEEP formatted 32 byte header with data entries representing a
-serialized merkle tree based on the data in the data storage layer. All
+serialized Merkle tree based on the data in the data storage layer. All
 the fixed size nodes written in in-order tree notation. The header
 algorithm string for \texttt{tree} files is \texttt{BLAKE2b}. The entry
 size is 40 bytes. Entries are formatted like this:
@@ -849,7 +849,7 @@ this:
 
 The reason the tree entries contain data lengths is to allow for sparse
 mode replication. Encoding lengths (and including lengths in all hashes)
-means you can verify the merkle subtrees independent of the rest of the
+means you can verify the Merkle subtrees independent of the rest of the
 tree, which happens during sparse replication scenarios.
 
 The tree file corresponds directly to the \texttt{data} file.
@@ -898,7 +898,7 @@ For example, if we wanted to seek to a specific entry offset (say entry
   begins, you need to sum all the lengths of all the earlier entries in
   the tree. The most efficient way to do this is to sum all the previous
   parent node (non-leaf) entry lengths. You can also sum all leaf node
-  lengths, but parent nodes contain the sum of their childrens lengths
+  lengths, but parent nodes contain the sum of their children's lengths
   so it's more efficient to use parents. During Dat replication, these
   nodes are fetched as part of the Merkle tree verification so you will
   already have them locally. This is a log(N) operation where N is the
@@ -1022,7 +1022,7 @@ Each entry contains three objects:
 \begin{itemize}
 \tightlist
 \item
-  Data Bitfield (1024 bytes) - 1 bit for each data entry that you
+  Data Bitfield (1024 bytes) - 1 bit for for each data entry that you
   have synced (1 for every entry in \texttt{data}).
 \item
   Tree Bitfield (2048 bytes) - 1 bit for every tree entry (all nodes in
@@ -1040,7 +1040,7 @@ filesystem. The Tree and Index sizes are based on the Data size (the
 Tree has twice the entries as the Data, odd and even nodes vs just even
 nodes in \texttt{tree}, and Index is always 1/4th the size).
 
-To generate the Index, you pair 2 bytes at a time from the Data
+To generate the Index, you take pairs of 2 bytes at a time from the Data
 Bitfield, check if all bits in the 2 bytes are the same, and generate 4
 bits of Index metadata~for every 2 bytes of Data (hence how 1024 bytes
 of Data ends up as 256 bytes of Index).
@@ -1103,9 +1103,9 @@ the SLEEP files.
 
 The contents of this file is a series of versions of the Dat filesystem
 tree. As this is a hypercore data feed, it's just an append only log of
-binary data entries. The challenge is representing a tree in a one
-dimensional way to make it representable as a Hypercore register. For
-example, imagine three files:
+binary data entries. The challenge is representing a tree in a
+one-dimensional way to make it representable as a Hypercore register.
+For example, imagine three files:
 
 \begin{verbatim}
 ~/dataset $ ls
@@ -1136,7 +1136,7 @@ like this:
   sequence: 1
 }
 {
-  "path": "/figures/graph2",
+  "path": "/figures/graph2.png",
   children: [[0], [1]],
   sequence: 2
 }
@@ -1174,7 +1174,7 @@ The longest common ancestor between \texttt{/results.csv} and
 \texttt{/figures/graph2} is \texttt{/}. You then grab the corresponding
 entry in the children array for \texttt{/}, which in this case is the
 first entry, \texttt{{[}0{]}}. You then repeat this with all of the
-chilren entries until you find a child that is closer to the entry you
+children entries until you find a child that is closer to the entry you
 are looking for. In this example, the first entry happens to be the
 match we are looking for.
 
@@ -1222,10 +1222,17 @@ message Node {
   required string path = 1;
   optional Stat value = 2;
   optional bytes children = 3;
+  repeated Writer writers = 4;
+  optional uint64 writersSequence = 5;
+}
+
+message Writer {
+  required bytes publicKey = 1;
+  optional string permission = 2;
 }
 \end{verbatim}
 
-The \texttt{Node} object has three fields
+The \texttt{Node} object has five fields
 
 \begin{itemize}
 \tightlist
@@ -1236,30 +1243,36 @@ The \texttt{Node} object has three fields
 \item
   \texttt{children} - a compressed list of the sequence numbers as
   described earlier
+\item
+  \texttt{writers} - a list of the writers who are allowed to write to
+  this dat
+\item
+  \texttt{writersSequence} - a reference to the last sequence where the
+  writers array was modified. you can use this to quickly find the value
+  of the writers keys.
 \end{itemize}
 
 The \texttt{children} value is encoded by starting with the nested array
-of sequence numbers, e.g. \texttt{{[}{[}3{]},\ {[}2,\ 1{]}{]}}. You then
-sort the individual arrays, in this case resulting in
-\texttt{{[}{[}3{]},\ {[}1,\ 2{]}{]}}. You then delta compress each
-subarray by storing the difference between each integer. In this case it
-would be \texttt{{[}{[}3{]},\ {[}1,\ 1{]}{]}} because \texttt{3} is 3
-more than 0, \texttt{1} is 1 more than than 0, and \texttt{2} is 1 more
-than \texttt{1}.
+of sequence numbers, e.g.
+\texttt{{[}{[}{[}0,\ 3{]}{]},\ {[}{[}0,\ 2{]},\ {[}0,\ 1{]}{]}{]}}. Each
+entry is a tuple where the first item is the index of the feed in the
+\texttt{writers} array and the second value is the sequence number.
+Finally you prepend the children value with a version number varint.
 
-When we write these delta compressed subarrays we write them using
-variable width integers (varints), using a repeating pattern like this,
-one for each array:
+To write these subarrays we use variable width integers (varints), using
+a repeating pattern like this, one for each array:
 
 \begin{verbatim}
-<varint of first subarray element length>
-<varint of the first delta in this array>
-<varint of the next delta ...>
-<varint of the last delta>
+<varint of 0>
+<varint of 3>
+<varint of 0>
+<varint of 2>
+<varint of 0>
+<varint of 1>
 \end{verbatim}
 
 This encoding is designed for efficiency as it reduces the filesystem
-path metadata down to a series of small integers.
+path + feed index metadata down to a series of small integers.
 
 The \texttt{Stat} objects use this encoding:
 
@@ -1277,16 +1290,16 @@ message Stat {
 }
 \end{verbatim}
 
-These are the field defintions:
+These are the field definitions:
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{mode} - posix file mode bitmask
+  \texttt{mode} - POSIX file mode bitmask
 \item
-  \texttt{uid} - posix user id
+  \texttt{uid} - POSIX user id
 \item
-  \texttt{gid} - posix group id
+  \texttt{gid} - POSIX group id
 \item
   \texttt{size} - file size in bytes
 \item
@@ -1298,9 +1311,9 @@ These are the field defintions:
   \texttt{byteOffset} - the data feed file byte offset for the first
   chunk in this file
 \item
-  \texttt{mtime} - posix modified\_at time
+  \texttt{mtime} - POSIX modified\_at time
 \item
-  \texttt{mtime} - posix created\_at time
+  \texttt{mtime} - POSIX created\_at time
 \end{itemize}
 
 \subsection{4. Dat Network Protocol}\label{dat-network-protocol}
@@ -1311,7 +1324,7 @@ resolve a single byte region of a single file, which makes Dat suitable
 for a wide variety of streaming, real time and large dataset use cases.
 
 To take advantage of this, Dat includes a network protocol. It is
-message based and stateless, making it possible to implement on a
+message-based and stateless, making it possible to implement on a
 variety of network transport protocols including UDP and TCP. Both
 metadata and content registers in SLEEP share the exact same replication
 protocol.
@@ -1331,7 +1344,7 @@ format
 \end{verbatim}
 
 The \texttt{header} value is a single varint that has two pieces of
-information, the integer \texttt{type} that declares a 4-bit message
+information: the integer \texttt{type} that declares a 4-bit message
 type (used below), and a channel identifier, \texttt{0} for metadata and
 \texttt{1} for content.
 
@@ -1339,9 +1352,9 @@ To generate this varint, you bitshift the 4-bit type integer onto the
 end of the channel identifier, e.g.
 \texttt{channel\ \textless{}\textless{}\ 4\ \textbar{}\ \textless{}4-bit-type\textgreater{}}.
 
-\subsubsection{Register}\label{register}
+\subsubsection{Feed}\label{feed}
 
-Type 0, should be the first message sent on a channel.
+Type 0. Should be the first message sent on a channel.
 
 \begin{itemize}
 \tightlist
@@ -1354,7 +1367,7 @@ Type 0, should be the first message sent on a channel.
 \end{itemize}
 
 \begin{verbatim}
-message Register {
+message Feed {
   required bytes discoveryKey = 1;
   optional bytes nonce = 2;
 }
@@ -1362,28 +1375,35 @@ message Register {
 
 \subsubsection{Handshake}\label{handshake}
 
-Type 1. Overall connection handshake. Should be sent just after the
-register message on the first channel only (metadata).
+Type 1. Overall connection handshake. Should be sent just after the feed
+message on the first channel only (metadata).
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{id} - 32 byte random data used as an identifier for this peer
+  \texttt{id} - 32 byte random data used as a identifier for this peer
   on the network, useful for checking if you are connected to yourself
   or another peer more than once
 \item
   \texttt{live} - Whether or not you want to operate in live
   (continuous) replication mode or end after the initial sync
+\item
+  \texttt{userData} - User-specific metadata encoded as a byte sequence
+\item
+  \texttt{extensions} - List of extensions that are supported on this
+  Feed
 \end{itemize}
 
 \begin{verbatim}
 message Handshake {
   optional bytes id = 1;
   optional bool live = 2;
+  optional bytes userData = 3;
+  repeated string extensions = 4;
 }
 \end{verbatim}
 
-\subsubsection{Status}\label{status}
+\subsubsection{Info}\label{info}
 
 Type 2. Message indicating state changes. Used to indicate whether you
 are uploading and/or downloading.
@@ -1392,7 +1412,7 @@ Initial state for uploading/downloading is true. If both ends are not
 downloading and not live it is safe to consider the stream ended.
 
 \begin{verbatim}
-message Status {
+message Info {
   optional bool uploading = 1;
   optional bool downloading = 2;
 }
@@ -1440,8 +1460,8 @@ compressed-sequence = varint(
 )
 \end{verbatim}
 
-If the last bit is \emph{not} set then a header represents an non
-compressed sequence
+If the last bit is \emph{not} set then a header represents a
+non-compressed sequence.
 
 \begin{verbatim}
 uncompressed-sequence = varint(
@@ -1580,7 +1600,7 @@ message Data {
   optional bytes value = 2;
   repeated Node nodes = 3;
   optional bytes signature = 4;
-
+  
   message Node {
     required uint64 index = 1;
     required bytes hash = 2;
@@ -1589,7 +1609,45 @@ message Data {
 }
 \end{verbatim}
 
-\section{5. Existing Work}\label{existing-work}
+\section{5. Multi-Writer}\label{multi-writer}
+
+The design of Dat up to this point assumes you have a single keyholder
+writing and signing data and appending it to the metadata and content
+feed. However having the ability for multiple keyholders to be able to
+write to a single repository allows for many interesting use cases such
+as forking and collaborative workflows.
+
+In order to do this, we use one \texttt{metadata.data} feed for each
+writer. Each writer kets their own keypair. Each writer is responsible
+for storing their private key. To add a new writer to your feed, you
+include their key in a metadata feed entry.
+
+For example, if Alice wants to add Bob to have write access to a Dat
+repository, Alice would take Bob's public key and writes it to the
+`local' metadata feed (the feed that Alice owns, e.g.~the original
+feed). Now anyone else who replicates from Alice will find Bob's key in
+the history. If in the future Bob distributes a version of the Dat that
+he added new data to, everyone who has a copy of the Dat from Alice will
+have a copy of Bob's key that they can use to verify that Bob's writes
+are valid.
+
+On disk, each users feed is stored in a separate hyperdrive. The
+original hyperdrive (owned by Alice) is called the `local' hyperdrive.
+Bob's hyperdrive would be stored separately in the SLEEP folder
+addressed by Bob's public key.
+
+In case Bob and Alice write different values for the same file (e.g.~Bob
+creates a ``fork''), when they sync up with each other replication will
+still work, but for the forked value the Dat client will return an array
+of values for that key instead of just one value. The values are linked
+to the writer that wrote them, so in the case of receiving multiple
+values, clients can choose to choose the value from Alice, or Bob, or
+the latest value, or whatever other strategy they prefer.
+
+If a writer updates the value of a forked key with new value they are
+performing a merge.
+
+\section{6. Existing Work}\label{existing-work}
 
 Dat is inspired by a number of features from existing systems.
 
@@ -1611,7 +1669,7 @@ like Git-LFS solve this by using HTTP to download large files, rather
 than the Git protocol. GitHub offers Git-LFS hosting but charges
 repository owners for bandwidth on popular files. Building a distributed
 distribution layer for files in a Git repository is difficult due to
-design of Git Packfiles, which are delta compressed repository states
+design of Git Packfiles which are delta compressed repository states
 that do not easily support random access to byte ranges in previous file
 versions.
 
@@ -1627,12 +1685,12 @@ to have, it means one peer can download non-overlapping regions of the
 dataset from many peers at the same time in parallel, maximizing network
 throughput.
 
-Fixed sized chunking has drawbacks for data that changes (see LBFS
-above). BitTorrent assumes all metadata will be transferred up front
-which makes it impractical for streaming or updating content. Most
-BitTorrent clients divide data into 1024 pieces meaning large datasets
-could have a very large chunk size which impacts random access
-performance (e.g.~for streaming video).
+Fixed sized chunking has drawbacks for data that changes. BitTorrent
+assumes all metadata will be transferred up front which makes it
+impractical for streaming or updating content. Most BitTorrent clients
+divide data into 1024 pieces meaning large datasets could have a very
+large chunk size which impacts random access performance (e.g.~for
+streaming video).
 
 Another drawback of BitTorrent is due to the way clients advertise and
 discover other peers in absence of any protocol level privacy or trust.
@@ -1731,20 +1789,20 @@ Registers}\label{certificate-transparencysecure-registers}
 
 The UK Government Digital Service have developed the concept of a
 register which they define as a digital public ledger you can trust. In
-the UK, government registers are beginning to be piloted as a way to
+the UK government registers are beginning to be piloted as a way to
 expose essential open data sets in a way where consumers can verify the
 data has not been tampered with, and allows the data publishers to
 update their data sets over time.
 
 The design of registers was inspired by the infrastructure backing the
 Certificate Transparency (Laurie, Langley, and Kasper 2013) project,
-initated at Google, which provides a service on top of SSL certificates
+initiated at Google, which provides a service on top of SSL certificates
 that enables service providers to write certificates to a distributed
 public ledger. Any client or service provider can verify if a
 certificate they received is in the ledger, which protects against so
 called ``rogue certificates''.
 
-\section{6. Reference Implementation}\label{reference-implementation}
+\section{7. Reference Implementation}\label{reference-implementation}
 
 The connection logic is implemented in a module called
 \href{https://www.npmjs.com/package/discovery-swarm}{discovery-swarm}.
@@ -1763,7 +1821,7 @@ they need to), as well as a
 \href{https://github.com/bittorrent/bootstrap-dht}{DHT bootstrap}
 server. These discovery servers are the only centralized infrastructure
 we need for Dat to work over the Internet, but they are redundant,
-interchangeable, never see the actual data being shared, and anyone can run
+interchangeable, never see the actual data being shared, anyone can run
 their own and Dat will still work even if they all are unavailable. If
 this happens discovery will just be manual (e.g.~manually sharing
 IP/ports).

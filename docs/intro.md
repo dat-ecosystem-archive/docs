@@ -26,7 +26,11 @@ backups to be stored efficiently on an external hard drive or a cloud serve by u
 
 #### Security
 
-Dat transfers files over an encrypted connection using state-of-the-art cryptography. Only users with your unique link can access your files. Your dat link allows users to download and re-share your files. To write updates to a dat, users must have the secret key. Dat also verifies the hashes of files on download so no malicious content can be added.
+Dat transfers files over an encrypted connection using state-of-the-art
+cryptography. Only users with your unique link can access your files. Your dat
+link allows users to download and re-share your files. To write updates to
+a dat, users must have the secret key. Dat also verifies the hashes of files on
+download so no malicious content can be added. [Read more about security in dat.](/security)
 
 ## Who we are
 

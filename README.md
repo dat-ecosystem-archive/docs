@@ -63,3 +63,18 @@ It works this way:
 #### Other commands: 
 
 * `n
+
+## Document Aggregation
+
+The `package.json` scripts collect the README's from the following projects for aggregation in `docs.datproject.org`
+
+- 📔 [dat](https://github.com/datproject/dat)
+- 📔 [hyperdrive](https://github.com/mafintosh/hyperdrive)
+- 📔 [hyoercore](https://github.com/mafintosh/hypercore)
+- 📔 [discovery-swarm](https://github.com/mafintosh/discovery-swarm)
+- 📔 [dat-node](https://github.com/datproject/dat-node)
+- 📔 [hyperdrive-import-files](https://github.com/juliangruber/hyperdrive-import-files)
+- 📔 [hyperdiscovery](https://github.com/karissa/hyperdiscovery)
+- 📔 [hyperdrive-stats](https://github.com/juliangruber/hyperdrive-stats)
+
+By adding project entries to this list (with the folder icon) their README will also be aggregated.

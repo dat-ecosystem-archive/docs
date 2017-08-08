@@ -30,14 +30,6 @@ npm run paper
 
 This documentation uses [minidocs](https://github.com/freeman-lab/minidocs) for layout, [ecosystem-docs](https://github.com/hughsk/ecosystem-docs) to get documentation from other modules, and ideas from [pull-stream-docs](https://github.com/pull-stream/pull-stream-docs) for auto travis deployment.
 
-### Viewing Docs Locally
-
-1. Clone Repository
-2. `npm install`
-3. `npm run build:local` to build the docs for local viewing
-4. `npm run update` to update external modules
-4. `npm run start` to view the docs in browser
-
 ### Deployment
 
 This repository uses [netlify](https://www.netlify.com/) for deployment. Deployment will happen automatically.
@@ -52,29 +44,20 @@ It works this way:
   * runs `npm run netlify` which updates remote repos and builds.
 * deploys `/dist` to the web
 
-### NPM Commands
+### Viewing Docs Locally
 
-#### Local Docs Preview:
+1. Clone Repository
+2. `npm install`
+3. `npm run update` to update external modules
+4. `npm run build:local` to build the docs for local viewing
+5. `npm run start` to view the docs in browser
 
-* `npm update`: update external module readme files
-* `npm run build:local`: build app & css for local viewing
-* `npm start`: start budo server to view locally
+### Ecosystem-docs Modules
 
-#### Other commands: 
+Ecosystem-docs downloads readme files from the following modules to `docs/modules/`. Add another module to the documentation by adding the module below and updating `contents.json`: `"dat-node": "modules/dat-node.md"`. The 📔 makes it easier to parse (see `package.json`).
 
-* `n
-
-## Document Aggregation
-
-The `package.json` scripts collect the README's from the following projects for aggregation in `docs.datproject.org`
-
-- 📔 [dat](https://github.com/datproject/dat)
-- 📔 [hyperdrive](https://github.com/mafintosh/hyperdrive)
-- 📔 [hyoercore](https://github.com/mafintosh/hypercore)
-- 📔 [discovery-swarm](https://github.com/mafintosh/discovery-swarm)
-- 📔 [dat-node](https://github.com/datproject/dat-node)
-- 📔 [hyperdrive-import-files](https://github.com/juliangruber/hyperdrive-import-files)
-- 📔 [hyperdiscovery](https://github.com/karissa/hyperdiscovery)
-- 📔 [hyperdrive-stats](https://github.com/juliangruber/hyperdrive-stats)
-
-By adding project entries to this list (with the folder icon) their README will also be aggregated.
+* 📔 [dat](https://github.com/datproject/dat)
+* 📔 [hyperdrive](https://github.com/mafintosh/hyperdrive)
+* 📔 [hypercore](https://github.com/mafintosh/hypercore)
+* 📔 [dat-node](https://github.com/datproject/dat-node)
+* 📔 [hyperdiscovery](https://github.com/karissa/hyperdiscovery)

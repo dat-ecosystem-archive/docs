@@ -919,9 +919,9 @@ message Data {
 
 The design of Dat up to this point assumes you have a single keyholder writing and signing data and appending it to the metadata and content feed. However having the ability for multiple keyholders to be able to write to a single repository allows for many interesting use cases such as forking and collaborative workflows.
 
-In order to do this, we use one `metadata.data` feed for each writer. Each writer kets their own keypair. Each writer is responsible for storing their private key. To add a new writer to your feed, you include their key in a metadata feed entry.
+In order to do this, we use one `metadata.data` feed for each writer. Each writer gets their own keypair. Each writer is responsible for storing their private key. To add a new writer to your feed, you include their key in a metadata feed entry.
 
-For example, if Alice wants to add Bob to have write access to a Dat repository, Alice would take Bob's public key and writes it to the 'local' metadata feed (the feed that Alice owns, e.g. the original feed). Now anyone else who replicates from Alice will find Bob's key in the history. If in the future Bob distributes a version of the Dat that he added new data to, everyone who has a copy of the Dat from Alice will have a copy of Bob's key that they can use to verify that Bob's writes are valid.
+For example, if Alice wants to add Bob to have write access to a Dat repository, Alice would take Bob's public key and write it to the 'local' metadata feed (the feed that Alice owns, e.g. the original feed). Now anyone else who replicates from Alice will find Bob's key in the history. If in the future Bob distributes a version of the Dat that he added new data to, everyone who has a copy of the Dat from Alice will have a copy of Bob's key that they can use to verify that Bob's writes are valid.
 
 On disk, each users feed is stored in a separate hyperdrive. The original hyperdrive (owned by Alice) is called the 'local' hyperdrive. Bob's hyperdrive would be stored separately in the SLEEP folder addressed by Bob's public key.
 

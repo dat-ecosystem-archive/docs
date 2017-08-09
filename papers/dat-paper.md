@@ -241,7 +241,7 @@ These chunks then each get hashed, and the hashes get arranged into a Merkle tre
     5      - hash(4 + 6)
 6          - hash(cat-1)
 8          - hash(cat-2)
-    9      - hash()
+    9      - hash(8 + 10)
 10         - hash(cat-3)
 ```
 

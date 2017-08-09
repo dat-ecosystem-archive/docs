@@ -27,6 +27,7 @@ The protocol is agnostic to the underlying transport e.g. you could implement Da
 - 2.2 **Decentralized Mirroring** - Users sharing the same Dat automatically discover each other and exchange data in a swarm.
 - 2.3 **Network Privacy** - Dat provides certain privacy guarantees including end-to-end encryption.
 - 2.4 **Incremental Versioning** - Datasets can be efficiently synced, even in real time, to other peers.
+- 2.5 **Random Access** - Huge file hierarchies can be efficiently traversed remotely.
 
 ## 2.1 Content Integrity
 
@@ -261,6 +262,46 @@ The first entry in this feed is a special metadata entry that tells Dat the addr
 Now we're ready to send our metadata to the other peer. The first message is a `Register` message with the key that was shared for this Dat. Let's call ourselves Alice and the other peer Bob. Alice sends Bob a `Want` message that declares they want all nodes in the file list (the metadata register). Bob replies with a single `Have` message that indicates he has 2 nodes of data. Alice sends three `Request` messages, one for each leaf node (`0, 2, 4`). Bob sends back three `Data` messages. The first `Data` message contains the content register key, the hash of the sibling, in this case node `2`, the hash of the uncle root `4`, as well as a signature for the root hashes (in this case `1, 4`). Alice verifies the integrity of this first `Data` message by hashing the metadata received for the content register metadata to produce the hash for node `0`. They then hash the hash `0` with the hash `2` that was included to reproduce hash `1`, and hashes their `1` with the value for `4` they received, which they can use the received signature to verify it was the same data. When the next `Data` message is received, a similar process is performed to verify the content.
 
 Now Alice has the full list of files in the Dat, but decides they only want to download `cat.png`. Alice knows they want blocks 3 through 6 from the content register. First Alice sends another `Register` message with the content key to open a new replication channel over the connection. Then Alice sends three `Request` messages, one for each of blocks `4, 5, 6`. Bob sends back three `Data` messages with the data for each block, as well as the hashes needed to verify the content in a way similar to the process described above for the metadata feed.
+
+## 2.5 Random Access
+
+Dat pursues the following access capabilities:
+
+- Support large file hierachies (millions of files in a single repository).
+- Support efficient traversal of the hierarchy (listing files in arbitrary folders efficiently).
+- Store all changes to all files (metadata and/or content).
+- List all changes made to any single file.
+- View the state of all files relative to any point in time.
+- Subscribe live to all changes (any file).
+- Subscribe live to changes to files under a specific path.
+- Efficiently access any byte range of any version of any file.
+- Allow all of the above to happen remotely, only syncing the minimum metadata necessary to perform any action.
+- Allow efficient comparison of remote and local repository state to request missing pieces during synchronization.
+- Allow entire remote archive to be synchronized, or just some subset of files and/or versions.
+
+The way Dat accomplishes these is through a combination of storing all changes in Hypercore feeds, but also using strategic metadata indexing strategies that support certain queries efficiently to be performed by traversing the Hypercore feeds. The protocol itself is specified in Section 3 (SLEEP), but a scenario based summary follows here. 
+
+### Scenario: Reading a file from a specific byte offset
+
+Alice has a dataset in Dat, Bob wants to access a 100MB CSV called `cat_dna.csv` stored in the remote repository, but only wants to access the 10MB range of the CSV spanning from 30MB - 40MB.
+
+Bob has never communicated with Alice before, and is starting fresh with no knowledge of this Dat repository other than that he knows he wants `cat_dna.csv` at a specific offset.
+
+First, Bob asks Alice through the Dat protocol for the metadata he needs to resolve `cat_dna.csv` to the correct metadata feed entry that represents the file he wants. Note: In this scenario we assume Bob wants the latest version of `cat_dna.csv`. It is also possible to do this for a specific older version.
+
+Bob first sends a `Request` message for the latest entry in the metadata feed. Alice responds. Bob looks at the `trie` value, and using the lookup algorithm described below sends another `Request` message for the metadata node that is closer to the filename he is looking for. This repeats until Alice sends Bob the matching metadata entry. This is the un-optimized resolution that uses `log(n)` round trips, though there are ways to optimize this by having Alice send additional sequence numbers to Bob that help him traverse in less round trips.
+
+In the metadata record Bob recieved for `cat_dna.csv` there is the byte offset to the beginning of the file in the data feed. Bob adds his +30MB offset to this value and starts requesting pieces of data starting at that byte offset using the SLEEP protocol as described below.
+
+This method tries to allow any byte range of any file to be accessed without the need to synchronize the full metadata for all files up front.
+
+### Scenario: Syncing live changes to files at a specific path
+
+TODO
+
+### Scenario: Syncing an entire archive
+
+TODO
 
 ## 3. SLEEP Specification
 
@@ -561,17 +602,17 @@ To do this, we convert the filesystem metadata into entries in a feed like this:
 ```
 {
   "path": "/results.csv",
-  children: [[]],
+  trie: [[]],
   sequence: 0
 }
 {
   "path": "/figures/graph1.png",
-  children: [[0], []],
+  trie: [[0], []],
   sequence: 1
 }
 {
   "path": "/figures/graph2.png",
-  children: [[0], [1]],
+  trie: [[0], [1]],
   sequence: 2
 }
 ```
@@ -617,7 +658,7 @@ After the header the file will contain many filesystem `Node` entries:
 message Node {
   required string path = 1;
   optional Stat value = 2;
-  optional bytes children = 3;
+  optional bytes trie = 3;
   repeated Writer writers = 4;
   optional uint64 writersSequence = 5;
 }
@@ -632,11 +673,11 @@ The `Node` object has five fields
 
   - `path` - the string of the absolute file path of this file. 
   - `Stat` - a Stat encoded object representing the file metadata
-  - `children` - a compressed list of the sequence numbers as described earlier
+  - `trie` - a compressed list of the sequence numbers as described earlier
   - `writers` - a list of the writers who are allowed to write to this dat
   - `writersSequence` - a reference to the last sequence where the writers array was modified. you can use this to quickly find the value of the writers keys.
 
-The `children` value is encoded by starting with the nested array of sequence numbers, e.g. `[[[0, 3]], [[0, 2], [0, 1]]]`. Each entry is a tuple where the first item is the index of the feed in the `writers` array and the second value is the sequence number. Finally you prepend the children value with a version number varint.
+The `trie` value is encoded by starting with the nested array of sequence numbers, e.g. `[[[0, 3]], [[0, 2], [0, 1]]]`. Each entry is a tuple where the first item is the index of the feed in the `writers` array and the second value is the sequence number. Finally you prepend the trie value with a version number varint.
 
 To write these subarrays we use variable width integers (varints), using a repeating pattern like this, one for each array:
 

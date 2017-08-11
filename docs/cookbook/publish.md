@@ -69,6 +69,6 @@ In order for anyone to see the dat, you'll need to have `dat share` running on y
 
 ## Using Git with `dat.json`
 
-You might want to be able to get the collaborative benefits of git along with the benefits of fast data download, versioning, p2p, and deduplication with dat. All you have to do is include the `dat.json` file in your git repository, and tell people to type `dat clone` for them to get the latest version of your data. Now, when someone clones your git repository, they can download your data by simply typing `dat clone dat.json`, and the url in the dat.json will be used to download the dat.
+You might want to be able to get the collaborative benefits of git along with the benefits of fast data download, versioning, p2p, and deduplication with dat. All you have to do is include the `dat.json` file in your git repository, and tell people to type `dat clone .` for them to get the latest version of your data. Now, when someone clones your git repository, they can download your data by simply typing `dat clone .` or `dat clone dat.json`, and the url in the dat.json will be used to download the dat.
 
 To save space in your git repo, you probably want to add `.dat` to your `.gitignore` file in your git repository to make sure none of dat's metadata is included. Dat by default ignores your `.git` folder, so you don't have to worry about that.

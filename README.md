@@ -20,11 +20,7 @@ To generate the paper again, make sure you have `pandoc` and `pandoc-citeproc`:
 brew install pandoc pandoc-citeproc
 ```
 
-Then run the npm script:
-
-```
-npm run paper
-```
+Then run the build script in `papers`
 
 ## Development
 

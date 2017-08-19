@@ -171,14 +171,14 @@ All odd hashes are derived by hashing the two child nodes, e.g. given hash0 is `
 For example a register with two data entries would look something like this (pseudocode):
 
 ```
-0. hash(value0)
+0. hash(chunk0)
 1. hash(hash(chunk0) + hash(chunk1))
-2. hash(value1)
+2. hash(chunk1)
 ```
 
 It is possible for the in-order Merkle tree to have multiple roots at once. A root is defined as a parent node with a full set of child node slots filled below it.
 
-For example, this tree hash 2 roots (1 and 4)
+For example, this tree has 2 roots (1 and 4)
 
 ```
 0
@@ -188,7 +188,7 @@ For example, this tree hash 2 roots (1 and 4)
 4
 ```
 
-This tree hash one root (3):
+This tree has one root (3):
 
 ```
 0

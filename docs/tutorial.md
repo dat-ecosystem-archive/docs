@@ -41,6 +41,8 @@ Find a folder on your computer to share. Any kind of files work with Dat but for
 First, you can create a new dat inside that folder. Using the `dat create` command initializes the dat and allows us to give it some information so that other people and applications can easily display what is in the dat.
 
 ```
+mkdir MyData
+cd MyData
 dat create
 > Title My Amazing Data
 > Title My Awesome Dat

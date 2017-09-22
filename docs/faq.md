@@ -49,7 +49,7 @@ It's not technically impossible that they'd collide, but it's extremely unlikely
 
 ### What are the limits on file sizes?
 
-The Dat software does not have any inherent size limits. The Dat project does not store any data itself except for caching (on datproject.org registry). All data is transferred directly between peers. Depending on where the data is hosted, there may be storage or bandwidth limits. 
+The Dat software does not have any inherent size limits. The Dat project does not store any data itself except for caching (on datproject.org registry). All data is transferred directly between peers. Depending on where the data is hosted, there may be storage or bandwidth limits.
 
 To improve the ecosystem and allow for better availability and archiving of data, we plan to help institutions and others set up cloud storage for academic uses.
 
@@ -129,9 +129,11 @@ Dat has a lot of overlap with other distributed web tools, data management tools
 
 IPFS and Dat share a number of underlying similarities but address different problems. Both deduplicate content-addressed pieces of data and have a mechanism for searching for peers who have a specific piece of data. Both have implementations which work in modern Web browsers, as well as command line tools.
 
-The two systems also have a number of differences. Dat keeps a secure version log of changes to a dataset over time which allows Dat to act as a version control tool. The type of Merkle tree used by Dat lets peers compare which pieces of a specific version of a dataset they each have and efficiently exchange the deltas to complete a full sync. It is not possible to synchronize or version a dataset in this way in IPFS without implementing such functionality yourself, as IPFS provides a CDN and/or filesystem interface but not a synchronization mechanism. In short, IPFS provides distribution of objects, Dat provides synchronization of datasets.
+The two systems also have a number of differences. Dat keeps a secure version log of changes to a dataset over time which allows Dat to act as a version control tool. The type of Merkle tree used by Dat lets peers compare which pieces of a specific version of a dataset they each have and efficiently exchange the deltas to complete a full sync. It is not possible to synchronize or version a dataset in this way in IPFS without implementing such functionality yourself, as IPFS provides a CDN and/or filesystem interface but not a synchronization mechanism.
 
-In order for IPFS to provide guarantees about interoperability, IPFS applications must use only the IPFS network stack. In contrast, Dat is only an application protocol and is agnostic to which network protocols (transports and naming systems) are used. As a result, Dat cannot make the same types of interoperability guarantees as IPFS.
+ Dat has also prioritized efficiency and speed for the most basic use cases, especially when sharing large datasets. Dat does not make a duplicate of the data on the filesystem, unlike IPFS in which storage is duplicated upon import. Dat's pieces can also be easily decoupled for implementing lower-level object stores. See [hypercore](http://github.com/mafintosh/hypercore) and [hyperdb](http://github.com/mafintosh/hyperdb) for more information.
+
+In order for IPFS to provide guarantees about interoperability, IPFS applications must use only the IPFS network stack. In contrast, Dat is only an application protocol and is agnostic to which network protocols (transports and naming systems) are used.
 
 ### How is dat different than Academic Torrents or BitTorrent?
 

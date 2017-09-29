@@ -71,6 +71,6 @@ If you don't want the other person to download dat, you can also send them a lin
 
 Your data will be available on the network as long as the process is open. However, if you need to close your laptop or turn off the computer, you might want to host the dat for long-term on a server.
 
-First, you need to purchase a server on your own. We recommend using [Digital Ocean](digitalocean.com), or setting up a [data silo in your house](https://github.com/datproject/datasilo).
+First, you need to purchase a server on your own. We recommend using [Digital Ocean](https://digitalocean.com), or setting up a [data silo in your house](https://github.com/datproject/datasilo).
 
 Once you have a server available, head over to the [Running Dats on a Server section to automatically re-host your dat](/server).

@@ -47,7 +47,7 @@ SLEEP files are laid out like this:
 ````
 
 - 32 byte header
-  - 4 bytes - magic byte (value varies depending on which file, used to quickly identify which file type it is)
+  - 4 bytes Uint32BE ("Big-Endian") - magic byte (value varies depending on which file, used to quickly identify which file type it is)
   - 1 byte - version number of the file header protocol, current version is 0
   - 2 byte Uint16BE - entry size, describes how long each entry in the file is
   - 1 byte - length prefix for body

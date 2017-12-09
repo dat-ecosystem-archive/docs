@@ -329,7 +329,7 @@ To generate this varint, you bitshift the 4-bit type integer onto the end of the
 Type 0. Should be the first message sent on a channel.
 
 - `discoveryKey` - A BLAKE2b keyed hash of the string 'hypercore' using the public key of the metadata register as the key.
-- `nonce` - 32 bytes of random binary data, used in our encryption scheme
+- `nonce` - 24 bytes (192 bits) of random binary data, used in our encryption scheme
 
 ```
 message Feed {

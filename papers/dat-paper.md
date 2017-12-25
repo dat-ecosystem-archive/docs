@@ -14,7 +14,7 @@ Many datasets are shared online today using HTTP and FTP, which lack built in su
 
 Cloud storage services like S3 ensure availability of data, but they have a centralized hub-and-spoke networking model and are therefore limited by their bandwidth, meaning popular files can become very expensive to share. Services like Dropbox and Google Drive provide version control and synchronization on top of cloud storage services which fixes many issues with broken links but rely on proprietary code and services requiring users to store their data on centralized cloud infrastructure which has implications on cost, transfer speeds, vendor lock-in and user privacy.
 
-Distributed file sharing tools can become faster as files become more popular, removing the bandwidth bottleneck and making file distribution cheaper. They also use link resolution and discovery systems which can prevent broken links meaning if the original source goes offline other backup sources can be automatically discovered. However these file sharing tools today are not supported by Web browsers, do not have good privacy guarantees, and do not provide a mechanism for updating files without redistributing a new dataset which could mean entirely redownloading data you already have.
+Distributed file sharing tools can become faster as files become more popular, removing the bandwidth bottleneck and making file distribution cheaper. They also use link resolution and discovery systems which can prevent broken links meaning if the original source goes offline other backup sources can be automatically discovered. However these file sharing tools today are not supported by Web browsers, do not have good privacy guarantees, and do not provide a mechanism for updating files without redistributing a new dataset which could mean entirely re-downloading data you already have.
 
 # 2. Dat
 
@@ -96,7 +96,7 @@ Additional discovery networks can be implemented as needed. We chose the above t
 
 ### Peer Connections
 
-After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either TCP, HTTP or [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) [@rossi2010ledbat]. UTP uses LEDBAT which is designed to not take up all available bandwidth on a network (e.g. so that other people sharing wifi can still use the Internet), and is still based on UDP so works with NAT traversal techniques like UDP hole punching. HTTP is supported for compatibility with static file servers and web browser clients. Note that these are the protocols we support in the reference Dat implementation, but the Dat protocol itself is transport agnostic.
+After the discovery phase, Dat should have a list of potential data sources to try and contact. Dat uses either TCP, HTTP or [UTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) [@rossi2010ledbat]. UTP uses LEDBAT which is designed to not take up all available bandwidth on a network (e.g. so that other people sharing WiFi can still use the Internet), and is still based on UDP so works with NAT traversal techniques like UDP hole punching. HTTP is supported for compatibility with static file servers and web browser clients. Note that these are the protocols we support in the reference Dat implementation, but the Dat protocol itself is transport agnostic.
 
 If an HTTP source is specified Dat will prefer that one over other sources. Otherwise when Dat gets the IP and port for a potential TCP or UTP source it tries to connect using both protocols. If one connects first, Dat aborts the other one. If none connect, Dat will try again until it decides that source is offline or unavailable and then stops trying to connect to them. Sources Dat is able to connect to go into a list of known good sources, so that if/when the Internet connection goes down Dat can use that list to reconnect to known good sources again quickly.
 
@@ -290,7 +290,7 @@ First, Bob asks Alice through the Dat protocol for the metadata he needs to reso
 
 Bob first sends a `Request` message for the latest entry in the metadata feed. Alice responds. Bob looks at the `trie` value, and using the lookup algorithm described below sends another `Request` message for the metadata node that is closer to the filename he is looking for. This repeats until Alice sends Bob the matching metadata entry. This is the un-optimized resolution that uses `log(n)` round trips, though there are ways to optimize this by having Alice send additional sequence numbers to Bob that help him traverse in less round trips.
 
-In the metadata record Bob recieved for `cat_dna.csv` there is the byte offset to the beginning of the file in the data feed. Bob adds his +30MB offset to this value and starts requesting pieces of data starting at that byte offset using the SLEEP protocol as described below.
+In the metadata record Bob received for `cat_dna.csv` there is the byte offset to the beginning of the file in the data feed. Bob adds his +30MB offset to this value and starts requesting pieces of data starting at that byte offset using the SLEEP protocol as described below.
 
 This method tries to allow any byte range of any file to be accessed without the need to synchronize the full metadata for all files up front.
 

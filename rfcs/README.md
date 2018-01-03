@@ -15,7 +15,8 @@ include:
 
 ## The Process
 
-TL;DR: write up an RFC
+TL;DR: write up an RFC markdown file, submit a github PR, revise per review,
+community either accepts (merges PR) or does not (closes PR).
 
 * Fork this git repository
 * Copy `rfcs/template.md` to `text/0000-my-proposal.md` (don't chose the "next"

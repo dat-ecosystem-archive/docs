@@ -47,3 +47,11 @@ Why should we *not* do this?
 - What parts of the design do you expect to resolve through the RFC consensus process before this gets merged?
 - What parts of the design do you expect to resolve through implementation and code review, or are left to independent library or application developers?
 - What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC?
+
+# Changelog
+[changelog]: #changelog
+
+A brief statemnt about current status can go here, follow by a list of dates
+when the status line of this RFC changed (in most-recent-last order).
+
+- YYYY-MM-DD: First complete draft submitted for review

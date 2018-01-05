@@ -20,7 +20,7 @@ Distributed file sharing tools can become faster as files become more popular, r
 
 Dat is a dataset synchronization protocol that does not assume a dataset is static or that the entire dataset will be downloaded. The main reference implementation is available from npm as `npm install dat -g`.
 
-The protocol is agnostic to the underlying transport e.g. you could implement Dat over carrier pigeon. Data is stored in a format called SLEEP [@sleep], described in it's own paper. The key properties of the Dat design are explained in this section.
+The protocol is agnostic to the underlying transport e.g. you could implement Dat over carrier pigeon. Data is stored in a format called SLEEP [@sleep], described in its own paper. The key properties of the Dat design are explained in this section.
 
 - 2.1 **Content Integrity** - Data and publisher integrity is verified through use of signed hashes of the content.
 - 2.2 **Decentralized Mirroring** - Users sharing the same Dat automatically discover each other and exchange data in a swarm.
@@ -162,7 +162,7 @@ chunk3 -> 6
 In the resulting Merkle tree, the even and odd nodes store different information:
 
 - Evens - List of data hashes [chunk0, chunk1, chunk2, ...]
-- Odds - List of Merkle hashes (hashes of child even nodes) [hash0, hash1, hash2, ...] 
+- Odds - List of Merkle hashes (hashes of child even nodes) [hash0, hash1, hash2, ...]
 
 These two lists get interleaved into a single register such that the indexes (position) in the register are the same as the bin numbers from the Merkle tree.
 
@@ -225,7 +225,7 @@ Let's assume `bat.jpg` and `cat.jpg` both produce three chunks, each around 64KB
 bat-1
 bat-2
 bat-3
-cat-1 
+cat-1
 cat-2
 cat-3
 ```
@@ -278,7 +278,7 @@ Dat pursues the following access capabilities:
 - Allow efficient comparison of remote and local repository state to request missing pieces during synchronization.
 - Allow entire remote archive to be synchronized, or just some subset of files and/or versions.
 
-The way Dat accomplishes these is through a combination of storing all changes in Hypercore feeds, but also using strategic metadata indexing strategies that support certain queries efficiently to be performed by traversing the Hypercore feeds. The protocol itself is specified in Section 3 (SLEEP), but a scenario based summary follows here. 
+The way Dat accomplishes these is through a combination of storing all changes in Hypercore feeds, but also using strategic metadata indexing strategies that support certain queries efficiently to be performed by traversing the Hypercore feeds. The protocol itself is specified in Section 3 (SLEEP), but a scenario based summary follows here.
 
 ### Scenario: Reading a file from a specific byte offset
 
@@ -320,7 +320,7 @@ Over the wire messages are packed in the following lightweight container format
   <message>
 ```
 
-The `header` value is a single varint that has two pieces of information: the integer `type` that declares a 4-bit message type (used below), and a channel identifier, `0` for metadata and `1` for content. 
+The `header` value is a single varint that has two pieces of information: the integer `type` that declares a 4-bit message type (used below), and a channel identifier, `0` for metadata and `1` for content.
 
 To generate this varint, you bitshift the 4-bit type integer onto the end of the channel identifier, e.g. `channel << 4 | <4-bit-type>`.
 
@@ -488,7 +488,7 @@ message Data {
   optional bytes value = 2;
   repeated Node nodes = 3;
   optional bytes signature = 4;
-  
+
   message Node {
     required uint64 index = 1;
     required bytes hash = 2;

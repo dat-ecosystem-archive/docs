@@ -1,5 +1,5 @@
 
-Status: Undefined (as of YYY-MM-DD)
+Status: Undefined (as of YYYY-MM-DD)
 
 Type: (Standard or Process)
 

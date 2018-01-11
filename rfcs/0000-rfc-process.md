@@ -1,5 +1,5 @@
 
-Status: Draft (as of 2017-01-05)
+Status: Draft (as of 2018-01-05)
 
 Type: Process
 
@@ -140,5 +140,5 @@ Is "RFC" the term we want to use? Could also be "Dat Enhancement Proposal"
 A brief statemnt about current status can go here, follow by a list of dates
 when the status line of this RFC changed (in most-recent-last order).
 
-- 2017-01-08: TODO: First complete draft submitted for review
+- 2018-01-08: TODO: First complete draft submitted for review
 

@@ -57,3 +57,7 @@ Ecosystem-docs downloads readme files from the following modules to `docs/module
 * 📔 [hypercore](https://github.com/mafintosh/hypercore)
 * 📔 [dat-node](https://github.com/datproject/dat-node)
 * 📔 [hyperdiscovery](https://github.com/karissa/hyperdiscovery)
+
+## Protocol RFCs
+
+[See rfcs folder](rfcs/README.md) for information about Dat Protocol RFCs ("Requests for Comment", aka enhancement proposals).

@@ -294,14 +294,6 @@ In the metadata record Bob received for `cat_dna.csv` there is the byte offset t
 
 This method tries to allow any byte range of any file to be accessed without the need to synchronize the full metadata for all files up front.
 
-### Scenario: Syncing live changes to files at a specific path
-
-TODO
-
-### Scenario: Syncing an entire archive
-
-TODO
-
 ## 3. Dat Network Protocol
 
 The SLEEP format is designed to allow for sparse replication, meaning you can efficiently download only the metadata and data required to resolve a single byte region of a single file, which makes Dat suitable for a wide variety of streaming, real time and large dataset use cases.
@@ -497,21 +489,7 @@ message Data {
 }
 ```
 
-# 4. Multi-Writer
-
-The design of Dat up to this point assumes you have a single keyholder writing and signing data and appending it to the metadata and content feed. However having the ability for multiple keyholders to be able to write to a single repository allows for many interesting use cases such as forking and collaborative workflows.
-
-In order to do this, we use one `metadata.data` feed for each writer. Each writer gets their own keypair. Each writer is responsible for storing their private key. To add a new writer to your feed, you include their key in a metadata feed entry.
-
-For example, if Alice wants to add Bob to have write access to a Dat repository, Alice would take Bob's public key and write it to the 'local' metadata feed (the feed that Alice owns, e.g. the original feed). Now anyone else who replicates from Alice will find Bob's key in the history. If in the future Bob distributes a version of the Dat that he added new data to, everyone who has a copy of the Dat from Alice will have a copy of Bob's key that they can use to verify that Bob's writes are valid.
-
-On disk, each users feed is stored in a separate hyperdrive. The original hyperdrive (owned by Alice) is called the 'local' hyperdrive. Bob's hyperdrive would be stored separately in the SLEEP folder addressed by Bob's public key.
-
-In case Bob and Alice write different values for the same file (e.g. Bob creates a "fork"), when they sync up with each other replication will still work, but for the forked value the Dat client will return an array of values for that key instead of just one value. The values are linked to the writer that wrote them, so in the case of receiving multiple values, clients can choose to choose the value from Alice, or Bob, or the latest value, or whatever other strategy they prefer.
-
-If a writer updates the value of a forked key with new value they are performing a merge.
-
-# 5. Existing Work
+# 4. Existing Work
 
 Dat is inspired by a number of features from existing systems.
 
@@ -563,7 +541,7 @@ The UK Government Digital Service have developed the concept of a register which
 
 The design of registers was inspired by the infrastructure backing the Certificate Transparency [@laurie2013certificate] project, initiated at Google, which provides a service on top of SSL certificates that enables service providers to write certificates to a distributed public ledger. Any client or service provider can verify if a certificate they received is in the ledger, which protects against so called "rogue certificates".
 
-# 6. Reference Implementation
+# 5. Reference Implementation
 
 The connection logic is implemented in a module called [discovery-swarm](https://www.npmjs.com/package/discovery-swarm). This builds on discovery-channel and adds connection establishment, management and statistics. It provides statistics such as how many sources are currently connected, how many good and bad behaving sources have been talked to, and it automatically handles connecting and reconnecting to sources. UTP support is implemented in the module [utp-native](https://www.npmjs.com/package/utp-native).
 

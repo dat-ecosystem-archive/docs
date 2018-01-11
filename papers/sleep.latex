@@ -48,12 +48,6 @@
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-% set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-
-
 \title{SLEEP - Syncable Ledger of Exact Events Protocol}
 \author{Mathias Buus Madsen, Maxwell Ogden, Code for Science}
 \date{August 2017}
@@ -138,8 +132,8 @@ SLEEP files are laid out like this:
 \item
   32 byte header
 \item
-  4 bytes - magic byte (value varies depending on which file, used to
-  quickly identify which file type it is)
+  4 bytes Uint32BE (``Big-Endian'') - magic byte (value varies depending
+  on which file, used to quickly identify which file type it is)
 \item
   1 byte - version number of the file header protocol, current version
   is 0
@@ -149,11 +143,10 @@ SLEEP files are laid out like this:
 \item
   1 byte - length prefix for body
 \item
-  rest of 32 byte header - string describing key algorithm (in dat
-  `ed25519'). length of this string matches the length in the previous
-  length prefix field. This string must fit within the 32 byte header
-  limitation (24 bytes reserved for string). Unused bytes should be
-  filled with zeroes.
+  rest of 32 byte header - string describing key or hash algorithm.
+  length of this string matches the length in the previous length prefix
+  field. This string must fit within the 32 byte header limitation (24
+  bytes reserved for string). Unused bytes should be filled with zeroes.
 \end{itemize}
 
 Possible values in the Dat implementation for the body field are:
@@ -365,9 +358,9 @@ random access regions of files in sparse replication scenarios.
   byte range.
 \item
   The chunk described by this child node will contain the byte range you
-  are looking for. You can use the \texttt{byteOffset} property in the
-  \texttt{Stat} metadata object to seek into the right position in the
-  content for the start of this chunk.
+  are looking for. You can use the \texttt{byteOffset} field in the
+  \texttt{Stat} metadata object to seek to the correct position in the
+  content file for the start of this chunk.
 \end{itemize}
 
 \subparagraph{Metadata Overhead}\label{metadata-overhead}
@@ -515,10 +508,9 @@ are all uniform (\texttt{{[}1,1{]}})
 6 - [11 11 11 11]
 \end{verbatim}
 
-Using this scheme, to represent 32 bytes of data it takes at most 8
-bytes of Index. In this example it compresses nicely as its all
-contiguous ones on disk, similarly for an empty bitfield it would be all
-zeroes.
+Using this scheme, it takes at most 8 bytes of Index to represent 32
+bytes of data. In this example the Index can compresses well because it
+consists of all one bits. Similarly, an empty bitfield is all zero bits.
 
 If you write 4GB of data using on average 64KB data chunk size, your
 bitfield will be at most 32KB.
@@ -746,6 +738,9 @@ These are the field definitions:
 \item
   \texttt{mtime} - POSIX created\_at time
 \end{itemize}
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
 
 \hypertarget{refs}{}
 \hypertarget{ref-varda2008protocol}{}

@@ -48,15 +48,9 @@
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-% set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-
-
 \title{Dat - Distributed Dataset Synchronization And Versioning}
 \author{Maxwell Ogden, Karissa McKelvey, Mathias Buus Madsen, Code for Science}
-\date{May 2017}
+\date{May 2017 (last updated: Jan 2018)}
 
 \begin{document}
 \maketitle
@@ -103,7 +97,7 @@ backup sources can be automatically discovered. However these file
 sharing tools today are not supported by Web browsers, do not have good
 privacy guarantees, and do not provide a mechanism for updating files
 without redistributing a new dataset which could mean entirely
-redownloading data you already have.
+re-downloading data you already have.
 
 \section{2. Dat}\label{dat}
 
@@ -114,7 +108,7 @@ reference implementation is available from npm as
 
 The protocol is agnostic to the underlying transport e.g.~you could
 implement Dat over carrier pigeon. Data is stored in a format called
-SLEEP (Ogden and Buus 2017), described in it's own paper. The key
+SLEEP (Ogden and Buus 2017), described in its own paper. The key
 properties of the Dat design are explained in this section.
 
 \begin{itemize}
@@ -319,7 +313,7 @@ sources to try and contact. Dat uses either TCP, HTTP or
 \href{https://en.wikipedia.org/wiki/Micro_Transport_Protocol}{UTP}
 (Rossi et al. 2010). UTP uses LEDBAT which is designed to not take up
 all available bandwidth on a network (e.g.~so that other people sharing
-wifi can still use the Internet), and is still based on UDP so works
+WiFi can still use the Internet), and is still based on UDP so works
 with NAT traversal techniques like UDP hole punching. HTTP is supported
 for compatibility with static file servers and web browser clients. Note
 that these are the protocols we support in the reference Dat
@@ -495,16 +489,16 @@ For example a register with two data entries would look something like
 this (pseudocode):
 
 \begin{verbatim}
-0. hash(value0)
+0. hash(chunk0)
 1. hash(hash(chunk0) + hash(chunk1))
-2. hash(value1)
+2. hash(chunk1)
 \end{verbatim}
 
 It is possible for the in-order Merkle tree to have multiple roots at
 once. A root is defined as a parent node with a full set of child node
 slots filled below it.
 
-For example, this tree hash 2 roots (1 and 4)
+For example, this tree has 2 roots (1 and 4)
 
 \begin{verbatim}
 0
@@ -514,7 +508,7 @@ For example, this tree hash 2 roots (1 and 4)
 4
 \end{verbatim}
 
-This tree hash one root (3):
+This tree has one root (3):
 
 \begin{verbatim}
 0
@@ -560,7 +554,7 @@ list like this:
 bat-1
 bat-2
 bat-3
-cat-1 
+cat-1
 cat-2
 cat-3
 \end{verbatim}
@@ -702,7 +696,7 @@ matching metadata entry. This is the un-optimized resolution that uses
 having Alice send additional sequence numbers to Bob that help him
 traverse in less round trips.
 
-In the metadata record Bob recieved for \texttt{cat\_dna.csv} there is
+In the metadata record Bob received for \texttt{cat\_dna.csv} there is
 the byte offset to the beginning of the file in the data feed. Bob adds
 his +30MB offset to this value and starts requesting pieces of data
 starting at that byte offset using the SLEEP protocol as described
@@ -711,16 +705,6 @@ below.
 This method tries to allow any byte range of any file to be accessed
 without the need to synchronize the full metadata for all files up
 front.
-
-\subsubsection{Scenario: Syncing live changes to files at a specific
-path}\label{scenario-syncing-live-changes-to-files-at-a-specific-path}
-
-TODO
-
-\subsubsection{Scenario: Syncing an entire
-archive}\label{scenario-syncing-an-entire-archive}
-
-TODO
 
 \subsection{3. Dat Network Protocol}\label{dat-network-protocol}
 
@@ -768,8 +752,8 @@ Type 0. Should be the first message sent on a channel.
   \texttt{discoveryKey} - A BLAKE2b keyed hash of the string `hypercore'
   using the public key of the metadata register as the key.
 \item
-  \texttt{nonce} - 32 bytes of random binary data, used in our
-  encryption scheme
+  \texttt{nonce} - 24 bytes (192 bits) of random binary data, used in
+  our encryption scheme
 \end{itemize}
 
 \begin{verbatim}
@@ -1006,7 +990,7 @@ message Data {
   optional bytes value = 2;
   repeated Node nodes = 3;
   optional bytes signature = 4;
-  
+
   message Node {
     required uint64 index = 1;
     required bytes hash = 2;
@@ -1015,45 +999,7 @@ message Data {
 }
 \end{verbatim}
 
-\section{4. Multi-Writer}\label{multi-writer}
-
-The design of Dat up to this point assumes you have a single keyholder
-writing and signing data and appending it to the metadata and content
-feed. However having the ability for multiple keyholders to be able to
-write to a single repository allows for many interesting use cases such
-as forking and collaborative workflows.
-
-In order to do this, we use one \texttt{metadata.data} feed for each
-writer. Each writer kets their own keypair. Each writer is responsible
-for storing their private key. To add a new writer to your feed, you
-include their key in a metadata feed entry.
-
-For example, if Alice wants to add Bob to have write access to a Dat
-repository, Alice would take Bob's public key and writes it to the
-`local' metadata feed (the feed that Alice owns, e.g.~the original
-feed). Now anyone else who replicates from Alice will find Bob's key in
-the history. If in the future Bob distributes a version of the Dat that
-he added new data to, everyone who has a copy of the Dat from Alice will
-have a copy of Bob's key that they can use to verify that Bob's writes
-are valid.
-
-On disk, each users feed is stored in a separate hyperdrive. The
-original hyperdrive (owned by Alice) is called the `local' hyperdrive.
-Bob's hyperdrive would be stored separately in the SLEEP folder
-addressed by Bob's public key.
-
-In case Bob and Alice write different values for the same file (e.g.~Bob
-creates a ``fork''), when they sync up with each other replication will
-still work, but for the forked value the Dat client will return an array
-of values for that key instead of just one value. The values are linked
-to the writer that wrote them, so in the case of receiving multiple
-values, clients can choose to choose the value from Alice, or Bob, or
-the latest value, or whatever other strategy they prefer.
-
-If a writer updates the value of a forked key with new value they are
-performing a merge.
-
-\section{5. Existing Work}\label{existing-work}
+\section{4. Existing Work}\label{existing-work}
 
 Dat is inspired by a number of features from existing systems.
 
@@ -1208,7 +1154,7 @@ public ledger. Any client or service provider can verify if a
 certificate they received is in the ledger, which protects against so
 called ``rogue certificates''.
 
-\section{6. Reference Implementation}\label{reference-implementation}
+\section{5. Reference Implementation}\label{reference-implementation}
 
 The connection logic is implemented in a module called
 \href{https://www.npmjs.com/package/discovery-swarm}{discovery-swarm}.

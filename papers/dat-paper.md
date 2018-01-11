@@ -1,6 +1,6 @@
 ---
 title: "Dat - Distributed Dataset Synchronization And Versioning"
-date: "May 2017"
+date: "May 2017 (last updated: Jan 2018)"
 author: "Maxwell Ogden, Karissa McKelvey, Mathias Buus Madsen, Code for Science"
 ---
 

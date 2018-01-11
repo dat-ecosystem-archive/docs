@@ -4,3 +4,6 @@ dist
 repos.txt
 node_modules
 docs/modules
+*~
+*.swp
+*.bak

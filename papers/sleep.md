@@ -175,7 +175,7 @@ The above method illustrates how to resolve a chunk position index to a byte off
 - First, you start by calculating the current Merkle roots
 - Each node in the tree (including these root nodes) stores the aggregate file size of all byte sizes of the nodes below it. So the roots cumulatively will describe all possible byte ranges for this repository.
 - Find the root that contains the byte range of the offset you are looking for and get the node information for all of that nodes children using the Index Lookup method, and recursively repeat this step until you find the lowest down child node that describes this byte range.
-- The chunk described by this child node will contain the byte range you are looking for. You can use the `byteOffset` property in the `Stat` metadata object to seek into the right position in the content for the start of this chunk.
+- The chunk described by this child node will contain the byte range you are looking for. You can use the `byteOffset` field in the `Stat` metadata object to seek to the correct position in the content file for the start of this chunk.
 
 ##### Metadata Overhead
 
@@ -276,7 +276,7 @@ The tuples at entry `1` above are `[1,0]` because the relative child tuples are 
 6 - [11 11 11 11]
 ```
 
-Using this scheme, to represent 32 bytes of data it takes at most 8 bytes of Index. In this example it compresses nicely as its all contiguous ones on disk, similarly for an empty bitfield it would be all zeroes.
+Using this scheme, it takes at most 8 bytes of Index to represent 32 bytes of data. In this example the Index can compresses well because it consists of all one bits. Similarly, an empty bitfield is all zero bits.
 
 If you write 4GB of data using on average 64KB data chunk size, your bitfield will be at most 32KB.
 

@@ -45,8 +45,8 @@ var hyperdrive = require('hyperdrive')
 var discovery = require('hyperdiscovery')
 
 var link = process.argv[2] // user inputs the dat link
-
-var archive = hyperdrive(ram, link)
+var key = link.slice(6) //extract they key
+var archive = hyperdrive(ram, key)
 archive.ready(function () {
   discovery(archive)
 })
@@ -103,9 +103,10 @@ var discovery = require('hyperdiscovery')
 var mirror = require('mirror-folder')
 
 var link = process.argv[2] // user inputs the dat link
+var key= link.slice(6) // extract they key
 var dir = process.cwd() // download to cwd
 
-var archive = hyperdrive(ram, link)
+var archive = hyperdrive(ram, key)
 archive.ready(function () {
   discovery(archive)
 

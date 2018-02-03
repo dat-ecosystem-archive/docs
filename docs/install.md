@@ -10,8 +10,8 @@ If you don't want to use the terminal, you can use our desktop application on Ma
 
 | Platform | Link             |
 |---------|-------------------|
-| Mac     | [Download .dmg](http://datproject.github.io/dat-desktop/mac)          |
-| Linux   | [Download .AppImage](http://datproject.github.io/dat-desktop/linux)          |
+| Mac     | [Download .dmg](http://dat-land.github.io/dat-desktop/mac)          |
+| Linux   | [Download .AppImage](http://dat-land.github.io/dat-desktop/linux)          |
 | Windows | Coming Soon       |
 
 

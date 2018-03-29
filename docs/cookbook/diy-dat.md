@@ -98,14 +98,17 @@ In practice, you should use [dat-storage](https://github.com/datproject/dat-stor
 Setup will be the same as before (make sure you install `mirror-folder`). The first part of the module will look the same.
 
 ```js
+var path = require('path')
 var ram = require('random-access-memory')
 var hyperdrive = require('hyperdrive')
 var discovery = require('hyperdiscovery')
 var mirror = require('mirror-folder')
+var mkdirp = require('mkdirp')
 
 var link = process.argv[2] // user inputs the dat link
 var key = link.replace('dat://', '') // extract the key
-var dir = process.cwd() // download to cwd
+var dir = path.join(process.cwd(), 'dat-download') // make a download folder
+mkdirp.sync(dir)
 
 var archive = hyperdrive(ram, key)
 archive.ready(function () {

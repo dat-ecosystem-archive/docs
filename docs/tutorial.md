@@ -75,4 +75,4 @@ First, you need to purchase a server on your own. We recommend using [Digital Oc
 
 Once you have a server available, head over to the [Running Dats on a Server section to automatically re-host your dat](/server).
 
-You may also use [this free serive](https://hashbase.io/) to keep your data alive.
+You may also use [this free service](https://hashbase.io/) to keep your data alive.

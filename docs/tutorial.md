@@ -44,8 +44,7 @@ First, you can create a new dat inside that folder. Using the `dat create` comma
 mkdir MyData
 cd MyData
 dat create
-> Title My Amazing Data
-> Title My Awesome Dat
+> Title: My Amazing Data
 > Description This is a dat
 
 Created empty Dat in /Users/me/MyData/.dat

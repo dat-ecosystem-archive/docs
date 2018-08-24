@@ -41,5 +41,4 @@ Dat uses an append-only to track changes over time. An append-only log shows all
 
 ### Privacy and Security Versus Bittorrent
 
-As a peer to peer network, Dat faces similar privacy risks as Bittorrent. When you download a dataset, your IP address is exposed to the users sharing that dataset. This may lead to honeypot servers collecting IP addresses, as we've seen in Bittorrent. However, with dataset sharing we can create a web of trust model where specific institutions are trusted as primary sources for datasets, diminishing the sharing of IP addresses. [Read more](https://datproject.org/blog/2016-12-18-p2p-reader-privacy) about reader privacy in the p2p web.
-
+As a peer to peer network, Dat faces similar privacy risks as Bittorrent. When you download a dataset, your IP address is exposed to the users sharing that dataset. This may lead to honeypot servers collecting IP addresses, as we've seen in Bittorrent. However, with dataset sharing we can create a web of trust model where specific institutions are trusted as primary sources for datasets, diminishing the sharing of IP addresses. [Read more](https://blog.datproject.org/2016/12/12/reader-privacy-on-the-p2p-web/) about reader privacy in the p2p web.

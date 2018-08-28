@@ -38,4 +38,8 @@ Note: There has not been an independent security audit for Dat. Use at your own 
 
 Dat is funded by [Code for Science & Society](https://codeforscience.org), a nonprofit supporting open source tools that benefit science and society. Dat also has a vibrant global community of developers building apps on the Dat protocol.
 
+These documents are collaboratively maintained on Github under
+[datproject/docs](https://github.com/datproject/docs). We welcome correctsion
+and requests for clarification.
+
 Enough reading, more doing? [Head over to Installation to get started.](/install)

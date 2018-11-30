@@ -266,7 +266,7 @@ Now Alice has the full list of files in the Dat, but decides they only want to d
 
 Dat pursues the following access capabilities:
 
-- Support large file hierachies (millions of files in a single repository).
+- Support large file hierarchies (millions of files in a single repository).
 - Support efficient traversal of the hierarchy (listing files in arbitrary folders efficiently).
 - Store all changes to all files (metadata and/or content).
 - List all changes made to any single file.

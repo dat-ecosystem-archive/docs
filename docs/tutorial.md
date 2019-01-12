@@ -30,7 +30,7 @@ dat clone dat://778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639
 
 This will download our demo files to the `~/Downloads/dat-demo` folder. These files are being shared by a server over Dat (to ensure high availability). When you download data, you may connect to any number of users who are running dat, too. The more users that are running dat the faster it downloads.
 
-You can also also view the files online: [https://datproject.org/778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639](https://datproject.org/778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639/). Datproject.org previews a dat in the browser -- as long as someone is hosting it. The website temporarily caches data for any visited links (i.e., do not view your dat on datproject.org if you do not want us caching your data).
+You can also also view the files online: [https://datbase.org/dat://778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639](https://datbase.org/dat://778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639). Datproject.org previews a dat in the browser -- as long as someone is hosting it. The website temporarily caches data for any visited links (i.e., do not view your dat on datproject.org if you do not want us caching your data).
 
 ## Creating a Dat
 

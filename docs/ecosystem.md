@@ -14,6 +14,7 @@ Dat embraces the Unix philosophy: a modular design with composable parts. All of
 
 * [Dat Whitepaper](https://github.com/datproject/docs/tree/master/papers) - The Dat whitepaper
 * [Dat Protocol](https://www.datprotocol.com/) - Site for the Dat protocol
+* [How Dat Works](https://datprotocol.github.io/how-dat-works/) - Visual explanation of the Dat protocol
 
 ## Core Modules
 

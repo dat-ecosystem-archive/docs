@@ -68,7 +68,7 @@ The first part of the link is the link protocol, Dat (read about the Dat protoco
 
 **`ff34725120b2f3c5bd5028e4f61d14a45a22af48a7b12126d5d588becde88a93` - the unique identifier**
 
-The second part of the link is a 64-character hex strings ([ed25519 public-keys](https://ed25519.cr.yp.to/) to be precise). Each Dat archive gets a public key link to identify it. With the hex string as a link we can a few things:
+The second part of the link is a 64-character hex strings ([ed25519 public-keys](https://ed25519.cr.yp.to/) to be precise). Each Dat archive gets a public key link to identify it. With the hex string as a link we can do a few things:
 
 1. Encrypt the data transfer
 2. Create a persistent identifier, an ID that never changes, even as file are updated (as opposed to a checksum which is based on the file contents).

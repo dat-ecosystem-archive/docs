@@ -46,7 +46,7 @@ Here are the required methods a storage provider must implement (even if their m
 
 When you pass the storage module into Dat or Hyperdrive it will be initialized with the signature `(filename, opts)`. Many storage instances will be made, one for each filename. The filename is passed as the first argument. This first argument can be ignored if the filename is not relevant to your storage module (this is the case with random-access-memory).
 
-The options is an object to specify special options for the storage provider. Options is currently not passed in by Dat or Hyperdrive but individual storage modules may use it for their own specific settings.
+Options is an object to specify special options for the storage provider. Options is currently not passed in by Dat or Hyperdrive but individual storage modules may use it for their own specific settings.
 
 ### open(callback)
 

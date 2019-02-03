@@ -174,7 +174,7 @@ The above method illustrates how to resolve a chunk position index to a byte off
 
 - First, you start by calculating the current Merkle roots
 - Each node in the tree (including these root nodes) stores the aggregate file size of all byte sizes of the nodes below it. So the roots cumulatively will describe all possible byte ranges for this repository.
-- Find the root that contains the byte range of the offset you are looking for and get the node information for all of that nodes children using the Index Lookup method, and recursively repeat this step until you find the lowest down child node that describes this byte range.
+- Find the root that contains the byte range of the offset you are looking for and get the node information for all of those nodes children using the Index Lookup method, and recursively repeat this step until you find the lowest down child node that describes this byte range.
 - The chunk described by this child node will contain the byte range you are looking for. You can use the `byteOffset` field in the `Stat` metadata object to seek to the correct position in the content file for the start of this chunk.
 
 ##### Metadata Overhead
@@ -236,11 +236,11 @@ The `bitfield` file actually contains three bitfields of different sizes. A bitf
 
 Each entry contains three objects:
 
-- Data Bitfield (1024 bytes) - 1 bit for for each data entry that you have synced (1 for every entry in `data`).
+- Data Bitfield (1024 bytes) - 1 bit for each data entry that you have synced (1 for every entry in `data`).
 - Tree Bitfield (2048 bytes) - 1 bit for every tree entry (all nodes in `tree`)
 - Bitfield Index (256 bytes) - This is an index of the Data Bitfield that makes it efficient to figure out which pieces of data are missing from the Data Bitfield without having to do a linear scan.
 
-The Data Bitfield is 1Kb somewhat arbitrarily, but the idea is that because most filesystems work in 4Kb chunk sizes, we can fit the Data, Tree and Index in less then 4Kb of data for efficient writes to the filesystem. The Tree and Index sizes are based on the Data size (the Tree has twice the entries as the Data, odd and even nodes vs just even nodes in `tree`, and Index is always 1/4th the size).
+The Data Bitfield is 1Kb somewhat arbitrarily, but the idea is that because most filesystems work in 4Kb chunk sizes, we can fit the Data, Tree and Index in less than 4Kb of data for efficient writes to the filesystem. The Tree and Index sizes are based on the Data size (the Tree has twice the entries as the Data, odd and even nodes vs just even nodes in `tree`, and Index is always 1/4th the size).
 
 To generate the Index, you take pairs of 2 bytes at a time from the Data Bitfield, check if all bits in the 2 bytes are the same, and generate 4 bits of Index metadata for every 2 bytes of Data (hence how 1024 bytes of Data ends up as 256 bytes of Index).
 
@@ -276,7 +276,7 @@ The tuples at entry `1` above are `[1,0]` because the relative child tuples are 
 6 - [11 11 11 11]
 ```
 
-Using this scheme, it takes at most 8 bytes of Index to represent 32 bytes of data. In this example the Index can compresses well because it consists of all one bits. Similarly, an empty bitfield is all zero bits.
+Using this scheme, it takes at most 8 bytes of Index to represent 32 bytes of data. In this example the Index can compress well because it consists of all one bits. Similarly, an empty bitfield is all zero bits.
 
 If you write 4GB of data using on average 64KB data chunk size, your bitfield will be at most 32KB.
 
@@ -284,7 +284,7 @@ If you write 4GB of data using on average 64KB data chunk size, your bitfield wi
 
 This file is used to store content described by the rest of the `metadata.*` hypercore SLEEP files. Whereas the `content.*` SLEEP files describe the data stored in the actual data cloned in the Dat repository filesystem, the `metadata` data feed is stored inside the `.dat` folder along with the rest of the SLEEP files.
 
-The contents of this file is a series of versions of the Dat filesystem tree. As this is a hypercore data feed, it's just an append only log of binary data entries. The challenge is representing a tree in a one-dimensional way to make it representable as a Hypercore register. For example, imagine three files:
+The contents of this file are a series of versions of the Dat filesystem tree. As this is a hypercore data feed, it's just an append only log of binary data entries. The challenge is representing a tree in a one-dimensional way to make it representable as a Hypercore register. For example, imagine three files:
 
 ```
 ~/dataset $ ls

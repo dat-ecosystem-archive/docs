@@ -12,13 +12,13 @@ Code for Science and Society (CSS), a US based 501(c)(3) not for profit organiza
 
 Dat software is built with long-term sustainability as a focus. For us, this goes beyond financial sustainability. Establishing lasting data archives depends on a transparent and open process, a wider open source community, and ensuring no single entity or technology is responsible for data storage or access.
 
-**Public Design Process** All discussion related to the design and development of Dat project software is public (either on IRC or Github). Dat software is released with open source licenses and will always be freely available.
+**Public Design Process** All discussion related to the design and development of Dat project software is public (either on IRC or GitHub). Dat software is released with open source licenses and will always be freely available.
 
 **Open Source Community** The Dat team develops with [pragmatic modularity](http://mafintosh.com/pragmatic-modularity.html) in mind. We have high-level user facing software, but many of our underlying modules are small, highly focused, and used outside of the Dat project. This helps create a broader community to continue supporting and using the software regardless of the success of Dat itself.
 
 **No Lock In** We only want you to use Dat because you love it, not because it is too hard to get your data out. Dat does not import or copy your data into specialized databases. This means that you can easily move your data around and keep it intact in its original form. You can even simultaneously host your data on HTTP along with Dat to ensure backwards compatibility with existing web tools. You'll never be locked into using the Dat software.
 
-**Distributed Storage** Dat is built to distribute storage and bandwidth costs throughout the network. Data hosting and bandwidth are some of the main costs for long-term data storage. By using Dat we can help ensure there are not single points of failure for data storage. Dat does not currently host any data, except for caching on datproject.org. We plan to build hosting options but will prioritize financial sustainability into those services.
+**Distributed Storage** Dat is built to distribute storage and bandwidth costs throughout the network. Data hosting and bandwidth are some of the main costs for long-term data storage. By using Dat we can help ensure there are no single points of failure for data storage. Dat does not currently host any data, except for caching on datproject.org. We plan to build hosting options but will prioritize financial sustainability into those services.
 
 **No Centralized Servers** Dat transfers all data directly between peers and has little reliance on Dat maintaining servers. We have public servers for peers to help discover each other, but those use very little bandwidth and anyone can run them.
 

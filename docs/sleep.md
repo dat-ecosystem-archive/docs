@@ -5,11 +5,11 @@
 
 SLEEP is a metadata format that allows a set of files to be accessed randomly, cryptographically verified, and dynamically updated. A SLEEP file contains content addressed file metadata in a representation specifically designed to allow partial streaming access to individual chunks of data. SLEEP files can be shared as a single downloadable file for easy distribution and we also specify a way to expose SLEEP over REST.
 
-The SLEEP format can be used in a similar way to how MD5 checksums are used over HTTP today, to verify the integrity of data downloads. Whereas MD5 or SHA are usually checksums of the whole data set, meaning consumers have to download the entire all available data before they are able to verify the integrity of any of it, SLEEP allows a set of data to be split in to many small pieces, each one getting it's own cryptographically secure checksum. This allows consumers to download subsets metadata and data, in whatever order they prefer, but allowing them to verify the integrity of each piece of data as it is accessed. It also includes cryptographic signatures allowing users to verify that data they received was created using a holder of a specific private key.
+The SLEEP format can be used in a similar way to how MD5 checksums are used over HTTP today, to verify the integrity of data downloads. Whereas MD5 or SHA are usually checksums of the whole data set, meaning consumers have to download the entire all available data before they are able to verify the integrity of any of it, SLEEP allows a set of data to be split in to many small pieces, each one getting its own cryptographically secure checksum. This allows consumers to download subsets metadata and data, in whatever order they prefer, but allowing them to verify the integrity of each piece of data as it is accessed. It also includes cryptographic signatures allowing users to verify that data they received was created using a holder of a specific private key.
 
 ## Registers
 
-SLEEP is designed around the concept of a register, an append only list that you can trust. The contents of a register are cryptographically fingerprinted and an aggregate checksum can be used to verify the contents of the register have not been tampered with. There are various ways to calculate these aggregate checksums but the data in a register is a binary append only feed, e.g. an list of buffers that can only be updated by placing new buffers at the end of the list.
+SLEEP is designed around the concept of a register, an append only list that you can trust. The contents of a register are cryptographically fingerprinted and an aggregate checksum can be used to verify the contents of the register have not been tampered with. There are various ways to calculate these aggregate checksums but the data in a register is a binary append only feed, e.g. a list of buffers that can only be updated by placing new buffers at the end of the list.
 
 SLEEP also provides an index that allows each piece of data in a register to be accessed randomly. In order to look up a specific piece of data in the register, you only need a small subset of the metadata in order to find it, making SLEEP suitable for live streaming or sparse download use cases.
 
@@ -63,7 +63,7 @@ All non-leaf nodes contain these three pieces of information:
 
 - The sha256 hash of the concatenation of the two children hashes
 - The cryptographic signature of the hash
-- The span of bytes that the the nodes children cover
+- The span of bytes that the nodes children cover
 
 When initializing a register an asymmetric Ed25519 keypair is derived. The private key is never shared. The public key is used as the URL for the register. When signing hashes in the tree the public key is used to generate an EdDSA signature. For the example register above, 'abcd', the register index (in JSON) would be:
 

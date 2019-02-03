@@ -35,7 +35,7 @@ The connection logic is implemented in a module called [discovery-swarm](https:/
 
 ## Phase 3: Data exchange
 
-So now we have found data sources, have connected to them, but we havent yet figured out if they *actually* have the data we need. This is where our file transfer protocol [Hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in.
+So now we have found data sources, have connected to them, but we haven't yet figured out if they *actually* have the data we need. This is where our file transfer protocol [Hyperdrive](https://www.npmjs.com/package/hyperdrive) comes in.
 
 The short version of how Hyperdrive works is: It breaks file contents up in to pieces, hashes each piece and then constructs a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) out of all of the pieces. This ultimately gives us the Dat link, which is the top level hash of the Merkle tree.
 

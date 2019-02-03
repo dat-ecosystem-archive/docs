@@ -53,7 +53,7 @@ archive.ready(function () {
 })
 ```
 
-Notice, the user will input the link for the second argument The easiest way to get a file from a hyperdrive archive is to make a read stream. `archive.readFile` accepts the index number of filename for the first argument. To display the file, we can create a file stream and pipe it to `process.stdout`.
+Notice, the user will input the link for the second argument. The easiest way to get a file from a hyperdrive archive is to make a read stream. `archive.readFile` accepts the index number of filename for the first argument. To display the file, we can create a file stream and pipe it to `process.stdout`.
 
 ```js
 // Make sure your archive has a dat.json file!

@@ -36,7 +36,7 @@ It works this way:
 * netlify pulls latest repo
 * netlify automatically runs `npm install`
 * netlify runs the build script `sh scripts/netlify.sh`, which:
-  * sets git config so we can use `ecosystem-docs` and pull latests readme files
+  * sets git config so we can use `ecosystem-docs` and pull latest readme files
   * runs `npm run netlify` which updates remote repos and builds.
 * deploys `/dist` to the web
 

@@ -58,7 +58,7 @@
 \subsection{SLEEP}\label{sleep}
 
 This document is a technical description of the SLEEP format intended
-for implementers. SLEEP is the the on-disk format that Dat produces and
+for implementers. SLEEP is the on-disk format that Dat produces and
 uses. It is a set of 9 files that hold all of the metadata needed to
 list the contents of a Dat repository and verify the integrity of the
 data you receive. SLEEP is designed to work with REST, allowing servers
@@ -446,7 +446,7 @@ Each entry contains three objects:
 \begin{itemize}
 \tightlist
 \item
-  Data Bitfield (1024 bytes) - 1 bit for for each data entry that you
+  Data Bitfield (1024 bytes) - 1 bit for each data entry that you
   have synced (1 for every entry in \texttt{data}).
 \item
   Tree Bitfield (2048 bytes) - 1 bit for every tree entry (all nodes in
@@ -459,7 +459,7 @@ Each entry contains three objects:
 
 The Data Bitfield is 1Kb somewhat arbitrarily, but the idea is that
 because most filesystems work in 4Kb chunk sizes, we can fit the Data,
-Tree and Index in less then 4Kb of data for efficient writes to the
+Tree and Index in less than 4Kb of data for efficient writes to the
 filesystem. The Tree and Index sizes are based on the Data size (the
 Tree has twice the entries as the Data, odd and even nodes vs just even
 nodes in \texttt{tree}, and Index is always 1/4th the size).
@@ -509,7 +509,7 @@ are all uniform (\texttt{{[}1,1{]}})
 \end{verbatim}
 
 Using this scheme, it takes at most 8 bytes of Index to represent 32
-bytes of data. In this example the Index can compresses well because it
+bytes of data. In this example the Index can compress well because it
 consists of all one bits. Similarly, an empty bitfield is all zero bits.
 
 If you write 4GB of data using on average 64KB data chunk size, your
@@ -524,7 +524,7 @@ data cloned in the Dat repository filesystem, the \texttt{metadata} data
 feed is stored inside the \texttt{.dat} folder along with the rest of
 the SLEEP files.
 
-The contents of this file is a series of versions of the Dat filesystem
+The contents of this file are a series of versions of the Dat filesystem
 tree. As this is a hypercore data feed, it's just an append only log of
 binary data entries. The challenge is representing a tree in a
 one-dimensional way to make it representable as a Hypercore register.

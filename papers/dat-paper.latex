@@ -421,7 +421,7 @@ for old versions in \texttt{.dat}. Git for example stores all previous
 content versions and all previous metadata versions in the \texttt{.git}
 folder. Because Dat is designed for larger datasets, if it stored all
 previous file versions in \texttt{.dat}, then the \texttt{.dat} folder
-could easily fill up the users hard drive inadvertently. Therefore Dat
+could easily fill up the users' hard drive inadvertently. Therefore Dat
 has multiple storage modes based on usage.
 
 Hypercore registers include an optional \texttt{data} file that stores
@@ -635,7 +635,7 @@ Dat pursues the following access capabilities:
 \begin{itemize}
 \tightlist
 \item
-  Support large file hierachies (millions of files in a single
+  Support large file hierarchies (millions of files in a single
   repository).
 \item
   Support efficient traversal of the hierarchy (listing files in

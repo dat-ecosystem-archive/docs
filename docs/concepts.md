@@ -16,17 +16,17 @@ Dat goes beyond regular archiving through its *distributed network*. When you sh
 
 <img src="/assets/share_link.png" alt="Share unique dat link" style="width:500px;"/>
 
-To maintain privacy, the dat link controls access to your data. Any data shared in the network is encrypted using your link as the password. Learn more about Dat's securtiy and privacy below or in [the faqs](faq#security-and-privacy). We are also investigating ways to improve [reader privacy](https://blog.datproject.org/2016/12/12/reader-privacy-on-the-p2p-web/) for public data.
+To maintain privacy, the dat link controls access to your data. Any data shared in the network is encrypted using your link as the password. Learn more about Dat's security and privacy below or in [the faqs](faq#security-and-privacy). We are also investigating ways to improve [reader privacy](https://blog.datproject.org/2016/12/12/reader-privacy-on-the-p2p-web/) for public data.
 
 ## Version History
 
-Dat automatically maintains a built in version history whenever files are added. Dat uses this history to allow partial downloads of files, for example only getting the latest files. There are two types of versioning performed automatically by Dat. Metadata is stored in a folder called `.dat` in the main folder of a repository, and data is stored as normal files in the main folder.
+Dat automatically maintains a built-in version history whenever files are added. Dat uses this history to allow partial downloads of files, for example only getting the latest files. There are two types of versioning performed automatically by Dat. Metadata is stored in a folder called `.dat` in the main folder of a repository, and data is stored as normal files in the main folder.
 
 Dat uses append-only registers to store version history. This means all changes are written to the end of the file, growing over time.
 
 ### Metadata Versioning
 
-Dat acts as a one-to-one mirror of the state of a folder and all it's contents. When importing files, Dat grabs the filesystem metadata for each file and checks if there is already an entry for this filename. If the file with this metadata matches exactly the newest version of the file metadata stored in Dat, then this file will be skipped (no change).
+Dat acts as a one-to-one mirror of the state of a folder and all its contents. When importing files, Dat grabs the filesystem metadata for each file and checks if there is already an entry for this filename. If the file with this metadata matches exactly the newest version of the file metadata stored in Dat, then this file will be skipped (no change).
 
 If the metadata differs or does not exist, then this new metadata entry will be appended as the new 'latest' version for this file in the append-only SLEEP metadata content register.
 
@@ -38,7 +38,7 @@ The default storage system used in Dat stores the files as files. This has the a
 
 In contrast to other version control systems, like Git, Dat only stores the current set of files, not older versions. Git, for example, stores all previous content versions and all previous metadata versions in the `.git` folder. But Dat is designed for larger datasets.
 
-Storing all history on content could easily fill up the users hard drive. Dat has multiple storage modes based on usage. With Dat's dynamic storage, you can store the content history on a local external hard drive or on a remote server (or both!).
+Storing all history on content could easily fill up the users' hard drive. Dat has multiple storage modes based on usage. With Dat's dynamic storage, you can store the content history on a local external hard drive or on a remote server (or both!).
 
 ## Dat Privacy
 
@@ -79,6 +79,6 @@ All together, the links can be thought of similarly to a web URL, as a place to 
 
 1. You do not have to worry about where the files are stored.
 2. You can always get the latest files available.
-3. You can view the version history or add version numbers to links to get an permanent link to a specific version.
+3. You can view the version history or add version numbers to links to get a permanent link to a specific version.
 
 [If you'd like you read more about how dat works, see our whitepaper.](https://github.com/datproject/docs/blob/master/papers/dat-paper.pdf)

@@ -12,7 +12,7 @@ A core goal is to be as simple and pragmatic as possible. This allows for easier
 
 It also tries to be modular and export responsibilities to external modules whenever possible. Peer discovery is a good example of this as it handled by 3rd party modules that wasn't written with hyperdrive in mind. A benefit of this is a much smaller core implementation that can focus on smaller and simpler problems.
 
-Prioritized synchronization of parts of a feed is also at the heart of hyperdrive as this allows for fast streaming with low latency of data such as structured datasets (wikipedia, genomic datasets), linux containers, audio, videos, and much more. To allow for low latency streaming another goal is also to keep verifiable block sizes as small as possible - even with huge data feeds.
+Prioritized synchronization of parts of a feed is also at the heart of hyperdrive as this allows for fast streaming with low latency of data such as structured datasets (Wikipedia, genomic datasets), Linux containers, audio, videos, and much more. To allow for low latency streaming another goal is also to keep verifiable block sizes as small as possible - even with huge data feeds.
 
 The protocol itself draws heavy inspiration from existing file sharing systems such as BitTorrent and [PPSP](https://datatracker.ietf.org/doc/rfc7574/?include_text=1)
 
@@ -20,7 +20,7 @@ The protocol itself draws heavy inspiration from existing file sharing systems s
 
 ### Flat In-Order Trees
 
-A Flat In-Order Tree is a simple way represent a binary tree as a list. It also allows you to identify every node of a binary tree with a numeric index. Both of these properties makes it useful in distributed applications to simplify wire protocols that uses tree structures.
+A Flat In-Order Tree is a simple way represent a binary tree as a list. It also allows you to identify every node of a binary tree with a numeric index. Both of these properties makes it useful in distributed applications to simplify wire protocols that use tree structures.
 
 Flat trees are described in [PPSP RFC 7574 as "Bin numbers"](https://datatracker.ietf.org/doc/rfc7574/?include_text=1) and a node version is available through the [flat-tree](https://github.com/mafintosh/flat-tree) module.
 
@@ -38,7 +38,7 @@ A sample flat tree spanning 4 blocks of data looks like this:
 
 The even numbered entries represent data blocks (leaf nodes) and odd numbered entries represent parent nodes that have two children.
 
-The depth of an tree node can be calculated by counting the number of trailing 1s a node has in binary notation.
+The depth of a tree node can be calculated by counting the number of trailing 1s a node has in binary notation.
 
 ```
 5 in binary = 101 (one trailing 1)
@@ -179,7 +179,7 @@ This means that if two datasets share a similar sequence of data the merkle tree
 
 ## Signed Merkle Trees
 
-As described above the top hash of a merkle tree is the hash of all its content. This has both advantages and disadvanteges.
+As described above the top hash of a merkle tree is the hash of all its content. This has both advantages and disadvantages.
 
 An advantage is that you can always reproduce a merkle tree simply by having the data contents of a merkle tree.
 
@@ -187,7 +187,7 @@ A disadvantage is every time you add content to your data set your merkle tree h
 
 However Using a bit of cryptography we can make our merkle tree appendable. First generate a cryptographic key pair that can be used to sign data using [ed25519](https://ed25519.cr.yp.to/) keys, as they are compact in size (32 byte public keys). A key pair (public key, secret key) can be used to sign data. Signing data means that if you trust a public key and you receive data and a signature for that data you can verify that a signature was generated with the corresponding secret key.
 
-How does this relate to merkle trees? Instead of distributing the hash of a merkle tree we can distribute our public key instead. We then use our secret key to continously sign the merkle trees of our data set every time we append to it.
+How does this relate to merkle trees? Instead of distributing the hash of a merkle tree we can distribute our public key instead. We then use our secret key to continuously sign the merkle trees of our data set every time we append to it.
 
 Assume we have a data set with only a single item in it `(a)` and a key pair `(secret, public)`:
 
@@ -237,9 +237,9 @@ This however isn't always possible if we use a signed merkle tree since the root
 
 To communicate which hashes we have just have to communicate two things: which uncles we have and whether or not we have any parent node that can verify the tree.
 
-Looking at the above tree that means if we want to fetch block `0` we need to communicate whether of not we already have the uncles `(2, 5)` and the parent `3`. This information can be compressed into very small bit vector using the following scheme.
+Looking at the above tree that means if we want to fetch block `0` we need to communicate whether or not we already have the uncles `(2, 5)` and the parent `3`. This information can be compressed into very small bit vector using the following scheme.
 
-Let the trailing bit denote whether or not the leading bit is a parent and not a uncle. Let the previous trailing bits denote wheather or not we have the next uncle.
+Let the trailing bit denote whether or not the leading bit is a parent and not a uncle. Let the previous trailing bits denote whether or not we have the next uncle.
 
 For example for block `0` the following bit vector `1011` is decoded the following way
 
@@ -268,7 +268,7 @@ These digests are very compact in size, only `(log2(number-of-blocks) + 2) / 8` 
 
 ### Hypercore Feeds
 
-Hypercore appends arbitrary binary blocks to form the feed. It is agnostic to the content of the block. As each block is appended, new merkle-tree nodes are generated to address it. Each addition generates new roots, which are signed if the feed is a signed-feed. The binary blocks are stored without changes, and the new hashes and signatures are stored to an internal datbase.
+Hypercore appends arbitrary binary blocks to form the feed. It is agnostic to the content of the block. As each block is appended, new merkle-tree nodes are generated to address it. Each addition generates new roots, which are signed if the feed is a signed-feed. The binary blocks are stored without changes, and the new hashes and signatures are stored to an internal database.
 
 Feeds can be used to represent many kinds of data. In Hyperdrive, they are used to represent the changes in the archive file-set over time.
 
@@ -276,7 +276,7 @@ Hypercore feeds are append-only and totally-ordered. They are not allowed to hav
 
 ## Hypercore Replication Protocol
 
-Lets assume two peers have the identifier for a hypercore feed. This could either be the hash of the merkle tree roots described above or a public key if they want to share a signed merkle tree. The two peers wants to exchange the data verified by this tree. Lets assume the two peers have somehow connected to each other.
+Lets assume two peers have the identifier for a hypercore feed. This could either be the hash of the merkle tree roots described above or a public key if they want to share a signed merkle tree. The two peers want to exchange the data verified by this tree. Let's assume the two peers have somehow connected to each other.
 
 Hypercore uses a message based protocol to exchange data. All messages sent are encoded to binary values using Protocol Buffers. Protocol Buffers are a widely supported schema based encoding support. A Protocol Buffers implementation is available on npm through the [protocol-buffers](https://github.com/mafintosh/protocol-buffers) module.
 
@@ -308,7 +308,7 @@ message Handshake {
 }
 ```
 
-You should send this message after sending an open message. By sending it after an open message it will be encrypted and we wont expose our peer id to a third party. The current protocol version is 0.
+You should send this message after sending an open message. By sending it after an open message it will be encrypted and we won't expose our peer id to a third party. The current protocol version is 0.
 
 #### `1` Have
 

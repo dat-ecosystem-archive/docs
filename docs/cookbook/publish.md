@@ -30,7 +30,7 @@ This will generate a `dat.json` file which you can use to reference your dat in 
 {
   "url": "dat://96cf4957539aff4fc856fa0804e613181064ed193e5f7882c9623ec7bed38deb",
   "title": "More Tweets More Votes",
-  "description": "An analysis of tweets from the peroid before 2012 U.S. House election combined with census data."
+  "description": "An analysis of tweets from the period before 2012 U.S. House election combined with census data."
 }
 ```
 

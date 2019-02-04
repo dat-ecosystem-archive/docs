@@ -50,7 +50,7 @@ dat create
 Created empty Dat in /Users/me/MyData/.dat
 ```
 
-This will create a new (empty) dat. A folder called `.dat` is created, which contains a bunch of metadata files that keep the dat in sync. To learn more about what these files are, read the [Overview](/overview) or the  [read the Dat paper](/paper).
+This will create a new (empty) dat. A folder called `.dat` is created, which contains a bunch of metadata files that keep the dat in sync. To learn more about what these files are, read the [Overview](/overview) or the [Dat paper](/paper).
 
 ## Sharing data
 

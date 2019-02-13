@@ -95,35 +95,56 @@ To download the files to the file system, we are going to use [mirror-folder](ht
 
 In practice, you should use [dat-storage](https://github.com/datproject/dat-storage) to do this as it'll be more efficient and keep the metadata on disk.
 
-Setup will be the same as before (make sure you install `mirror-folder`). The first part of the module will look the same.
+In addition to the modules you installed earlier, you will also need to install the following ones:
+
+```bash
+npm install --save mirror-folder mkdirp
+```
+
+Update your _index.js_ file to match the following:
 
 ```js
-var path = require('path')
-var ram = require('random-access-memory')
-var hyperdrive = require('hyperdrive')
-var discovery = require('hyperdiscovery')
-var mirror = require('mirror-folder')
-var mkdirp = require('mkdirp')
+const path = require('path')
+const ram = require('random-access-memory')
+const hyperdrive = require('hyperdrive')
+const discovery = require('hyperdiscovery')
+const mirror = require('mirror-folder')
+const mkdirp = require('mkdirp')
 
-var link = process.argv[2] // user inputs the dat link
-var key = link.replace('dat://', '') // extract the key
-var dir = path.join(process.cwd(), 'dat-download') // make a download folder
+const link = process.argv[2]
+
+const key = link.replace('dat://', '')
+
+const dir = path.join(process.cwd(), 'dat-download')
 mkdirp.sync(dir)
 
-var archive = hyperdrive(ram, key)
-archive.ready(function () {
-  discovery(archive)
+const archive = hyperdrive(ram, key)
 
-  var progress = mirror({name: '/', fs: archive}, dir, function (err) {
-    console.log('done downloading!')
+archive.ready(function (err) {
+  if (err) throw err
+  const swarm = discovery(archive)
+  swarm.on('connection', function (peer, type) {
+    console.log(`Connected to peer (${type.type})`)
+  })
+})
+
+archive.on('content', function () {
+  console.log('Archive’s content is ready.')
+  console.log('Starting to mirror…')
+  const progress = mirror({name: '/', fs: archive}, dir, function (err) {
+    if (err) throw err
+    console.log('Done mirroring the archive’s content to disk.')
   })
   progress.on('put', function (src) {
-    console.log(src.name, 'downloaded')
+    console.log(`  Mirrored: ${src.name}`)
+  })
+  progress.on('skip', function (src) {
+    console.log(`  Skipped:  ${src.name}`)
   })
 })
 ```
 
-You should be able to run the module and see all our docs files in the `download` folder:
+You should be able to run the module and see all our docs files in the `dat-download` folder:
 
 ```bash
 node index.js dat://<link>

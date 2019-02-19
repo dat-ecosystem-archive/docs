@@ -2,19 +2,19 @@
 
 Dat is written in JavaScript, so naturally, it can work entirely in the browser! The great part about this is that as more peers connect to each other in their client, the site assets will be shared between users rather hitting any server.
 
-This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dat links can be rendered live and read dynamically, whereas BitTorrent links are static. The original owner can update the files in the directory and all peers will receive the updates automatically.
+This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dat links can be rendered live and read dynamically, whereas BitTorrent links are static. The original owner of a Dat can update the files in the directory and all peers will receive the updates automatically.
 
 ## WebRTC Usage Notes
 
-**Important**: dat-js uses WebRTC, so it can only connect to other WebRTC clients. It is not possible for the dat-js library to connect directly clients using other protocols. All other Dat applications use non-WebRTC protocols ([see this FAQ for more info](https://docs.datproject.org/faq#does-dat-use-webrtc)). Non-browser clients can connect dats peer-to-peer via webrtc modules, such as [electron-webrtc](https://github.com/mappum/electron-webrtc), or use proxies via websockets, http, or other client-server protocols.
+dat-js primarily uses WebRTC, so it prioritizes connections to other WebRTC clients. In order for the dat-js library to connect to clients using other protocols, it needs to use a [gateway](https://github.com/garbados/dat-gateway/). The gateway works by having the client open a [websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) to the gateway, and have the gateway reach out to the rest of the dat network in order to fetch data from peers and send it down the websocket connection to dat-js. The gateway acts as a fallback and only gets used after dat-js has tried to connect to WebRTC peers first in order to reduce gateway bandwidth constraints and keep most of the traffic P2P. You can find a gatway at [gateway.mauve.moe](https://gateway.mauve.moe/). All other Dat applications use non-WebRTC protocols ([see this FAQ for more info](https://docs.datproject.org/faq#does-dat-use-webrtc)). Non-browser clients can connect dats peer-to-peer via webrtc modules, such as [electron-webrtc](https://github.com/mappum/electron-webrtc), or use proxies via websockets, http, or other client-server protocols.
 
-Due to WebRTC's less than stellar performance - Dat has focused on creating solid networking using other protocols. We may integrate WebRTC if performance improves and it becomes easier to run in non-browser interfaces (though we'd prefer using [more performant options](https://github.com/noffle/web-udp) in the browser, if they develop).
+Due to WebRTC's less than stellar performance - Dat has focused on creating solid networking using other protocols. We may integrate WebRTC outside of dat-js if performance improves and it becomes easier to run in non-browser interfaces (though we'd prefer using [more performant options](https://github.com/noffle/web-udp) in the browser, if they develop).
 
 OK, now for the goods.
 
 ## Install
 
-Embed the following script [dat.min.js](https://cdn.jsdelivr.net/dat/6.2.0/dat.min.js) on the page:
+Embed the following script [dat.min.js](https://cdn.jsdelivr.net/npm/dat-js@7/dat.min.js) on the page:
 ```
 <script type="text/javascript" src="dat.min.js"></script>
 ```
@@ -22,7 +22,7 @@ Embed the following script [dat.min.js](https://cdn.jsdelivr.net/dat/6.2.0/dat.m
 You can also use the jsdelivr CDN for faster load speeds:
 
 ```
-<script type="text/javascript" src="https://cdn.jsdelivr.net/dat/6.2.0/dat.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dat-js@7/dat.min.js"></script>
 ```
 
 This provides a `Dat` prototype on the `window` object.
@@ -47,11 +47,11 @@ var Dat = require('dat-js')
 
 ```js
 var dat = Dat()
-dat.add(function (repo) {
-  var writer = repo.archive.createFileWriteStream('hello.txt')
-  writer.write('world')
-  writer.end(function () { replicate(repo.key) })
-})
+
+var repo = dat.create()
+var writer = repo.archive.createWriteStream('hello.txt')
+writer.write('world')
+writer.end(function () { replicate(repo.url) })
 ```
 
 ### Downloading data
@@ -60,10 +60,9 @@ dat.add(function (repo) {
 var Dat = require('dat-js')
 
 var clone = Dat()
-clone.add(key, function (repo) {
-  repo.archive.readFile('hello.txt', function (err, data) {
-    console.log(data.toString()) // prints 'world'
-  })
+var repo = clone.get(url)
+repo.archive.readFile('hello.txt', function (err, data) {
+  console.log(data.toString()) // prints 'world'
 })
 ```
 
@@ -71,21 +70,25 @@ The `repo.archive` is a [hyperdrive](http://github.com/mafintosh/hyperdrive) ins
 
 For the full hyperdrive API and more examples, see the full [hyperdrive documentation](/hyperdrive).
 
-## Downloading only what you need
+## Downloading everyting or only what you need
 
 You might be asking 'Is it possible to index into a subset of a dat dataset?' Most datasets are too large for browsers, and we probably only want a subset of them.
 
-You can do this by using `sparse` mode, which make it only download content that the peer asks for. To do this, simply pass `{sparse: true}` when you create the dat:
+You can do this by using `sparse` mode, which makes it only download content that the peer asks for. This is actually enabled by default and you can opt-into downloading the entire archive by passing `{sparse: false}` when you create the dat:
 
 ```js
 var Dat = require('dat-js')
 
 var dat= Dat()
-dat.add(key, {sparse: true}, function (repo) {
-  // etc..
-})
+var fullRepo = dat.get(url, {sparse: false})
+
+// etc.
 ```
 
+<!--
+
+// TODO: Gonna leave this out for now and work on it last, there might still be changes for how signaling and peer discovery works.
+ 
 ## Under the hood
 
 Let's look under the hood of `dat-js` to see how a simple lower-level implementation can be built to create a browser-based dat.
@@ -116,6 +119,8 @@ swarm.on('peer', function (conn) {
 
 That's it. Now you are serving a dat-compatible hyperdrive from the browser. In another browser tab, you can connect to the swarm and download the data by using the same code as above. Just make sure to reference the archive you created before by using `archive.key` as the first argument:
 
+-->
+
 ## Storage API for metadata and content
 
 Hyperdrive is the underlying database that runs dat.
@@ -124,7 +129,7 @@ Hyperdrive will save the metadata (small) and the content (potentially large) se
 
 There are a million different ways to store and retrieve data in the browser, and all have their pros and cons depending on the use case. We've compiled a variety of examples here to try to make it as clear as possible.
 
-The first argument to `hyperdrive` will be the main database for all metadata and content. The `file` option can be supplied to specify how to read and write content data. If a `file` option is not supplied, the content will also be stored in the main database.
+You can pass in the specific implementation with the `db` parameter when initializing dat-js. By default, dat-js uses [random-access-memory](https://www.npmjs.com/package/random-access-memory) which is fast, but gets cleared when you refresh the page.
 
 There are many different ways to piece modules together to create the storage infrastructure for a hyperdrive -- here are some tested examples:
 
@@ -133,6 +138,26 @@ There are many different ways to piece modules together to create the storage in
 File writes are limited to the available memory on the machine. Files are buffered (read: copied) *into memory* while being written to the hyperdrive instance. This isn't ideal, but works as long as file sizes stay below system RAM limits.
 
 To fix this problem, you can use [random-access-file-reader](https://github.com/mafintosh/random-access-file-reader) to read the files directly from the filesystem instead of buffering them into memory.
+
+### Writing files to IndexedDB in the browser
+
+[IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) is a low-level key-value database that's supported by all the major browsers. It can be used to persist data for your dat archives across page refreshes and tabs using the [random-access-idb](https://www.npmjs.com/package/random-access-idb) module.
+
+You can decide to have dat archives persist to memory by default and only load certain ones through idb:
+
+```js
+var random = require('random-access-idb')
+var Dat = require('dat-js')
+
+var dat = new Dat()
+
+var persistedRepo = dat.get(url, {
+  // Create a new IndexedDB database for this dat
+  db: random(url)
+})
+```
+
+## Get in touch!
 
 Come over to our community channels and ask a question. It's probably a good one and we should cover it in the documentation. Thanks for trying it out, and PRs always welcome!
 

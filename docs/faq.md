@@ -160,6 +160,6 @@ Dat(dir, {sparse: true}, function (dat) {
 
 ### Does Dat use WebRTC?
 
-Dat can use WebRTC but it's very experimental. You can check out our tutorial on using [Dat in the browser here](/browser)
+ You can check out our tutorial on using [Dat in the browser here](/browser).
 
-We implemented a prototype web version using WebRTC. Moving forward, we are not planning on immediately supporting WebRTC in any Dat application because of reliability issues and lack of support in non-browser environments. Our future browser implementations of Dat will use websockets to transfer data to non-browser Dat interfaces.
+We implemented a web version using WebRTC. Moving forward, we are not planning on immediately supporting WebRTC in any Dat application because of reliability issues and lack of support in non-browser environments. The browser implementation of Dat also uses websockets to transfer data to non-browser Dat interfaces.

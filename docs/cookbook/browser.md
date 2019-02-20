@@ -14,22 +14,22 @@ OK, now for the goods.
 
 ## Install
 
-Embed the following script [dat.min.js](https://cdn.jsdelivr.net/npm/dat-js@7/dat.min.js) on the page:
-```
+Embed the following script [dat.min.js](https://packd.now.sh/dat-js@7) on the page:
+```html
 <script type="text/javascript" src="dat.min.js"></script>
 ```
 
-You can also use the jsdelivr CDN for faster load speeds:
+You can also use [packd](https://packd.now.sh/) to have it generate the bundle on the fly:
 
-```
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/dat-js@7/dat.min.js"></script>
+```html
+<script type="text/javascript" src="https://packd.now.sh/dat-js@7"></script>
 ```
 
 This provides a `Dat` prototype on the `window` object.
 
 ### Browserify
 
-Or use Node.js in the browser with [browserify](http://github.com/substack/node-browserify), which lets you use node.js style require() to organize your browser code using npm.
+Or use Node.js in the browser with [browserify](https://github.com/browserify/browserify), which lets you use node.js style require() to organize your browser code using npm.
 
 ```
 npm install dat-js
@@ -37,8 +37,20 @@ npm install dat-js
 
 Then use `dat-js` like this:
 
-```
+```js
 var Dat = require('dat-js')
+```
+
+And build a bundle with browserify, assuming your file is called `index.js` like this:
+
+```
+browserify ./index.js > bundle.js
+```
+
+Then include a script tag pointing at your `bundle.js`:
+
+```
+<scrupt type="text/javascript" src="bundle.js"></script>
 ```
 
 ## Quick Examples
@@ -146,14 +158,13 @@ To fix this problem, you can use [random-access-file-reader](https://github.com/
 You can decide to have dat archives persist to memory by default and only load certain ones through idb:
 
 ```js
-var random = require('random-access-idb')
+var storage = require('random-access-idb')('dats')
 var Dat = require('dat-js')
 
 var dat = new Dat()
 
 var persistedRepo = dat.get(url, {
-  // Create a new IndexedDB database for this dat
-  db: random(url)
+  db: storage
 })
 ```
 

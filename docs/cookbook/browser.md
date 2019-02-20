@@ -50,7 +50,7 @@ browserify ./index.js > bundle.js
 Then include a script tag pointing at your `bundle.js`:
 
 ```
-<scrupt type="text/javascript" src="bundle.js"></script>
+<script type="text/javascript" src="bundle.js"></script>
 ```
 
 ## Quick Examples

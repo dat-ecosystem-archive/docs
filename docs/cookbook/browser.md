@@ -14,15 +14,15 @@ OK, now for the goods.
 
 ## Install
 
-Embed the following script [dat.min.js](https://packd.now.sh/dat-js@7) on the page:
+Embed the following script [dat.min.js](https://bundle.run/dat-js@7) on the page:
 ```html
 <script type="text/javascript" src="dat.min.js"></script>
 ```
 
-You can also use [packd](https://packd.now.sh/) to have it generate the bundle on the fly:
+You can also use [packd](https://bundle.run/) to have it generate the bundle on the fly:
 
 ```html
-<script type="text/javascript" src="https://packd.now.sh/dat-js@7"></script>
+<script type="text/javascript" src="https://bundle.run/dat-js@7"></script>
 ```
 
 This provides a `Dat` prototype on the `window` object.

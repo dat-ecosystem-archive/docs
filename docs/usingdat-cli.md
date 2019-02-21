@@ -3,8 +3,6 @@ id: cli-intro
 title: Command Line
 ---
 
-# Getting Started with Dat
-
 This is a tutorial for the Dat command line tool.
 
 In this tutorial we will go through the two main ways to use Dat, sharing data and downloading data. If possible, this is great to go through with a partner to see how Dat works across computers.

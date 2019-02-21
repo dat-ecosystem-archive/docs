@@ -2,7 +2,6 @@
 id: diy-dat
 title: Building with Dat
 ---
-# Build with Dat
 
 In this guide, we will show how to develop applications with the Dat ecosystem. The Dat ecosystem is very modular making it easy to develop custom applications using Dat.
 

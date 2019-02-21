@@ -3,8 +3,6 @@ id: troubleshooting
 title: Troubleshooting Dat
 ---
 
-# Troubleshooting
-
 We've provided some troubleshooting tips based on issues users have seen. Please [open an issue](https://github.com/datproject/dat/issues/new) or ask us in our [chat room](https://gitter.im/datproject/discussions) if you need help troubleshooting and it is not covered here.
 
 ### Check Your Version

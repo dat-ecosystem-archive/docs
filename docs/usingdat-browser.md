@@ -5,8 +5,6 @@ title: Browser Dat
 
 **We've just released a NEW!! version of [dat-js](https://github.com/datproject/dat-js). Take a look and let us know how you use it!**
 
-# Browser Dat
-
 Dat is written in JavaScript, so naturally, it can work entirely in the browser! The great part about this is that as more peers connect to each other in their client, the site assets will be shared between users rather hitting any server.
 
 This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dats can be rendered live and read dynamically, whereas BitTorrent links are static. The original owner of a Dat can update the files in the directory and all peers will receive the updates automatically.

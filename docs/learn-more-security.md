@@ -3,8 +3,6 @@ id: security-faq
 title: Understanding Dat Privacy
 ---
 
-## Security & Privacy
-
 ### Can other users tell what I am downloading? 
 
 Users only connect to other users with the same dat read key. Anyone with a dat read key can see other users that are sharing that read key and their IP addresses.

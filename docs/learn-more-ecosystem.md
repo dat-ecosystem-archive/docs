@@ -1,7 +1,6 @@
 ---
 id: dat-ecosystem
 title: Open Source Ecosystem
-sidebar_label: dat:// protocol
 ---
 
 We have built and contributed to a variety of modules that support our work on Dat as well as the larger data and code ecosystem. Feel free to go deeper and see the implementations we are using in the [Dat command-line tool](https://github.com/datproject/dat) and the [Dat Desktop](https://github.com/datproject/dat-desktop).

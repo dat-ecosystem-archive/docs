@@ -6,14 +6,6 @@ sidebar_label: Intro to Dat
 
 Dat is a protocol for sharing data between computers. By making sure changes in data are transparent, everyone receives only the data they want, and connecting computers directly (rather than using a cloud server), Dat powers communities building next-generation Web.
 
-## What is Dat Project?
-
-The *Dat Project* helps shepherd community efforts surrounding the Dat protocol.
-
-## How is Dat funded?
-
-Community support.
-
 ## Welcome to Dat
 
 Ever tried moving large files and folders to other computers? Usually this involves one of a few strategies: being in the same location (usb stick), using a cloud service (Dropbox), or using old but reliable technical tools (rsync). None of these easily store, track, and share your data over time. People often are stuck choosing between security, speed, or ease of use. Dat provides all three by using a state of the art technical foundation and user friendly tools for fast and encrypted file sharing that you control.
@@ -43,19 +35,21 @@ backups to be stored efficiently on an external hard drive or a cloud serve by u
 #### Security
 
 Dat transfers files over an encrypted connection using state-of-the-art
-cryptography. Only users with your unique link can access your files. Your dat
-link allows users to download and re-share your files. To write updates to
-a dat, users must have the secret key. Dat also verifies the hashes of files on
-download so no malicious content can be added. As long as the link isn't shared outside of your team, the content will be encrypted, though the IP addresses and discovery key may become known. [Read more about security in dat.](/security)
+cryptography. Only users with your unique read key can access your files. Your dat
+read key allows users to download and re-share your files. To write updates to
+a dat, users must have the write key. Dat also verifies the hashes of files on
+download so no malicious content can be added. As long as the read key isn't shared outside of your team, the content will be encrypted, though the IP addresses and discovery key may become known. [Read more about security in dat.](docs/security-faq)
 
-Note: There has not been an independent security audit for Dat. Use at your own risk. 
+Note: There has not been an independent security audit for Dat.
 
 ## Who we are
 
-Dat is funded by [Code for Science & Society](https://codeforscience.org), a nonprofit supporting open source tools that benefit science and society. Dat also has a vibrant global community of developers building apps on the Dat protocol.
+Dat is a vibrant global community of people contributing and building software with the Dat protocol. The community hosts [weekly meetings](https://comm-comm.datproject.org/) to chat about Dat.
+
+The Dat Project is a fiscally supported project of [Code for Science & Society](https://codeforscience.org), a nonprofit supporting open source tools that benefit science and society. 
 
 These documents are collaboratively maintained on Github under
 [datproject/docs](https://github.com/datproject/docs). We welcome corrections
 and requests for clarification.
 
-Enough reading, more doing? [Head over to Installation to get started.](/install)
+Enough reading, more doing? [Head over to Installation to get started.](docs/install)

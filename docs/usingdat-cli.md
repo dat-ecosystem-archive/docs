@@ -15,7 +15,7 @@ In this tutorial we will go through the two main ways to use Dat, sharing data a
 * **Distributed** - Connect directly to other users sharing or downloading common datasets. Any device can share files without need for centralized servers. [Read more](terms#distributed-web) about the distributed web.
 * **Fast** - Share files instantly with in-place archiving. Download only the files you want. Quickly sync updates by only downloading new data, saving time and bandwidth.
 * **Transparent** - A complete version history improves transparency and auditability. Changes are written in append-only logs and uniformly shared throughout the network.
-* **Future-proof** - Persistent links identify and verify content. These unique ids allow users to host copies, boosting long-term availability without sacrificing provenance.
+* **Future-proof** - Persistent identifiers and verify content. These unique ids allow users to host copies, boosting long-term availability without sacrificing provenance.
 
 ## Installing Dat
 
@@ -23,7 +23,7 @@ To install dat in the Terminal, use `npm install -g dat`. For more information, 
 
 ## Downloading Data
 
-Similar to git, you do download somebody's dat by running `dat clone <link>`. A dat link is like an http:// link, but with special properties.
+Similar to git, you do download somebody's dat by running `dat clone <read-key>`. A dat read key is like an http:// read key, but with special properties.
 
 As an example, we created a dat that you can download. It just contains a couple of small files.
 
@@ -34,8 +34,6 @@ dat clone dat://778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639
 ![clone](https://raw.githubusercontent.com/datproject/docs/master/assets/cli-clone.gif)
 
 This will download our demo files to the `~/Downloads/dat-demo` folder. These files are being shared by a server over Dat (to ensure high availability). When you download data, you may connect to any number of users who are running dat, too. The more users that are running dat the faster it downloads.
-
-You can also also view the files online: [https://datbase.org/dat://778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639](https://datbase.org/dat://778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639). Datproject.org previews a dat in the browser -- as long as someone is hosting it. The website temporarily caches data for any visited links (i.e., do not view your dat on datproject.org if you do not want us caching your data).
 
 ## Creating a Dat
 
@@ -67,16 +65,12 @@ dat share
 
 ![share](https://raw.githubusercontent.com/datproject/docs/master/assets/cli-share.gif)
 
-As long as this process is running, you can share the link with your friend and they can instantly start downloading your files.
-
-If you don't want the other person to download dat, you can also send them a link and they can see the contents in the browser. Go to [https://datbase.org/](https://datbase.org/) and enter your link to preview on the upper left. *(Some users, including me when writing this, may have trouble connecting to datproject.org initially. It might take some time to initially connect, but if you wait and refresh it should view the files. We are actively working on improving this performance. Thanks.)*
+As long as this process is running, you can share the read key with your friend and they can instantly start downloading your files.
 
 ## Keeping data alive
 
 Your data will be available on the network as long as the process is open. However, if you need to close your laptop or turn off the computer, you might want to host the dat for long-term on a server.
 
-First, you need to purchase a server on your own. We recommend using [Digital Ocean](https://digitalocean.com), or setting up a [data silo in your house](https://github.com/datproject/datasilo).
+Once you have a server available, head over to the [Running Dats on a Server section to automatically re-host your dat](usingdat-server.md).
 
-Once you have a server available, head over to the [Running Dats on a Server section to automatically re-host your dat](/server).
-
-You may also use [this free service](https://hashbase.io/) to keep your data alive.
+You may also use [hashbase](https://hashbase.io/) or other cloud services to keep your data alive.

@@ -1,7 +1,7 @@
 {
   "docs": {
-    "Getting Started": ["intro", "install"],
-    "Learning More": ["dat-protocol", "security-faq"],
-    "Using Dat": ["cli-intro", "node-intro", "guides", "troubleshooting"]
+    "Getting Started": ["intro", "install", "faq"],
+    "Learning More": ["dat-protocol","dat-ecosystem", "concepts", "security-faq"],
+    "Using Dat": ["cli-intro", "cli-more", "browser-intro", "dat-server", "troubleshooting"]
   }
 }

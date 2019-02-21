@@ -21,19 +21,13 @@ function Help(props) {
 
   const supportLinks = [
     {
-      content: `Learn more using the [documentation on this site.](${docUrl(
-        'doc1.html',
-      )})`,
-      title: 'Browse Docs',
+      content: `Chat on [Gitter.im](https://gitter.im/datproject/discussions) or [IRC](https://webchat.freenode.net/?channels=dat) (they are the same room!). Connect with the community and find support.`,
+      title: 'Join the Chat',
     },
     {
-      content: 'Ask questions about the documentation and project',
-      title: 'Join the community',
-    },
-    {
-      content: "Find out what's new with this project",
-      title: 'Stay up to date',
-    },
+      content: 'See an issue or find something confusing? [Open an issue](https://github.com/datproject/docs/issues).',
+      title: 'Improve the Documentation',
+    }
   ];
 
   return (
@@ -43,8 +37,7 @@ function Help(props) {
           <header className="postHeader">
             <h1>Need help?</h1>
           </header>
-          <p>This project is maintained by a dedicated group of people.</p>
-          <GridBlock contents={supportLinks} layout="threeColumn" />
+          <GridBlock contents={supportLinks} layout="twoColumn" />
         </div>
       </Container>
     </div>

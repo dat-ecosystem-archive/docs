@@ -32,11 +32,10 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'intro', label: 'All Docs'},
+    {doc: 'intro', label: 'Docs'},
     {doc: 'install', label: 'Install'},
     {page: 'help', label: 'Help'},
-    {href: 'https://blog.datproject.org', label: 'Blog'},
-    {href: 'https://datproject.org', label: 'Home'},
+    {href: 'https://blog.datproject.org', label: 'Blog'}
   ],
 
   // If you have users set above, you add it here:

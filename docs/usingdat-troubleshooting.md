@@ -80,5 +80,5 @@ The `-g` option installs Dat globally allowing you to run it as a command. Make 
 If you are having trouble with a specific command, run with the debug environment variable set to `dat` (and optionally also `dat-node`). This will help us debug any issues:
 
 ```
-DEBUG=dat,dat-node dat clone dat://<link> dir
+DEBUG=dat,dat-node dat clone dat://<readKey> dir
 ```

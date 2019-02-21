@@ -64,9 +64,9 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href="#try">Try It Out</Button>
+            <Button href={docUrl('intro')}>Get Started</Button>
             <Button href={docUrl('install')}>Install</Button>
-            <Button href={docUrl('how-dat-works')}>How Dat Works</Button>
+            <Button href="https://datprotocol.github.io/how-dat-works/">How Dat Works</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -95,11 +95,10 @@ class Index extends React.Component {
     const FeatureCallout = () => (
       <div
         className="productShowcaseSection paddingBottom"
-        style={{textAlign: 'center'}}>
+        style={{textAlign: 'left'}}>
         <h2>Why Dat?</h2>
         <MarkdownBlock>
         Dat is a protocol for sharing data between computers. Dat’s strengths are that data is hosted and distributed by many computers on the network, that it can work offline or with poor connectivity, that the original uploader can add or modify data while keeping a full history and that it can handle large amounts of data.
-
         </MarkdownBlock>
         <MarkdownBlock>
         Dat is compelling because the people working on it have a dedication to user experience and ease-of-use. The software around Dat brings publishing within reach for people with a wide range of skills, not just technical. Although first designed with scientific data in mind, the Dat community is testing the waters and has begun to use it for websites, art, music releases, peer-to-peer chat programs and many other experiments.
@@ -181,8 +180,6 @@ class Index extends React.Component {
         <HomeSplash siteConfig={siteConfig} language={language} />
         <div className="mainContainer">
           <FeatureCallout />
-          <LearnHow />
-          <TryOut />
           <Showcase />
         </div>
       </div>

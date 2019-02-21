@@ -37,14 +37,14 @@ class Footer extends React.Component {
           </a>
           <div>
             <h5>Docs</h5>
-            <a href={this.docUrl('doc1.html', this.props.language)}>
+            <a href={this.docUrl('intro', this.props.language)}>
               Getting Started
             </a>
-            <a href={this.docUrl('doc2.html', this.props.language)}>
-              Guides
+            <a href="https://datprotocol.com">
+              Dat Protocol
             </a>
-            <a href={this.docUrl('doc3.html', this.props.language)}>
-              API Reference
+            <a href="https://datprotocol.github.io/how-dat-works/">
+              How Dat Works
             </a>
           </div>
           <div>

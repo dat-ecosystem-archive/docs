@@ -85,9 +85,7 @@ repo.archive.readFile('hello.txt', function (err, data) {
 
 The `repo.archive` is a [hyperdrive](http://github.com/mafintosh/hyperdrive) instance, which manages all of the files. A hyperdrive archive has a bunch of simple methods including only getting the files and byte ranges you want from a particular repository.
 
-For the full hyperdrive API and more examples, see the full [hyperdrive documentation](/hyperdrive).
-
-## Downloading everyting or only what you need
+## Downloading everything or only what you need
 
 You might be asking 'Is it possible to index into a subset of a dat dataset?' Most datasets are too large for browsers, and we probably only want a subset of them.
 

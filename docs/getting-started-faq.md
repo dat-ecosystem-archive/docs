@@ -16,7 +16,7 @@ Dat software is built with long-term sustainability as a focus. For us, this goe
 
 **No Lock In** We only want you to use Dat because you love it, not because it is too hard to get your data out. Dat does not import or copy your data into specialized databases. This means that you can easily move your data around and keep it intact in its original form. You can even simultaneously host your data on HTTP along with Dat to ensure backwards compatibility with existing web tools. You'll never be locked into using the Dat software.
 
-**Distributed Storage** Dat is built to distribute storage and bandwidth costs throughout the network. Data hosting and bandwidth are some of the main costs for long-term data storage. By using Dat we can help ensure there are no single points of failure for data storage. Dat does not currently host any data, except for caching on datproject.org. We plan to build hosting options but will prioritize financial sustainability into those services.
+**Distributed Storage** Dat is built to distribute storage and bandwidth costs throughout the network. Data hosting and bandwidth are some of the main costs for long-term data storage. By using Dat we can help ensure there are no single points of failure for data storage. Dat does not host any data.
 
 **No Centralized Servers** Dat transfers all data directly between peers and has little reliance on Dat maintaining servers. We have public servers for peers to help discover each other, but those use very little bandwidth and anyone can run them.
 
@@ -107,7 +107,7 @@ Currently, Dat uses one keypair to verify that only one writer is allowed to add
  
 ## Dat vs ?
 
-Dat has a lot of overlap with other distributed web tools, data management tools, and distributed version control. Below are some of the most common questions. See more in depth technical comparisons in the [Dat whitepaper](https://github.com/datproject/docs/blob/master/papers/dat-paper.md#5-existing-work).
+Dat has a lot of overlap with other distributed web tools, data management tools, and distributed version control. Below are some of the most common questions.
 
 ### How is Dat different than IPFS?
 

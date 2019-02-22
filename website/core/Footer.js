@@ -31,13 +31,12 @@ class Footer extends React.Component {
                 src={this.props.config.baseUrl + this.props.config.footerIcon}
                 alt={this.props.config.title}
                 width="66"
-                height="58"
               />
             )}
           </a>
           <div>
             <h5>Docs</h5>
-            <a href={this.docUrl('intro', this.props.language)}>
+            <a href={this.docUrl('intro')}>
               Getting Started
             </a>
             <a href="https://datprotocol.com">
@@ -62,7 +61,7 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>More</h5>
-            <a href={`${this.props.config.baseUrl}blog`}>Blog</a>
+            <a href="https://blog.datproject.org">Blog</a>
             <a href="https://github.com/datproject">GitHub</a>
             <a
               className="github-button"

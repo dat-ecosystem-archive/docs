@@ -26,7 +26,7 @@ wget -qO- https://raw.githubusercontent.com/datproject/dat/master/download.sh | 
 curl -o- https://raw.githubusercontent.com/datproject/dat/master/download.sh | bash
 ```
 
-Once the install finishes, you should be able to run the `$ dat` command in your terminal. If not, see the [installation troubleshooting](docs/troubleshooting#installation-troubleshooting) for tips.
+Once the install finishes, you should be able to run the `$ dat` command in your terminal. If not, see the [installation troubleshooting](usingdat-troubleshooting.md#installation-troubleshooting) for tips.
 
 ### Using npm
 
@@ -38,7 +38,7 @@ npm install -g dat
 
 Make sure you have `node` and `npm` installed first. If not, see the prerequisites section below. We recommend `npm` because it makes it easy to install new versions of `dat` when they get released.
 
-Once `npm install` finishes, you should be able to run the `$ dat` command. If not, see the [installation troubleshooting](docs/troubleshooting#installation-troubleshooting) for tips.
+Once `npm install` finishes, you should be able to run the `$ dat` command. If not, see the [installation troubleshooting](usingdat-troubleshooting.md#installation-troubleshooting) for tips.
 
 #### NPM Prerequisites
 

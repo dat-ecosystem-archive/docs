@@ -10,14 +10,14 @@ In this tutorial we will go through the two main ways to use Dat, sharing data a
 ## Features
 
 * **Secure** - Dat encrypts data transfers and verifies content on arrival. Dat prevents third-party access to metadata and content. [Learn more](faq#security-and-privacy) about security & privacy.
-* **Distributed** - Connect directly to other users sharing or downloading common datasets. Any device can share files without need for centralized servers. [Read more](terms#distributed-web) about the distributed web.
+* **Distributed** - Connect directly to other users sharing or downloading common datasets. Any device can share files without need for centralized servers.
 * **Fast** - Share files instantly with in-place archiving. Download only the files you want. Quickly sync updates by only downloading new data, saving time and bandwidth.
 * **Transparent** - A complete version history improves transparency and auditability. Changes are written in append-only logs and uniformly shared throughout the network.
 * **Future-proof** - Persistent identifiers and verify content. These unique ids allow users to host copies, boosting long-term availability without sacrificing provenance.
 
 ## Installing Dat
 
-To install dat in the Terminal, use `npm install -g dat`. For more information, see the [Installation page](/install).
+To install dat in the Terminal, use `npm install -g dat`. For more information, see the [Installation page](getting-started-installation.md).
 
 ## Downloading Data
 
@@ -51,7 +51,7 @@ dat create
 Created empty Dat in /Users/me/MyData/.dat
 ```
 
-This will create a new (empty) dat. A folder called `.dat` is created, which contains a bunch of metadata files that keep the dat in sync. To learn more about what these files are, read the [Overview](/overview) or the  [read the Dat paper](/paper).
+This will create a new (empty) dat. A folder called `.dat` is created, which contains a bunch of metadata files that keep the dat in sync. To learn more about what these files are, read the [How Dat Works](https://datprotocol.github.io/how-dat-works/.
 
 ## Sharing data
 

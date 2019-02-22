@@ -12,7 +12,7 @@ Dat software is built with long-term sustainability as a focus. For us, this goe
 
 **Public Design Process** All discussion related to the design and development of Dat project software is public (either on IRC or GitHub). Dat software is released with open source licenses and will always be freely available.
 
-**Open Source Community** The Dat team develops with [pragmatic modularity](http://mafintosh.com/pragmatic-modularity.html) in mind. We have high-level user facing software, but many of our underlying modules are small, highly focused, and used outside of the Dat project. This helps create a broader community to continue supporting and using the software regardless of the success of Dat itself.
+**Open Source Community** The Dat team develops with [pragmatic modularity](https://mafinto.sh/blog/pragmatic-modularity.html) in mind. We have high-level user facing software, but many of our underlying modules are small, highly focused, and used outside of the Dat project. This helps create a broader community to continue supporting and using the software regardless of the success of Dat itself.
 
 **No Lock In** We only want you to use Dat because you love it, not because it is too hard to get your data out. Dat does not import or copy your data into specialized databases. This means that you can easily move your data around and keep it intact in its original form. You can even simultaneously host your data on HTTP along with Dat to ensure backwards compatibility with existing web tools. You'll never be locked into using the Dat software.
 
@@ -91,7 +91,7 @@ Then you can download specific files or versions using the `--http` interface:
 dat sync /my-dat --http
 ```
 
-Visit [localhost:8080](http://localhost:8080) to view the latest content. Set the version flag, `localhost:8080/?version=3` to see a specific version. Clicking on a file will download that version of the file (assuming its available locally or on the network).
+Once running, visit `localhost:8080` to view the latest content. Set the version flag, `localhost:8080/?version=3` to see a specific version. Clicking on a file will download that version of the file (assuming its available locally or on the network).
 
 We are working on adding a local version history backup in the command line and desktop application. The interfaces for using and checking out older versions will also be further developed.
 

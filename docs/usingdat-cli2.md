@@ -5,7 +5,7 @@ title: Sharing files over HTTP
 
 The Dat command line comes with a built in HTTP server. This is a cool demo because we can also see how version history works! The `--http` option works for files you are sharing *or* downloading.
 
-(If you don't have dat command line installed, run `npm install -g dat`, or [see more info](intro#installation).)
+(If you don't have dat command line installed, run `npm install -g dat`, or [see more info](getting-started-installation.md).)
 
 ## Serve over HTTP
 
@@ -20,7 +20,7 @@ Serving files over http at http://localhost:8080
 2 connections | Download 0 B/s Upload 0 B/s
 ```
 
-Now visit [http://localhost:8080]() to see the files in your browser! The default http port is 8080. You should see a directory listing:
+Now visit `http://localhost:8080` to see the files in your browser! The default http port is 8080. You should see a directory listing:
 
 <img src="/assets/cli-http.png" alt="Dat HTTP viewer"/>
 
@@ -32,7 +32,7 @@ You can combine Dat's http support with our server tools to create a live updati
 
 As you may know, Dat automatically versions all files. The HTTP display is an easy way to view version history:
 
-**Use [localhost:8080/?version=2]() to view a specific version.**
+**Use `localhost:8080/?version=2` to view a specific version.**
 
 ## Live reloading
 
@@ -57,7 +57,7 @@ Serving files over http at http://localhost:8080
 The `--sparse` option tells Dat to only download files you specifically request. See how it works:
 
 1. Check out your `./demo` folder, it should be empty.
-2. [Open the Dat](http://localhost:8080) in your browser.
+2. Open the Dat in your browser.
 3. Click on a file to download.
 4. It should be in your folder now!
 

@@ -9,13 +9,14 @@ Dat embraces the Unix philosophy: a modular design with composable parts. All of
 
 ## User Software
 
-* [dat](https://github.com/datproject/dat) - The command line interface for Dat.
-* [Dat Desktop](https://github.com/datproject/dat-desktop) - Desktop application for Dat.
+* [dat](https://github.com/datproject/dat) - The Dat command line interface.
+* [Dat Desktop](https://github.com/datproject/dat-desktop) - Desktop application similar to a torrent client.
+* [Beaker](https://beakerbrowser.com) - A web browser for exploring and building Dat websites.
 
 ## Specifications
 
-* [Dat Protocol](https://www.datprotocol.com/) - Specifications for the Dat protocol
-* [How Dat Works](https://datprotocol.github.io/how-dat-works/) - Visual explanation of the Dat protocol
+* [How Dat Works](https://datprotocol.github.io/how-dat-works/) - Visual explanation of the Dat protocol.
+* [Dat Enhancement Proposals](https://github.com/datprotocol/DEPs) - Contains all specs for the Dat protocol, including drafts.
 
 ## Core Modules
 
@@ -29,12 +30,11 @@ These modules form the backbone of Dat software:
 
 View [more on Github](https://github.com/search?utf8=%E2%9C%93&q=topic%3Adat&type=Repositories).
 
-## Modules We Like & Use
+## Related modules
 
-These modules we use throughout our applications:
+These modules are community-driven and can be used to implement a variety of distributed web applications with Dat. 
 
-* [Choo](https://github.com/yoshuawuyts/choo) - A 4kb framework for creating sturdy frontend applications.
-* [neat-log](https://github.com/joehand/neat-log) - A neat cli logger for stateful command line applications Edit
-Add topics
+* [kappa-db](https://github.com/kappa-db) - Small core database for multiwriter kappa architectures.
+* [hypermerge](https://github.com/automerge/hypermerge#readme) - CRDT for merging multiple hypercore feeds. 
 * [mirror-folder](https://github.com/mafintosh/mirror-folder) - Mirror a folder to another folder, supports hyperdrive and live file watching.
 

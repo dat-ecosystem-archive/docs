@@ -9,11 +9,15 @@ Dat is written in JavaScript, so naturally, it can work entirely in the browser!
 
 This approach is similar to that used in Feross' [Web Torrent](http://webtorrent.io). The difference is that Dats can be rendered live and read dynamically, whereas BitTorrent links are static. The original owner of a Dat can update the files in the directory and all peers will receive the updates automatically.
 
-## WebRTC Usage Notes
+## Connecting to non-browser peers
 
-dat-js primarily uses WebRTC, so it prioritizes connections to other WebRTC clients. In order for the dat-js library to connect to clients using other protocols, it needs to use a [gateway](https://github.com/garbados/dat-gateway/). The gateway works by having the client open a [websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) to the gateway, and have the gateway reach out to the rest of the dat network in order to fetch data from peers and send it down the websocket connection to dat-js. The gateway acts as a fallback and only gets used after dat-js has tried to connect to WebRTC peers first in order to reduce gateway bandwidth constraints and keep most of the traffic P2P. You can find a gatway at [gateway.mauve.moe](https://gateway.mauve.moe/). All other Dat applications use non-WebRTC protocols ([see this FAQ for more info](getting-started-faq.md)). Non-browser clients can connect dats peer-to-peer via webrtc modules, such as [electron-webrtc](https://github.com/mappum/electron-webrtc), or use proxies via websockets, http, or other client-server protocols.
+dat-js primarily uses WebRTC, so it prioritizes connections to other browser peers that are also using WebRTC. All other Dat applications use non-WebRTC protocols ([see this FAQ for more info](getting-started-faq.md)). Non-browser clients can connect dats peer-to-peer via webrtc modules, such as [electron-webrtc](https://github.com/mappum/electron-webrtc), or use proxies via websockets, http, or other client-server protocols. 
 
-Due to WebRTC's less than stellar performance - Dat has focused on creating solid networking using other protocols. We may integrate WebRTC outside of dat-js if performance improves and it becomes easier to run in non-browser interfaces (though we'd prefer using [more performant options](https://github.com/noffle/web-udp) in the browser, if they develop).
+In order for the dat-js library to connect to clients that aren't in the browser, we recommend using [dat-gateway](https://github.com/garbados/dat-gateway/). Deploy your own gateway if you expect a lot of traffic to your application.
+
+A gateway works by having the client open a [websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) to the gatewa2y, and have the gateway reach out to the rest of the dat network in order to fetch data from peers and send it down the websocket connection to dat-js. The gateway acts as a fallback and only gets used after dat-js has tried to connect to WebRTC peers first. This reduces gateway bandwidth constraints and keep most of the traffic peer to peer. 
+
+There is an example gateway deployed at [gateway.mauve.moe](https://gateway.mauve.moe/). 
 
 OK, now for the goods.
 
@@ -68,8 +72,12 @@ var dat = Dat()
 var repo = dat.create()
 var writer = repo.archive.createWriteStream('hello.txt')
 writer.write('world')
-writer.end(function () { replicate(repo.url) })
+writer.end()
 ```
+
+The `repo.archive` is a [hyperdrive](http://github.com/mafintosh/hyperdrive) instance, which manages all of the files. A hyperdrive archive has a bunch of simple methods including only getting the files and byte ranges you want from a particular repository.
+
+You can now pass the URL of the dat, found at `repo.url`, to another peer, so they can download the data.
 
 ### Downloading data
 
@@ -83,7 +91,6 @@ repo.archive.readFile('hello.txt', function (err, data) {
 })
 ```
 
-The `repo.archive` is a [hyperdrive](http://github.com/mafintosh/hyperdrive) instance, which manages all of the files. A hyperdrive archive has a bunch of simple methods including only getting the files and byte ranges you want from a particular repository.
 
 ## Downloading everything or only what you need
 

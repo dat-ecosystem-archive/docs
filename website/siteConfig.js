@@ -86,8 +86,11 @@ const siteConfig = {
   ogImage: 'img/dat-logo-small.png',
   twitterImage: 'img/dat-logo-small.png',
 
+  // base url to edit files
+  editUrl: 'https://github.com/datproject/docs/edit/master/docs/',
+
   // Show documentation's last contributor's name.
-  enableUpdateBy: false,
+  enableUpdateBy: true,
 
   // Show documentation's last update time.
   enableUpdateTime: true,

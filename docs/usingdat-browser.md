@@ -15,7 +15,7 @@ dat-js primarily uses WebRTC, so it prioritizes connections to other browser pee
 
 In order for the dat-js library to connect to clients that aren't in the browser, we recommend using [dat-gateway](https://github.com/garbados/dat-gateway/). Deploy your own gateway if you expect a lot of traffic to your application.
 
-A gateway works by having the client open a [websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) to the gatewa2y, and have the gateway reach out to the rest of the dat network in order to fetch data from peers and send it down the websocket connection to dat-js. The gateway acts as a fallback and only gets used after dat-js has tried to connect to WebRTC peers first. This reduces gateway bandwidth constraints and keep most of the traffic peer to peer. 
+A gateway works by having the client open a [websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) to the gateway, and have the gateway reach out to the rest of the dat network in order to fetch data from peers and send it down the websocket connection to dat-js. The gateway acts as a fallback and only gets used after dat-js has tried to connect to WebRTC peers first. This reduces gateway bandwidth constraints and keeps most of the traffic peer to peer. 
 
 There is an example gateway deployed at [gateway.mauve.moe](https://gateway.mauve.moe/). 
 

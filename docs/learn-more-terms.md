@@ -48,7 +48,7 @@ In Dat, peers only connect if they both have the same Dat link.
 
 ### Secure Register
 
-A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-you-can-trust/) is an authoritative list of information you can trust. We maintain an open register called [Dat Folder](https://datproject.org) which contains public data, and is open to everyone.
+A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-you-can-trust/) is an authoritative list of information you can trust. 
 
 ### Beaker
 

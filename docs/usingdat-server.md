@@ -76,13 +76,13 @@ dat store remove dat://datproject.org
 ### Run It Forever
 
 You can install the Store to run as a service on the current machine.
-This is handled by the [os-service](https://www.npmjs.com/package/os-service) module.
+This is handled by the [os-service](https://www.npmjs.com/package/os-service) module which supports Linux, Mac, and Windows.
 
 ```
 dat store install-service
 ```
 
-The service will be called `dat-store` and can be managed by your operating system as you would any other service.
+The service will be called `dat-store` and can be managed by your operating system as you would any other service. To start and stop the service, you'll need to look into the specific commands for your operating system. For example, on Linux with Systemd you can use `sudo systemctl stop dat-store` to stop the service and `sudo systemctl start dat-store` to start it up again.
 
 You can uninstall the service when you no longer need it.
 
@@ -99,6 +99,9 @@ dat store set-provider http://192.168.1.1:3472
 ```
 
 This can be used to share a Store between members of a community or company.
+The provider URL and session token are stored in `~/.dat/store.json` and are used for any dats.
+Note that the CLI currently on supports having a single provider at a time.
+If you'd like to have multiple providers, please comment on [this issue](https://github.com/datproject/dat-store/issues/2) with your use case.
 It's strongly advised to layer some sort of authentication and HTTPS on top of the service if you want it to be accessible over the internet.
 
 If you want a more advanced Store that has authentication built in, check out [Homebase](https://github.com/beakerbrowser/homebase/)

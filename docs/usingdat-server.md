@@ -7,26 +7,21 @@ Since Dat is a distributed (peer-to-peer) data sharing tool, a computer must be 
 
 Running Dat on a server can also be used for live backups. As long as you are connected to your server and syncing changes, your server can backup all of your content history - allowing you to view old content later.
 
-## Short Instructions
+## Short instructions
 
-We have built a simple tool to host multiple dats using the commandline. The tool is called `hypercored`. Hypercored reads a file that contains all of the dats that you want to share.
-
-Install it on your server, create a `feeds` file with dats separated by newlines, and run `hypercored`.
+We have built a tool into the Dat CLI called `dat store` which enables you to set up a server to keep your Dats online. The tool also enables you to interact with servers that adhere to the [HTTP Pinning Service API](https://www.datprotocol.com/deps/0003-http-pinning-service-api/).
 
 ```
-npm install -g hypercored
-echo 'dat://64375abb733a62fa301b1f124427e825d292a6d3ba25a26c9d4303a7987bec65' >> feeds
-echo 'dat://another-dat-read-key-here' >> feeds
-hypercored
+npm install -g dat dat-store
+dat store install-service
+dat store dat://64375abb733a62fa301b1f124427e825d292a6d3ba25a26c9d4303a7987bec65
 ```
-
-That's it. Now it will download and host the data for the each dat in the `feeds` file. Hypercored uses [hypercore-archiver](https://github.com/mafintosh/hypercore-archiver) for efficient sharing of many dats and full content history backup.
-
-See below for more detailed instructions.
 
 ## Detailed Instructions
 
 ### Node Version
+
+If you don't have Node installed please follow the installation instructions for your platform [here](https://nodejs.org/en/download/package-manager/).
 
 Check your node version, you should have version 4.0 or higher, but 6.10.3 or higher is preferred.
 
@@ -34,50 +29,99 @@ Check your node version, you should have version 4.0 or higher, but 6.10.3 or hi
 $ node -v
 ```
 
-Then, go to your server (using `ssh username@hostname.com`) and install `hypercored`:
+### Install The CLI
+
+Then, go to your server (using `ssh username@hostname.com`) and install `dat` and the `dat-store` extension:
 
 ```
-npm install -g hypercored
+npm install -g dat dat-store
 ```
 
-If you have installation trouble due to a permissions error, please see [this tutorial for fixing permissions in node.js](https://docs.npmjs.com/getting-started/fixing-npm-permissions).
+### Start A Dat Store
 
-Now, create a file called 'feeds' with the list of dats you want to share.
-
-feeds
-```
-dat://one-hash
-two-hash
-website.com/three-hash
-```
-
-So then if you `ls` you should see `feeds` in the list of files.
+Once the CLI is installed, you can run a Dat Store which will be used for to keep a list of Dats online. By default, it will run on http://localhost:3472
 
 ```
-$ ls
-feeds
+dat store run-service
 ```
 
-Now, to share these dats simply type `hypercored` in the same directory.
+By default, it will store the data for Dats inside `~/.dat/store-data/`.
+This can be overridden with the `--storage-location` flag.
 
 ```
-~/dat $ hypercored
-Watching ~/dat/feeds for a list of active feeds
-Archiver key is 42471e32d36be3cb617ec1df382372532aac1d1ce683982962fb3594c5f9532a
-Swarm listening on port 58184
+dat store run-service --storage-location /example/location
 ```
 
-That's great! Now all of the dats in `feeds` will be downloaded and re-hosted. However, it's running in the foreground -- you probably want to use a process manager to run and watch the process so that it never goes down.
+### Add Dats
 
-## Run it Forever
-
-We recommend using `lil-pids` and `add-to-systemd` for long-term dat hosting from a linux server.
+You can interact with the store using the CLI.
 
 ```
-npm install -g add-to-systemd lil-pids
-mkdir ~/dat
-echo "hypercored --cwd ~/dat" > ~/dat/services
-sudo add-to-systemd dat-lil-pids $(which lil-pids) ~/dat/services ~/dat/pids
+dat store dat://64375abb733a62fa301b1f124427e825d292a6d3ba25a26c9d4303a7987bec65
+dat store add dat://datproject.org
 ```
 
-Replace `~` with the path where you want to store your dats.
+You can list all the Dats that are in the store:
+
+```
+dat store list
+```
+
+You can also remove Dats from the store
+
+```
+dat store remove dat://datproject.org
+```
+
+### Run It Forever
+
+You can install the Store to run as a service on the current machine.
+This is handled by the [os-service](https://www.npmjs.com/package/os-service) module which supports Linux, Mac, and Windows.
+
+```
+dat store install-service
+```
+
+The service will be called `dat-store` and can be managed by your operating system as you would any other service. To start and stop the service, you'll need to look into the specific commands for your operating system. For example, on Linux with Systemd you can use `sudo systemctl stop dat-store` to stop the service and `sudo systemctl start dat-store` to start it up again.
+
+You can uninstall the service when you no longer need it.
+
+```
+dat store uninstall-service
+```
+
+### Remote Stores
+
+You can configure the CLI to connect to a store that's running on another machine.
+
+```
+dat store set-provider http://192.168.1.1:3472
+```
+
+This can be used to share a Store between members of a community or company.
+The provider URL and session token are stored in `~/.dat/store.json` and are used for any dats.
+Note that the CLI currently on supports having a single provider at a time.
+If you'd like to have multiple providers, please comment on [this issue](https://github.com/datproject/dat-store/issues/2) with your use case.
+It's strongly advised to layer some sort of authentication and HTTPS on top of the service if you want it to be accessible over the internet.
+
+If you want a more advanced Store that has authentication built in, check out [Homebase](https://github.com/beakerbrowser/homebase/)
+
+### Public Stores
+
+Members of the Dat community have created [Hashbase](https://hashbase.io/) which is public Dat store that anybody can use.
+
+To set it up with the CLI, you'll need to [create an account].
+
+Then you'll need to point the CLI at Hashbase.
+
+```
+dat store set-provider https://hashbase.io
+```
+
+And finally, you'll need to log into Hashbase from the CLI
+
+```
+dat store login YOU_USERNAME_HERE
+```
+
+After this is ready, your calls to `dat store` will automatically add your Dats to Hashbase which will make sure your content is kept online.

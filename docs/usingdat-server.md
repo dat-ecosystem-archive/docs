@@ -92,7 +92,8 @@ dat store uninstall-service
 
 ### Remote Stores
 
-You can configure the CLI to connect to a store that's running on another machine. What's more you can specify a name for the remote store so you can handle multiple stores at once
+You can configure the CLI to connect to a store that's running on another machine.
+To handle multiple stores at once, you can specify a name for the remote store.
 
 ```
 dat store set-provider SOME_NAME_HERE http://192.168.1.1:3472

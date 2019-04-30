@@ -24,7 +24,7 @@ User who can write to a Dat archive. This user has the write key, allowing them 
 
 ### Collaborator
 
-User who are granted read access to a Dat archive by the owner. A collaborator can access a Dat archive if the owner or another collaborator sends the the Dat link.
+User who are granted read access to a Dat archive by the owner. A collaborator can access a Dat archive if the owner or another collaborator sends the Dat link.
 
 In the future, users will be able to grant collaborators write access to the Dat archive, allowing them to modify and create files in the archive.
 
@@ -48,7 +48,7 @@ In Dat, peers only connect if they both have the same Dat link.
 
 ### Secure Register
 
-A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-you-can-trust/) is an authoritative list of information you can trust. 
+A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-you-can-trust/) is an authoritative list of information you can trust.
 
 ### Beaker
 
@@ -92,6 +92,18 @@ The metadata is a hypercore feed. The first entry in the metadata feed is the ke
 
 The content feed is a hypercore feed containing the file contents for a Dat archive. The content feed together with a metadata feed make a Dat archive.
 
+### Version
+
+Internally every dat data-structure is composed of append-only logs or feeds (hypercores). Any time an entry is appended to the log, a new version is created. The version is identified according to the semantics of the data-structure. In the case of single-writer hyperdrive, it's currently being identified by the metadata log's latest message number.
+
+### Sparse
+
+When you load an archive, by default you only load the parts that are necessary. This is called `sparse` replication and is passed in as a flag when initializing the archive. For situations where you want to download the entire history of an archive, `sparse` is set to `false`.
+
+### Checkout
+
+Sometimes you want to load content from a Dat archive at a specific point in it's history. For that you need to checkout a given version which will ignore any newer changes and show you want the archive looked that at that version.
+
 ### Hyperdrive
 
 [Hyperdrive](https://github.com/mafintosh/hyperdrive) is peer to peer directories. We built hyperdrive to efficiently share scientific data in real time between research institutions. Hyperdrive handles the distribution of files while encrypting data transfer and ensuring content integrity. Hyperdrive creates append-only logs for file changes allow users to download partial datasets and to create versioned data. Hyperdrive is built on hypercore.
@@ -101,3 +113,7 @@ Archives created with hyperdrive are made with two feeds, one for the metadata a
 ### Hypercore
 
 [Hypercore](https://github.com/mafintosh/hypercore) is a protocol and network for distributing and replicating feeds of binary data. This creates an efficient gossip network where latency is reduced to a minimum. Hypercore is an eventually consistent, highly available, partition tolerant system.
+
+### Bootstrapping
+
+In order to discover peers in a P2P network, you must first discover some initial peers to connect to. This is know as Bootstrapping and is done by Dat whenever you load into a swarm. The default bootstrap IPs that Dat uses can be found in the [dat-swarm-defaults](https://github.com/datproject/dat-swarm-defaults/blob/master/index.js) module.

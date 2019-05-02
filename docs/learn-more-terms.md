@@ -46,9 +46,9 @@ A P2P software program searches for other connected computers on a P2P network t
 
 In Dat, peers only connect if they both have the same Dat link.
 
-### Secure Register
+### Store / Storage Provider
 
-A [register]( https://gds.blog.gov.uk/2015/09/01/registers-authoritative-lists-you-can-trust/) is an authoritative list of information you can trust.
+Distributed web content needs to have at least one peer in the network which has a copy of the content in order for new peers to be able to download it. Stores or storage providers let users send their Dat write key to their server and they will set up a peer that they guarantee will always be online. [Hashbase](https://hashbase.io/) is a popular storage provider, and you can host your own using [dat-store](https://www.npmjs.com/dat-store) or [Homebase](https://github.com/beakerbrowser/homebase/)
 
 ### Beaker
 

@@ -23,7 +23,7 @@ OK, now for the goods.
 
 ## Install
 
-Embed the following script [dat.min.js](https://bundle.run/dat-js@7) on the page:
+Embed the following script [dat.min.js](https://bundle.run/dat-js@8) on the page:
 ```html
 <script type="text/javascript" src="dat.min.js"></script>
 ```

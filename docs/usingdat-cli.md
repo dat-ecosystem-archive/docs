@@ -5,20 +5,10 @@ title: Command Line
 
 Share, download, and backup files with the command line! Automatically sync changes to datasets. Never worry about manually transferring files again.
 
-Mac/Linux      | Windows      | Version
--------------- | ------------ | ------------
-[![Travis][travis-badge]][travis-build] | [![Build status][appveyor-badge]][appveyor-build] | [![NPM version][npm-badge]][npm-package]
-
 Have questions or need some guidance?
-You can [chat with us](http://chat.datproject.org) in IRC on [#dat][irc-channel] or [Gitter][gitter-chat]!
+You can chat with us on [Gitter][gitter-chat]!
 
-### JS Library
-
-Add Dat to your `package.json`, `npm install dat --save`. Dat exports the [dat-node] API via `require('dat')`. Use it in your javascript applications! Dat Desktop and Dat command line both use dat-node to share and download dats.
-
-Full API documentation is available in the [dat-node] repository on Github.
-
-We have Dat installed, let's use it!
+## Getting Started
 
 Dat's unique design works wherever you store your data. You can create a new dat from any folder on your computer.
 
@@ -48,7 +38,7 @@ Use `dat clone` to download files from a remote computer sharing files with Dat.
 
 Try out `dat clone` with the link above to read more about the protocol!
 
-### Other Cool Commands
+### Other Useful Commands
 
 A few other highlights. Run `dat help` to see the full usage guide.
 
@@ -80,8 +70,6 @@ Version 4
 
 This will download our demo files to the `~/Downloads/dat-demo` folder. These files are being shared by a server over Dat (to ensure high availability) but you may connect to any number of users also hosting the content.
 
-You can also also view the files online: [datbase.org/778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639](https://datbase.org/778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639/). datbase.org can download files over Dat and display them on HTTP as long as someone is hosting it. The website temporarily caches data for any visited links (do not view your dat on datbase.org if you do not want us to cache your data).
-
 #### Sharing Demo
 
 Dat can share files from your computer to anywhere. If you have a friend going through this demo with you, try sharing to them! If not we'll see what we can do.
@@ -100,8 +88,6 @@ A Dat is a folder with some magic.
 This will create a new (empty) dat. Dat will print a link, share this link to give others access to view your files.
 
 Once we have our dat, run `dat share` to scan your files and sync them to the network. Share the link with your friend to instantly start downloading files.
-
-You can also try viewing your files online. Go to [datbase.org](https://datbase.org) and enter your link to preview on the top left. *(Some users, including me when writing this, may have trouble connecting to datbase.org initially. Don't be alarmed! It is something we are working on. Thanks.)*
 
 #### Bonus HTTP Demo
 
@@ -333,28 +319,6 @@ Dat('/data', function (err, dat) {
 ```
 
 **[Read more][dat-node] about the JS usage provided via `dat-node`.**
-
-## For Developers
-
-Please see [guidelines on contributing] before submitting an issue or PR.
-
-This command line library uses [dat-node] to create and manage the archives and networking.
-If you'd like to build your own Dat application that is compatible with this command line tool, we suggest using dat-node.
-
-### Installing from source
-
-Clone this repository and in a terminal inside of the folder you cloned run this command:
-
-```
-npm link
-```
-
-This should add a `dat` command line command to your PATH.
-Now you can run the `dat` command to try it out.
-
-The contribution guide also has more tips on our [development workflow].
-
-* `npm run test` to run tests
 
 
 [Dat Project]: https://datproject.org

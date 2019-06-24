@@ -11,13 +11,13 @@ This approach is similar to that used in Feross' [Web Torrent](http://webtorrent
 
 ## Connecting to non-browser peers
 
-dat-js primarily uses WebRTC, so it prioritizes connections to other browser peers that are also using WebRTC. All other Dat applications use non-WebRTC protocols ([see this FAQ for more info](getting-started-faq.md)). Non-browser clients can connect dats peer-to-peer via webrtc modules, such as [electron-webrtc](https://github.com/mappum/electron-webrtc), or use proxies via websockets, http, or other client-server protocols. 
+dat-js primarily uses WebRTC, so it prioritizes connections to other browser peers that are also using WebRTC. All other Dat applications use non-WebRTC protocols ([see this FAQ for more info](getting-started-faq.md)). Non-browser clients can connect dats peer-to-peer via webrtc modules, such as [electron-webrtc](https://github.com/mappum/electron-webrtc), or use proxies via websockets, http, or other client-server protocols.
 
 In order for the dat-js library to connect to clients that aren't in the browser, we recommend using [dat-gateway](https://github.com/garbados/dat-gateway/). Deploy your own gateway if you expect a lot of traffic to your application.
 
-A gateway works by having the client open a [websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) to the gateway, and have the gateway reach out to the rest of the dat network in order to fetch data from peers and send it down the websocket connection to dat-js. The gateway acts as a fallback and only gets used after dat-js has tried to connect to WebRTC peers first. This reduces gateway bandwidth constraints and keeps most of the traffic peer to peer. 
+A gateway works by having the client open a [websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) to the gateway, and have the gateway reach out to the rest of the dat network in order to fetch data from peers and send it down the websocket connection to dat-js. The gateway acts as a fallback and only gets used after dat-js has tried to connect to WebRTC peers first. This reduces gateway bandwidth constraints and keeps most of the traffic peer to peer.
 
-There is an example gateway deployed at [gateway.mauve.moe](https://gateway.mauve.moe/). 
+There is an example gateway deployed at [gateway.mauve.moe](https://gateway.mauve.moe/).
 
 OK, now for the goods.
 
@@ -31,10 +31,14 @@ Embed the following script [dat.min.js](https://bundle.run/dat-js@8) on the page
 You can also use [packd](https://bundle.run/) to have it generate the bundle on the fly:
 
 ```html
-<script type="text/javascript" src="https://bundle.run/dat-js@7"></script>
+<script type="text/javascript" src="https://bundle.run/dat-js@8"></script>
 ```
 
-This provides a `Dat` prototype on the `window` object.
+This provides a `datJS` prototype on the `window` object.
+
+```js
+var Dat = window.datJS 
+```
 
 ### Browserify
 
@@ -179,7 +183,7 @@ var fullArchive = dat.get(url, {sparse: false})
 <!--
 
 // TODO: Gonna leave this out for now and work on it last, there might still be changes for how signaling and peer discovery works.
- 
+
 ## Under the hood
 
 Let's look under the hood of `dat-js` to see how a simple lower-level implementation can be built to create a browser-based dat.
@@ -253,4 +257,3 @@ Come over to our community channels and ask a question. It's probably a good one
 
 [![#dat IRC channel on freenode](https://img.shields.io/badge/irc%20channel-%23dat%20on%20freenode-blue.svg)](http://webchat.freenode.net/?channels=dat)
 [![datproject/discussions](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/datproject/discussions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-

@@ -24,7 +24,7 @@ dat share <dir>
 
 Use `dat share` to create a dat and sync your files from your computer to other users. Dat scans your files inside `<dir>`, creating metadata in `<dir>/.dat`. Dat stores the public link, version history, and file information inside the dat folder.
 
-![share-gif]
+![animation demonstrating the "dat share" command](assets/cli-share.gif)
 
 ### Downloading Data
 
@@ -34,7 +34,7 @@ dat clone dat://<link> <download-dir>
 
 Use `dat clone` to download files from a remote computer sharing files with Dat. This will download the files from `dat://<link>` to your `<download-dir>`. The download exits after it completes but you can continue to update the files later after the clone is done. Use `dat pull` to update new files or `dat sync` to live sync changes.
 
-![clone-gif]
+![animation demonstrating the "dat clone" command](assets/cli-clone.gif)
 
 Try out `dat clone` with the link above to read more about the protocol!
 
@@ -327,8 +327,6 @@ Dat('/data', function (err, dat) {
 [Dat Desktop]: https://docs.datproject.org/install#desktop-application
 [Beaker Browser]: https://beakerbrowser.com
 [registry server]: https://github.com/datproject/datbase
-[share-gif]: https://raw.githubusercontent.com/datproject/docs/master/assets/cli-share.gif
-[clone-gif]: https://raw.githubusercontent.com/datproject/docs/master/assets/cli-clone.gif
 [Knight Foundation grant]: https://blog.datproject.org/2016/02/01/announcing-publicbits-org/
 [dat-node]: https://github.com/datproject/dat-node
 [dat-ignore]: https://github.com/joehand/dat-ignore

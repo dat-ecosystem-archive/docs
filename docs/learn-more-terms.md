@@ -48,7 +48,7 @@ In Dat, peers only connect if they both have the same Dat link.
 
 ### Store / Storage Provider
 
-Distributed web content needs to have at least one peer in the network which has a copy of the content in order for new peers to be able to download it. Stores or storage providers let users send their Dat write key to their server and they will set up a peer that they guarantee will always be online. [Hashbase](https://hashbase.io/) is a popular storage provider, and you can host your own using [dat-store](https://www.npmjs.com/dat-store) or [Homebase](https://github.com/beakerbrowser/homebase/)
+Distributed web content needs to have at least one peer in the network which has a copy of the content in order for new peers to be able to download it. Stores or storage providers let users send their Dat read key to their server and they will set up a peer that they guarantee will always be online. [Hashbase](https://hashbase.io/) is a popular storage provider, and you can host your own using [dat-store](https://www.npmjs.com/dat-store) or [Homebase](https://github.com/beakerbrowser/homebase/)
 
 ### Beaker
 

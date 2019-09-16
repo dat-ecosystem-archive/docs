@@ -24,7 +24,7 @@ These modules form the backbone of Dat software:
 
 * [hypercore](https://github.com/mafintosh/hypercore) - A secure, distributed append-only log.
 * [hyperdrive](https://github.com/mafintosh/hyperdrive) - A secure, real time distributed file system (built on hypercore).
-* [hyperdiscovery](https://github.com/karissa/hyperdiscovery) - Defaults for networking discovery and connection management.
+* [hyperdiscovery](https://github.com/datproject/hyperdiscovery) - Defaults for networking discovery and connection management.
 * [dat-node](https://github.com/datproject/dat-node) - High-level module for building Dat applications on the file system.
 * [dat-js](https://github.com/datproject/dat-js) - Using Dat in the browser.
 
@@ -32,9 +32,9 @@ View [more on Github](https://github.com/search?utf8=%E2%9C%93&q=topic%3Adat&typ
 
 ## Related modules
 
-These modules are community-driven and can be used to implement a variety of distributed web applications with Dat. 
+These modules are community-driven and can be used to implement a variety of distributed web applications with Dat.
 
 * [kappa-db](https://github.com/kappa-db) - Small core database for multiwriter kappa architectures.
-* [hypermerge](https://github.com/automerge/hypermerge#readme) - CRDT for merging multiple hypercore feeds. 
+* [hypermerge](https://github.com/automerge/hypermerge#readme) - CRDT for merging multiple hypercore feeds.
 * [mirror-folder](https://github.com/mafintosh/mirror-folder) - Mirror a folder to another folder, supports hyperdrive and live file watching.
 

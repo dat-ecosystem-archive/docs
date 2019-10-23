@@ -3,26 +3,33 @@ id: cli-intro
 title: Command Line
 ---
 
-Share, download, and backup files with the command line! Automatically sync changes to datasets. Never worry about manually transferring files again.
+Share, download, and backup files with the command line!
+Automatically sync changes to datasets.
+Never worry about manually transferring files again.
 
 Have questions or need some guidance?
 You can chat with us on [Gitter][gitter-chat]!
 
 ## Getting Started
 
-Dat's unique design works wherever you store your data. You can create a new dat from any folder on your computer.
+Dat's unique design works wherever you store your data.
+You can create a new dat from any folder on your computer.
 
-A dat is some files from your computer and a `.dat` folder. Each dat has a unique `dat://` link. With your dat link, other users can download your files and live sync any updates.
+A dat is some files from your computer and a `.dat` folder. Each dat has a unique `dat://` link.
+With your dat link, other users can download your files and live sync any updates.
 
 ### Sharing Data
 
-You can start sharing your files with a single command. Unlike `git`, you do not have to initialize a repository first, `dat share` will do that for you:
+You can start sharing your files with a single command.
+Unlike `git`, you do not have to initialize a repository first, `dat share` will do that for you:
 
 ```
 dat share <dir>
 ```
 
-Use `dat share` to create a dat and sync your files from your computer to other users. Dat scans your files inside `<dir>`, creating metadata in `<dir>/.dat`. Dat stores the public link, version history, and file information inside the dat folder.
+Use `dat share` to create a dat and sync your files from your computer to other users.
+Dat scans your files inside `<dir>`, creating metadata in `<dir>/.dat`.
+Dat stores the public link, version history, and file information inside the dat folder.
 
 ![animation demonstrating the "dat share" command](assets/cli-share.gif)
 
@@ -32,7 +39,10 @@ Use `dat share` to create a dat and sync your files from your computer to other 
 dat clone dat://<link> <download-dir>
 ```
 
-Use `dat clone` to download files from a remote computer sharing files with Dat. This will download the files from `dat://<link>` to your `<download-dir>`. The download exits after it completes but you can continue to update the files later after the clone is done. Use `dat pull` to update new files or `dat sync` to live sync changes.
+Use `dat clone` to download files from a remote computer sharing files with Dat.
+This will download the files from `dat://<link>` to your `<download-dir>`.
+The download exits after it completes but you can continue to update the files later after the clone is done.
+Use `dat pull` to update new files or `dat sync` to live sync changes.
 
 ![animation demonstrating the "dat clone" command](assets/cli-clone.gif)
 
@@ -52,9 +62,12 @@ To get started using Dat, you can try downloading a dat and then sharing a dat o
 
 #### Download Demo
 
-We made a demo folder just for this exercise. Inside the demo folder is a `dat.json` file and a gif. We shared these files via Dat and now you can download them with our dat key!
+We made a demo folder just for this exercise.
+Inside the demo folder is a `dat.json` file and a gif.
+We shared these files via Dat and now you can download them with our dat key!
 
-Similar to git, you can download somebody's dat by running `dat clone <link>`. You can also specify the directory:
+Similar to git, you can download somebody's dat by running `dat clone <link>`.
+You can also specify the directory:
 
 ```
 ❯ dat clone dat://778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639 ~/Downloads/dat-demo
@@ -68,15 +81,20 @@ dat sync complete.
 Version 4
 ```
 
-This will download our demo files to the `~/Downloads/dat-demo` folder. These files are being shared by a server over Dat (to ensure high availability) but you may connect to any number of users also hosting the content.
+This will download our demo files to the `~/Downloads/dat-demo` folder.
+These files are being shared by a server over Dat (to ensure high availability) but you may connect to any number of users also hosting the content.
 
 #### Sharing Demo
 
-Dat can share files from your computer to anywhere. If you have a friend going through this demo with you, try sharing to them! If not we'll see what we can do.
+Dat can share files from your computer to anywhere.
+If you have a friend going through this demo with you, try sharing to them!
+If not we'll see what we can do.
 
-Find a folder on your computer to share. Inside the folder can be anything, Dat can handle all sorts of files (Dat works with really big folders too!).
+Find a folder on your computer to share.
+Inside the folder can be anything, Dat can handle all sorts of files (Dat works with really big folders too!).
 
-First, you can create a new dat inside that folder. Using the `dat create` command also walks us through making a `dat.json` file:
+First, you can create a new dat inside that folder.
+Using the `dat create` command also walks us through making a `dat.json` file:
 
 ```
 ❯ dat create
@@ -85,13 +103,20 @@ You can turn any folder on your computer into a Dat.
 A Dat is a folder with some magic.
 ```
 
-This will create a new (empty) dat. Dat will print a link, share this link to give others access to view your files.
+This will create a new (empty) dat.
+Dat will print a link, share this link to give others access to view your files.
 
-Once we have our dat, run `dat share` to scan your files and sync them to the network. Share the link with your friend to instantly start downloading files.
+Once we have our dat, run `dat share` to scan your files and sync them to the network.
+Share the link with your friend to instantly start downloading files.
 
 #### Bonus HTTP Demo
 
-Dat makes it really easy to share live files on a HTTP server. This is a cool demo because we can also see how version history works! Serve dat files on HTTP with the `--http` option. For example, `dat sync --http`, serves your files to a HTTP website with live reloading and version history! This even works for dats you're downloading (add the `--sparse` option to only download files you select via HTTP). The default HTTP port is 8080.
+Dat makes it really easy to share live files on a HTTP server.
+This is a cool demo because we can also see how version history works!
+Serve dat files on HTTP with the `--http` option.
+For example, `dat sync --http`, serves your files to a HTTP website with live reloading and version history!
+This even works for dats you're downloading (add the `--sparse` option to only download files you select via HTTP).
+The default HTTP port is 8080.
 
 *Hint: Use `localhost:8080/?version=10` to view a specific version.*
 
@@ -102,7 +127,8 @@ Get started using Dat today with the `share` and `clone` commands or read below 
 The first time you run a command, a `.dat` folder is created to store the dat metadata.
 Once a dat is created, you can run all the commands inside that folder, similar to git.
 
-Dat keeps secret keys in the `~/.dat/secret_keys` folder. These are required to write to any dats you create.
+Dat keeps secret keys in the `~/.dat/secret_keys` folder.
+These are required to write to any dats you create.
 
 #### Creating a dat & dat.json
 
@@ -110,7 +136,8 @@ Dat keeps secret keys in the `~/.dat/secret_keys` folder. These are required to 
 dat create [<dir>]
 ```
 
-The create command prompts you to make a `dat.json` file and creates a new dat. Import the files with sync or share.
+The create command prompts you to make a `dat.json` file and creates a new dat.
+Import the files with sync or share.
 
 Optionally bypass Title and Description prompt:
 
@@ -156,18 +183,25 @@ Sync watches files for changes and imports updated files.
 
 #### Ignoring Files
 
-By default, Dat will ignore any files in a `.datignore` file, similar to git. Each file should be separated by a newline. Dat also ignores all hidden folders and files.
+By default, Dat will ignore any files in a `.datignore` file, similar to git.
+Each file should be separated by a newline.
+Dat also ignores all hidden folders and files.
 
-Dat uses [dat-ignore] to decide if a file should be ignored. Supports pattern wildcards (`/*.png`) and directory-wildcards (`/**/cache`).
+Dat uses [dat-ignore] to decide if a file should be ignored.
+Supports pattern wildcards (`/*.png`) and directory-wildcards (`/**/cache`).
 
 #### Selecting Files
 
-By default, Dat will download all files. If you want to only download a subset, you can create a `.datdownload` file which downloads only the files and folders specified. Each should be separated by a newline.
+By default, Dat will download all files.
+If you want to only download a subset, you can create a `.datdownload` file which downloads only the files and folders specified.
+Each should be separated by a newline.
 
 
 ### Downloading
 
-Start downloading by running the `clone` command. This creates a folder, downloads the content and metadata, and a `.dat` folder inside. Once you started the download, you can resume using `clone` or the other download commands.
+Start downloading by running the `clone` command.
+This creates a folder, downloads the content and metadata, and a `.dat` folder inside.
+Once you started the download, you can resume using `clone` or the other download commands.
 
 ```
 dat clone <link> [<dir>] [--temp]
@@ -178,7 +212,9 @@ This will create a folder with the key name if no folder is specified.
 
 #### Downloading via `dat.json` key
 
-You can use a `dat.json` file to clone also. This is useful when combining Dat and git, for example. To clone a dat you can specify the path to a folder containing a `dat.json`:
+You can use a `dat.json` file to clone also.
+This is useful when combining Dat and git, for example.
+To clone a dat you can specify the path to a folder containing a `dat.json`:
 
 ```
 git clone git@github.com:joehand/dat-clone-sparse-test.git
@@ -212,7 +248,9 @@ Download latest files and keep connection open to continue updating as remote so
 
 `dat keys` provides a few commands to help you move or backup your dats.
 
-Writing to a dat requires the secret key, stored in the `~/.dat` folder. You can export and import these keys between dats. First, clone your dat to the new location:
+Writing to a dat requires the secret key, stored in the `~/.dat` folder.
+You can export and import these keys between dats.
+First, clone your dat to the new location:
 
 * (original) `dat share`
 * (duplicate) `dat clone <link>`
@@ -319,7 +357,6 @@ Dat('/data', function (err, dat) {
 ```
 
 **[Read more][dat-node] about the JS usage provided via `dat-node`.**
-
 
 [Dat Project]: https://datproject.org
 [Code for Science & Society]: https://codeforscience.org

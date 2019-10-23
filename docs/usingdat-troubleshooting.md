@@ -3,7 +3,8 @@ id: troubleshooting
 title: Troubleshooting Dat
 ---
 
-We've provided some troubleshooting tips based on issues users have seen. Please [open an issue](https://github.com/datproject/dat/issues/new) or ask us in our [chat room](https://gitter.im/datproject/discussions) if you need help troubleshooting and it is not covered here.
+We've provided some troubleshooting tips based on issues users have seen.
+Please [open an issue](https://github.com/datproject/dat/issues/new) or ask us in our [chat room](https://gitter.im/datproject/discussions) if you need help troubleshooting and it is not covered here.
 
 ### Check Your Version
 
@@ -19,17 +20,23 @@ You should see the Dat semantic version printed, e.g. `13.1.2`.
 
 ## Networking Issues
 
-All Dat transfers happen directly between computers. Dat has various methods for connecting computers but because networking capabilities vary widely we may have issues connecting. Whenever you run a Dat there are several steps to share or download files with peers:
+All Dat transfers happen directly between computers.
+Dat has various methods for connecting computers but because networking capabilities vary widely we may have issues connecting.
+Whenever you run a Dat there are several steps to share or download files with peers:
 
 1. Discovering other sources
 2. Connecting to sources
 3. Sending & Receiving Data
 
-With successful use, Dat will show network counts after connection. If you never see a connection, your network may be restricting discovery or connection. Please try using the dat doctor (see below) between the two computers not connecting. This will help troubleshoot the networks.
+With successful use, Dat will show network counts after connection.
+If you never see a connection, your network may be restricting discovery or connection.
+Please try using the dat doctor (see below) between the two computers not connecting.
+This will help troubleshoot the networks.
 
 ### Dat Doctor
 
-We've included a tool to identify network issues with Dat, the Dat doctor. The Dat doctor will run two tests:
+We've included a tool to identify network issues with Dat, the Dat doctor.
+The Dat doctor will run two tests:
 
 1. Attempt to connect to a public server running Dat.
 2. Attempt a direct connection between two computers. You will need to run the command on both the computers you are trying to share data between.
@@ -51,7 +58,8 @@ Start the doctor by running:
 dat doctor
 ```
 
-For direct connection tests, the doctor will print out a command to run on the other computer, `dat doctor <64-character-string>`. The doctor will run through the key steps in the process of sharing data between computers to help identify the issue.
+For direct connection tests, the doctor will print out a command to run on the other computer, `dat doctor <64-character-string>`.
+The doctor will run through the key steps in the process of sharing data between computers to help identify the issue.
 
 ### Known Networking Issues
 
@@ -59,7 +67,8 @@ For direct connection tests, the doctor will print out a command to run on the o
 
 ## Installation Troubleshooting
 
-To use the Dat command line tool you will need to have [node and npm installed](https://docs.npmjs.com/getting-started/installing-node). Make sure those are installed correctly before installing Dat. Dat only supports Node versions 4 and above.
+To use the Dat command line tool you will need to have [node and npm installed](https://docs.npmjs.com/getting-started/installing-node).
+Make sure those are installed correctly before installing Dat. Dat only supports Node versions 4 and above.
 
 ```
 node -v
@@ -67,7 +76,8 @@ node -v
 
 #### Global Install
 
-The `-g` option installs Dat globally allowing you to run it as a command. Make sure you installed with that option.
+The `-g` option installs Dat globally allowing you to run it as a command.
+Make sure you installed with that option.
 
 * If you receive an `EACCES` error, read [this guide](https://docs.npmjs.com/getting-started/fixing-npm-permissions) on fixing npm permissions.
 * If you receive an `EACCES` error, you may also install dat with sudo: `sudo npm install -g dat`.
@@ -75,7 +85,8 @@ The `-g` option installs Dat globally allowing you to run it as a command. Make 
 
 ## Command Line Debugging
 
-If you are having trouble with a specific command, run with the debug environment variable set to `dat` (and optionally also `dat-node`). This will help us debug any issues:
+If you are having trouble with a specific command, run with the debug environment variable set to `dat` (and optionally also `dat-node`).
+This will help us debug any issues:
 
 ```
 DEBUG=dat,dat-node dat clone dat://<readKey> dir

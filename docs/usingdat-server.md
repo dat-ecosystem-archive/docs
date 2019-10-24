@@ -3,13 +3,17 @@ id: dat-server
 title: Dats on a Server
 ---
 
-Since Dat is a distributed (peer-to-peer) data sharing tool, a computer must be actively sharing a dat for it to be available. If you're sharing files over Dat, you might want to set up a dedicated server that re-hosts your dat. This means that it'll still be available even after you turn off your personal computer.
+Since Dat is a distributed (peer-to-peer) data sharing tool, a computer must be actively sharing a dat for it to be available.
+If you're sharing files over Dat, you might want to set up a dedicated server that re-hosts your dat.
+This means that it'll still be available even after you turn off your personal computer.
 
-Running Dat on a server can also be used for live backups. As long as you are connected to your server and syncing changes, your server can backup all of your content history - allowing you to view old content later.
+Running Dat on a server can also be used for live backups.
+As long as you are connected to your server and syncing changes, your server can backup all of your content history - allowing you to view old content later.
 
 ## Short instructions
 
-We have built a tool into the Dat CLI called `dat store` which enables you to set up a server to keep your Dats online. The tool also enables you to interact with servers that adhere to the [HTTP Pinning Service API](https://www.datprotocol.com/deps/0003-http-pinning-service-api/).
+We have built a tool into the Dat CLI called `dat store` which enables you to set up a server to keep your Dats online.
+The tool also enables you to interact with servers that adhere to the [HTTP Pinning Service API](https://www.datprotocol.com/deps/0003-http-pinning-service-api/).
 
 ```
 npm install -g dat dat-store
@@ -39,7 +43,8 @@ npm install -g dat dat-store
 
 ### Start A Dat Store
 
-Once the CLI is installed, you can run a Dat Store which will be used for to keep a list of Dats online. By default, it will run on http://localhost:3472
+Once the CLI is installed, you can run a Dat Store which will be used for to keep a list of Dats online.
+By default, it will run on http://localhost:3472
 
 ```
 dat store run-service
@@ -82,7 +87,9 @@ This is handled by the [os-service](https://www.npmjs.com/package/os-service) mo
 dat store install-service
 ```
 
-The service will be called `dat-store` and can be managed by your operating system as you would any other service. To start and stop the service, you'll need to look into the specific commands for your operating system. For example, on Linux with Systemd you can use `sudo systemctl stop dat-store` to stop the service and `sudo systemctl start dat-store` to start it up again.
+The service will be called `dat-store` and can be managed by your operating system as you would any other service.
+To start and stop the service, you'll need to look into the specific commands for your operating system.
+For example, on Linux with Systemd you can use `sudo systemctl stop dat-store` to stop the service and `sudo systemctl start dat-store` to start it up again.
 
 You can uninstall the service when you no longer need it.
 
@@ -132,7 +139,8 @@ dat store add hashbase dat://SOME_KEY_HERE
 
 ### Automatically Track A Folder
 
-The CLI supports a special case for local stores where you can pass it a folder and have it automatically watch for changes and update the Dat in addition to keeping the content online. This can be combined with a remote store to make sure any changes you do to a local folder get synced to the rest of the network and are kept online even if you're offline.
+The CLI supports a special case for local stores where you can pass it a folder and have it automatically watch for changes and update the Dat in addition to keeping the content online.
+This can be combined with a remote store to make sure any changes you do to a local folder get synced to the rest of the network and are kept online even if you're offline.
 
 ```
 # Set up the local store to run as a service

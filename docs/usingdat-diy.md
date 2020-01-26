@@ -9,14 +9,14 @@ Dat comes with a built in javascript API we use in Dat Desktop and dat command l
 
 Use Dat in your JS Application:
 
-1. `require('dat')`: use the [high-level Dat JS API](https://github.com/datproject/dat-node).
+1. `require('dat-sdk')`: use the [high-level Dat JS API](https://github.com/datproject/sdk).
 2. Build your own!
 
 This tutorial will cover the second option and get you familiar with the core Dat modules.
 
 ### The Dat Core Modules
 
-This tutorial will follow the steps for sharing and downloading files using Dat. In practice, we implement these in [dat-node](https://github.com/datproject/dat-node), a high-level module for using Dat that provides easy access to the core Dat modules.
+This tutorial will follow the steps for sharing and downloading files using Dat. In practice, we implement these in [dat-sdk](https://github.com/datproject/sdk), a high-level module for using Dat that provides easy access to the core Dat modules.
 
 For any Dat application, there are two essential modules you will start with:
 

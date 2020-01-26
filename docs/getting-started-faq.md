@@ -97,14 +97,14 @@ We are working on adding a local version history backup in the command line and 
 
 ### Is there a JavaScript or Node.js implementation?
 
-Find it on GitHub: [dat-node](http://github.com/datproject/dat-node) for Node and [dat-js](http://github.com/datproject/dat-js) for other applications.
+Find it on GitHub: [dat-sdk](https://github.com/datproject/sdk).
 
 ### Can multiple people write to one archive?
 
 Currently, Dat uses one keypair to verify that only one writer is allowed to add or update files in a Dat. This means that all peers connecting to the data are read-only right now. If the original creator of the dat loses the keypair, the data can no longer be updated.
 
 [HyperDB](https://github.com/mafintosh/hyperdb/) adds multiwriter support for Dat. It is under [active development](https://github.com/datproject/planning).
- 
+
 ## Dat vs ?
 
 Dat has a lot of overlap with other distributed web tools, data management tools, and distributed version control. Below are some of the most common questions.
@@ -133,11 +133,12 @@ Dat uses hyperdrive and a variety of other modules. Hyperdrive and Dat are compa
 
 ### What if I don't want to download all the data? Does dat have an index?
 
-Yes, you can tell Dat to only download the data you want using our Node.js API.  You can do this by using `sparse` mode in `hyperdrive` or `dat-node`, which make it only download content that the peer asks for. To do this, simply pass `{sparse: true}` when you create the dat (or hyperdrive):
+Yes, you can tell Dat to only download the data you want using our Node.js API.  You can do this by using `sparse` mode in `hyperdrive` or `dat-sdk`, which make it only download content that the peer asks for. To do this, simply pass `{sparse: true}` when you create the dat (or hyperdrive):
 
 ```js
-var Dat = require('dat-node')
-Dat(dir, {sparse: true}, function (dat) {
+const {DatArchive} = require('dat-sdk/auto')
+
+DatArchive.load(url).then((archive) => {
   console.log('got the dat!')
 })
 ```

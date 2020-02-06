@@ -18,7 +18,7 @@ const {DatArchive} = datSdk()
 const archive = DatArchive.load(`dat://dat.foundation`)
 
 // Read a file and parse it as JSON
-const datJSON = JSOn.parse(await archive.readFile('/dat.json'))
+const datJSON = JSON.parse(await archive.readFile('/dat.json'))
 
 console.log(datJSON)
 ```

@@ -138,7 +138,7 @@ If the original creator of the dat loses the keypair, the data can no longer be 
 
 [HyperDB](https://github.com/mafintosh/hyperdb/) adds multiwriter support for Dat.
 It is under [active development](https://github.com/datproject/planning).
- 
+
 ## Dat vs ?
 
 There are a lot of distributed web tools, data management tools, and distributed version control tools in development today.
@@ -184,13 +184,13 @@ Dat presents a user-friendly interface for scientists, researchers, and data ana
 
 ### What if I don't want to download all the data? Does dat have an index?
 
-Yes, you can tell Dat to only download the data you want using our Node.js API.
-Use `sparse` mode in `hyperdrive` or `dat-node`, which configure them to only download content that you later ask for.
-To do this, simply pass `{sparse: true}` when you create the dat or hyperdrive:
+Yes, you can tell Dat to only download the data you want using our Node.js API.  You can do this by using `sparse` mode in `hyperdrive` or `dat-sdk`, which make it only download content that the peer asks for.
+To do this, simply pass `{sparse: true}` when you create the dat (or hyperdrive):
 
 ```js
-var Dat = require('dat-node')
-Dat(dir, {sparse: true}, function (dat) {
+const {DatArchive} = require('dat-sdk/auto')
+
+DatArchive.load(url).then((archive) => {
   console.log('got the dat!')
 })
 ```

@@ -4,14 +4,14 @@ title: Installing Dat
 sidebar_label: Installation
 ---
 
-This page will show you how to install Dat for the command line, and use it in JavaScript applications.
-There are [many other applications](https://dat.land/apps) built on Dat, such as [Beaker Browser](https://beakerbrowser.com), which provide a graphical user interface.
+This page will guide how to install Dat for the command line or javascript applications.
+There are also [many other applications](https://dat.land/apps), such as [Beaker Browser](https://beakerbrowser.com), which provide a graphical user interface and much more on Dat.
 
-Dat can be used as a command line tool, a Node.js module, and a JavaScript library:
+Dat can be used as a command line tool, or as s JS library for Node.js and web browsers:
 
 * See below to install the `dat` command line tool.
-* Node.js - `npm install dat` and [read more](https://github.com/datproject/dat-node).
-* JavaScript - `npm install dat-js` and [read more](https://github.com/datproject/dat-js).
+* Node.js - `npm i dat-sdk` and [read more](https://github.com/datproject/sdk)
+* Web - `<script src="https://bundle.run/dat-sdk@1"></script>` and [read more](https://github.com/datproject/sdk)
 
 ## Installing Dat on the Command Line
 
@@ -48,4 +48,3 @@ If not, see the [installation troubleshooting](usingdat-troubleshooting.md#insta
 * **npm**: `npm` is installed with node. You can run `npm -v` to make sure it is installed.
 
 Once you have `npm` ready, install `dat` from npm with the `--global` option, like `npm install -g dat`.
-

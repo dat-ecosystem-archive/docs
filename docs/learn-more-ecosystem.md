@@ -27,9 +27,8 @@ These modules form the backbone of Dat software:
 
 * [hypercore](https://github.com/mafintosh/hypercore) - A secure, distributed append-only log.
 * [hyperdrive](https://github.com/mafintosh/hyperdrive) - A secure, real time distributed file system (built on hypercore).
-* [hyperdiscovery](https://github.com/datproject/hyperdiscovery) - Defaults for networking discovery and connection management.
-* [dat-node](https://github.com/datproject/dat-node) - High-level module for building Dat applications on the file system.
-* [dat-js](https://github.com/datproject/dat-js) - Using Dat in the browser.
+* [hyperdiscovery](https://github.com/karissa/hyperdiscovery) - Defaults for networking discovery and connection management.
+* [dat-sdk](https://github.com/datproject/sdk) - High-level module for building Dat applications in Node and the browser.
 
 View [more on Github](https://github.com/search?utf8=%E2%9C%93&q=topic%3Adat&type=Repositories).
 

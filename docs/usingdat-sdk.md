@@ -102,7 +102,33 @@ Then you should set up your HTML page to link to the bundle.
 <script src="bundle.js"></script>
 ```
 
-From here you can
+From here you can have all your JavaScript code loaded in your app.
+
+### Using Webpack to build
+
+A lot of modern web apps use [Webpack](https://webpack.js.org/) for bundling their JavaScript code.
+
+Here's an example `webpack.config.js` file to get you started with building an app using the SDK.
+
+```js
+const path = require('path')
+
+module.exports = {
+  entry: './index.js',
+  target: 'web',
+  resolve: {
+    alias: {
+      fs: 'graceful-fs'
+    }
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  }
+}
+```
+
+This will load your code from `index.js` and output your bundle to `./dist/bundle.js`
 
 ### Using script tags to load the SDK
 

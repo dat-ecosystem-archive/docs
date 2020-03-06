@@ -130,15 +130,6 @@ We'll also further develop the interfaces for using and checking out older versi
 
 Yes! On GitHub, use the Dat [SDK](https://github.com/datproject/sdk).
 
-### Can multiple people write to one archive?
-
-Currently, Dat uses one keypair to verify that only one writer is allowed to add or update files in a Dat.
-This means that all peers connecting to the data are read-only right now.
-If the original creator of the dat loses the keypair, the data can no longer be updated.
-
-[HyperDB](https://github.com/mafintosh/hyperdb/) adds multiwriter support for Dat.
-It is under [active development](https://github.com/datproject/planning).
-
 ## Dat vs ?
 
 There are a lot of distributed web tools, data management tools, and distributed version control tools in development today.

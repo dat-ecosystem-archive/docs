@@ -5,7 +5,7 @@ sidebar_label: Installation
 ---
 
 This page will guide how to install Dat for the command line or javascript applications.
-There are also [many other applications](https://dat.land/apps), such as [Beaker Browser](https://beakerbrowser.com), which provide a graphical user interface and much more on Dat.
+There is also [Dat Desktop](https://github.com/datproject/dat-desktop) and [Beaker Browser](https://beakerbrowser.com), which provide a graphical user interface and much more.
 
 Dat can be used as a command line tool, or as s JS library for Node.js and web browsers:
 

@@ -70,15 +70,18 @@ Similar to git, you can download somebody's dat by running `dat clone <link>`.
 You can also specify the directory:
 
 ```
-❯ dat clone dat://778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639 ~/Downloads/dat-demo
-dat v13.5.0
-Created new dat in /Users/joe/Downloads/dat-demo/.dat
-Cloning: 2 files (1.4 MB)
+❯ dat clone dat://dat.foundation ~/Downloads/dat-demo
+dat v13.13.1
+Created new dat in /Users/Jestre/Downloads/dat-demo/.dat
+Cloning: 169 files (2.4 MB)
 
-2 connections | Download 614 KB/s Upload 0 B/s
+3 connections | Download 509 KB/s Upload 0 B/s
 
 dat sync complete.
-Version 4
+Version 1302
+
+
+Exiting the Dat program...
 ```
 
 This will download our demo files to the `~/Downloads/dat-demo` folder.

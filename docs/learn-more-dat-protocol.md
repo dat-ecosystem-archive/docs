@@ -1,15 +1,14 @@
 ---
 id: dat-protocol
-title: More About the Dat Protocol
-sidebar_label: The dat:// Protocol
+title: More About the Hypercore Protocol
+sidebar_label: The Hypercore Protocol
 ---
 
-Dat is a protocol for sharing data between computers.
-By making sure changes in data are transparent, everyone receives only the data they want, and connecting computers directly (rather than using a cloud server), Dat powers communities building next-generation Web.
+Hypercore Protocol is a protocol for sharing data between computers.
 
-The *Dat Project* helps shepherd community efforts surrounding the Dat protocol.
-Find more information about the specifications, Dat Protocol working group, and Dat governance:
+The *Dat Project* helps shepherd community efforts surrounding the Hyperocre Protocol.
+Find more information about the specifications, Hypercore Protocol working group, and Dat governance:
 
-* [Dat Protocol Specifications](https://www.datprotocol.com/)
-* [How Dat Works](https://datprotocol.github.io/how-dat-works/)
-* [Dat Governance](https://github.com/datproject/governance)
+* [Hypercore Protocol Specifications](https://www.hypercore-protocol.org/)
+* [Governance](https://github.com/datproject/governance)
+* [How Dat Works](https://datprotocol.github.io/how-dat-works/) (outdated)

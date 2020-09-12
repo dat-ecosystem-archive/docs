@@ -6,7 +6,7 @@ sidebar_label: The Hypercore Protocol
 
 Hypercore Protocol is a protocol for sharing data between computers.
 
-The *Dat Project* helps shepherd community efforts surrounding the Hyperocre Protocol.
+The *Dat Project* helps shepherd community efforts surrounding the Hypercore Protocol.
 Find more information about the specifications, Hypercore Protocol working group, and Dat governance:
 
 * [Hypercore Protocol Specifications](https://www.hypercore-protocol.org/)

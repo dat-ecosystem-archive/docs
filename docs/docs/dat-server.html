@@ -50,42 +50,42 @@
                      <section class="navWrapper wrapper">
                         <div class="navBreadcrumb wrapper">
                            <div class="navToggle" id="navToggler"><i></i></div>
-                           <h2><i>›</i><span>Using Dat</span></h2>
+                           <h2><i>›</i><span>Cookbook</span></h2>
                            <div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div>
                         </div>
                         <div class="navGroups">
                            <div class="navGroup">
                               <h3 class="navGroupCategoryTitle">Getting Started</h3>
                               <ul class="">
-                                 <li class="navListItem"><a class="navItem" href="/docs/intro">Intro to Dat</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/install">Installation</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/faq">Dat FAQ</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/intro">Intro to Dat</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/install">Installation</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/faq">Dat FAQ</a></li>
                               </ul>
                            </div>
                            <div class="navGroup">
                               <h3 class="navGroupCategoryTitle">Learning More</h3>
                               <ul class="">
-                                 <li class="navListItem"><a class="navItem" href="/docs/dat-protocol">The Hypercore Protocol</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/dat-ecosystem">Open Source Ecosystem</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/terms">Dat Terminology</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/concepts">Key Dat Concepts</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/security-faq">Understanding Dat Privacy</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/dat-protocol">The Hypercore Protocol</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/dat-ecosystem">Open Source Ecosystem</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/terms">Dat Terminology</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/concepts">Key Dat Concepts</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/security-faq">Understanding Dat Privacy</a></li>
                               </ul>
                            </div>
                            <div class="navGroup">
                               <h3 class="navGroupCategoryTitle">Using Dat</h3>
                               <ul class="">
-                                 <li class="navListItem"><a class="navItem" href="/docs/cli-intro">Command Line</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/cli-more">Sharing files over HTTP</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/dat-sdk">Using the Dat SDK</a></li>
-                                 <li class="navListItem navListItemActive"><a class="navItem" href="/docs/dat-server">Dats on a Server</a></li>
-                                 <li class="navListItem"><a class="navItem" href="/docs/troubleshooting">Troubleshooting Dat</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/cli-intro">Command Line</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/cli-more">Sharing files over HTTP</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/dat-sdk">Using the Dat SDK</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/dat-server">Dats on a Server</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/troubleshooting">Troubleshooting Dat</a></li>
                               </ul>
                            </div>
                            <div class="navGroup">
                               <h3 class="navGroupCategoryTitle">Cookbook</h3>
                               <ul class="">
-                                 <li class="navListItem"><a class="navItem" href="/docs/kappa">A Simple Chat Application</a></li>
+                                 <li class="navListItem navListItemActive"><a class="navItem" href="/docs/docs/kappa">A Simple Chat Application</a></li>
                               </ul>
                            </div>
                         </div>
@@ -148,7 +148,7 @@
                <div class="wrapper">
                   <div class="post">
                      <header class="postHeader">
-                        <a class="edit-page-link button" href="https://github.com/datproject/docs/edit/master/docs/usingdat-server.md" target="_blank" rel="noreferrer noopener">Edit</a>
+                        <!-- <a class="edit-page-link button" href="https://github.com/datproject/docs/edit/master/docs/usingdat-server.md" target="_blank" rel="noreferrer noopener">Edit</a> -->
                         <h1 class="postHeaderTitle">Dats on a Server</h1>
                      </header>
                      <article>
@@ -171,7 +171,7 @@
                                  Short instructions
                               </h2>
                               <p>We have built a tool into the Dat CLI called <code>dat store</code> which enables you to set up a server to keep your Dats online.
-                                 The tool also enables you to interact with servers that adhere to the <a href="https://www.datprotocol.com/deps/0003-http-pinning-service-api/">HTTP Pinning Service API</a>.
+                                 The tool also enables you to interact with servers that adhere to the <a href="https://dat-ecosystem.github.io/datprotocol.com/deps/0003-http-pinning-service-api/">HTTP Pinning Service API</a>.
                               </p>
                               <pre><code class="hljs">npm <span class="hljs-keyword">install</span> -g dat dat-<span class="hljs-keyword">store</span>
 dat <span class="hljs-keyword">store</span> <span class="hljs-keyword">install</span>-service
@@ -341,7 +341,7 @@ dat add hashbase <span class="hljs-string">./my-website</span>
                      </article>
                   </div>
                   <div class="docLastUpdate"><em>Last updated on 2019-10-24 by Kevin Faaborg</em></div>
-                  <div class="docs-prevnext"><a class="docs-prev button" href="/docs/dat-sdk"><span class="arrow-prev">← </span><span>Using the Dat SDK</span></a><a class="docs-next button" href="/docs/troubleshooting"><span>Troubleshooting Dat</span><span class="arrow-next"> →</span></a></div>
+                  <div class="docs-prevnext"><a class="docs-prev button" href="/docs/docs/dat-sdk"><span class="arrow-prev">← </span><span>Using the Dat SDK</span></a><a class="docs-next button" href="/docs/troubleshooting"><span>Troubleshooting Dat</span><span class="arrow-next"> →</span></a></div>
                </div>
             </div>
             <nav class="onPageNav">

@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Building with Dat · Dat Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;In this guide, we will show how to develop applications with the Dat ecosystem.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Building with Dat · Dat Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://docs.datproject.org/index.html"/><meta property="og:description" content="&lt;p&gt;In this guide, we will show how to develop applications with the Dat ecosystem.&lt;/p&gt;
+"/><meta property="og:image" content="https://docs.datproject.org/img/dat-logo-small.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://docs.datproject.org/img/dat-logo-small.png"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/dat-logo-small.png" alt="Dat Docs"/><h2 class="headerTitleWithLogo">Dat Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/docs/intro" target="_self">Docs</a></li><li class=""><a href="/docs/install" target="_self">Install</a></li><li class=""><a href="/help" target="_self">Help</a></li><li class=""><a href="https://blog.datproject.org" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/datproject/docs/edit/master/docs/usingdat-diy.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 class="postHeaderTitle">Building with Dat</h1></header><article><div><span><p>In this guide, we will show how to develop applications with the Dat ecosystem.
+The Dat ecosystem is very modular making it easy to develop custom applications using Dat.</p>
+<p>Dat comes with a built in javascript API we use in Dat Desktop and dat command line.
+For custom applications, or more control, you can also use the core Dat modules separately.</p>
+<p>Use Dat in your JS Application:</p>
+<ol>
+<li><code>require('dat-sdk')</code>: use the <a href="https://github.com/datproject/sdk">high-level Dat JS API</a>.</li>
+<li>Build your own!</li>
+</ol>
+<p>This tutorial will cover the second option and get you familiar with the core Dat modules.</p>
+<h3><a class="anchor" aria-hidden="true" id="the-dat-core-modules"></a><a href="#the-dat-core-modules" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The Dat Core Modules</h3>
+<p>This tutorial will follow the steps for sharing and downloading files using Dat.
+In practice, we implement these in <a href="https://github.com/datproject/sdk">dat-sdk</a>, a high-level module for using Dat that provides easy access to the core Dat modules.</p>
+<p>For any Dat application, there are two essential modules you will start with:</p>
+<ol>
+<li><a href="https://npmjs.org/hyperdrive">hyperdrive</a> for file synchronization and versioning</li>
+<li><a href="https://npmjs.org/hyperdiscovery">hyperdiscovery</a> helps discover and connect to peers over local networks and the internet</li>
+</ol>
+<p>The <a href="https://npmjs.org/dat">Dat CLI</a> module itself combines these modules and wraps them in a command-line API.
+We also use the <a href="https://github.com/datproject/dat-storage">dat-storage</a> module to handle file and key storage.
+These modules can be swapped out for a similarly compatible module, such as switching storage for <a href="https://github.com/mafintosh/random-access-memory">random-access-memory</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="getting-started"></a><a href="#getting-started" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Getting Started</h2>
+<p>You will need node and npm installed to build with Dat.
+<a href="https://github.com/datproject/dat/blob/master/CONTRIBUTING.md#development-workflow">Read more</a> about our development work flow to learn how we manage our module dependencies during development.</p>
+<h2><a class="anchor" aria-hidden="true" id="download-a-file"></a><a href="#download-a-file" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Download a File</h2>
+<p>Our first module will download files from a Dat read key entered by the user.</p>
+<pre><code class="hljs css language-bash">mkdir module-1 &amp;&amp; <span class="hljs-built_in">cd</span> module-1
+npm init
+npm install --save hyperdrive random-access-memory hyperdiscovery
+touch index.js
+</code></pre>
+<p>For this example, we will use random-access-memory for our database (keeping the metadata in memory rather than on the file system).
+In your <code>index.js</code> file, require the main modules and set them up:</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">var</span> ram = <span class="hljs-built_in">require</span>(<span class="hljs-string">'random-access-memory'</span>)
+<span class="hljs-keyword">var</span> hyperdrive = <span class="hljs-built_in">require</span>(<span class="hljs-string">'hyperdrive'</span>)
+<span class="hljs-keyword">var</span> discovery = <span class="hljs-built_in">require</span>(<span class="hljs-string">'hyperdiscovery'</span>)
+
+<span class="hljs-keyword">var</span> readKey = process.argv[<span class="hljs-number">2</span>] <span class="hljs-comment">// user inputs the dat read key</span>
+<span class="hljs-keyword">var</span> key =  readKey.replace(<span class="hljs-string">'dat://'</span>, <span class="hljs-string">''</span>) <span class="hljs-comment">// extract the key</span>
+
+<span class="hljs-keyword">var</span> archive = hyperdrive(ram, key)
+archive.ready(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  discovery(archive)
+})
+</code></pre>
+<p>Notice, the user will input the read key for the second argument.
+The easiest way to get a file from a hyperdrive archive is to make a read stream.
+<code>archive.readFile</code> accepts the index number of filename for the first argument.
+To display the file, we can create a file stream and pipe it to <code>process.stdout</code>.</p>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// Make sure your archive has a dat.json file!</span>
+<span class="hljs-keyword">var</span> stream = archive.readFile(<span class="hljs-string">'dat.json'</span>, <span class="hljs-string">'utf-8'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, data</span>) </span>{
+  <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err
+  <span class="hljs-built_in">console</span>.log(data)
+})
+</code></pre>
+<p>Now, you can run the module!
+To download the <code>dat.json</code> file from an archive:</p>
+<pre><code class="hljs"><span class="hljs-keyword">node</span> <span class="hljs-title">index</span>.js dat://<span class="hljs-tag">&lt;readKey&gt;</span>
+</code></pre>
+<p>You should see the <code>dat.json</code> file.</p>
+<h4><a class="anchor" aria-hidden="true" id="bonus-display-any-file-in-the-dat"></a><a href="#bonus-display-any-file-in-the-dat" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Bonus: Display any file in the Dat</h4>
+<p>With a few more lines of code, the user can enter a file to display from the Dat.</p>
+<p>Challenge: create a module that will allow the user to input a Dat read key and a filename: <code>node bonus.js &lt;dat-readKey&gt; &lt;filename&gt;</code>.
+The module will print out that file from the readKey, as we did above:</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">var</span> stream = archive.readFile(fileName)
+</code></pre>
+<p>Once you are finished, see if you can view this file by running:</p>
+<pre><code class="hljs css language-bash">node bonus.js 395e3467bb5b2fa083ee8a4a17a706c5574b740b5e1be6efd65754d4ab7328c2 readme.md
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="download-all-files-to-computer"></a><a href="#download-all-files-to-computer" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Download all files to computer</h2>
+<p>This module will build on the last module.
+Instead of displaying a single file, we will download all of the files from a Dat into a local directory.</p>
+<p>To download the files to the file system, we are going to use <a href="https://github.com/mafintosh/mirror-folder">mirror-folder</a>.
+<a href="/using-fs">Read more</a> about how mirror-folder works with hyperdrive.</p>
+<p>In practice, you should use <a href="https://github.com/datproject/dat-storage">dat-storage</a> to do this as it'll be more efficient and keep the metadata on disk.</p>
+<p>Setup will be the same as before (make sure you install <code>mirror-folder</code>).
+The first part of the module will look the same.</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">var</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+<span class="hljs-keyword">var</span> ram = <span class="hljs-built_in">require</span>(<span class="hljs-string">'random-access-memory'</span>)
+<span class="hljs-keyword">var</span> hyperdrive = <span class="hljs-built_in">require</span>(<span class="hljs-string">'hyperdrive'</span>)
+<span class="hljs-keyword">var</span> discovery = <span class="hljs-built_in">require</span>(<span class="hljs-string">'hyperdiscovery'</span>)
+<span class="hljs-keyword">var</span> mirror = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mirror-folder'</span>)
+<span class="hljs-keyword">var</span> mkdirp = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mkdirp'</span>)
+
+<span class="hljs-keyword">var</span> readKey = process.argv[<span class="hljs-number">2</span>] <span class="hljs-comment">// user inputs the dat readKey</span>
+<span class="hljs-keyword">var</span> key = readKey.replace(<span class="hljs-string">'dat://'</span>, <span class="hljs-string">''</span>) <span class="hljs-comment">// extract the key</span>
+<span class="hljs-keyword">var</span> dir = path.join(process.cwd(), <span class="hljs-string">'dat-download'</span>) <span class="hljs-comment">// make a download folder</span>
+mkdirp.sync(dir)
+
+<span class="hljs-keyword">var</span> archive = hyperdrive(ram, key)
+archive.ready(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  discovery(archive)
+
+  <span class="hljs-keyword">var</span> progress = mirror({<span class="hljs-attr">name</span>: <span class="hljs-string">'/'</span>, <span class="hljs-attr">fs</span>: archive}, dir, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'done downloading!'</span>)
+  })
+  progress.on(<span class="hljs-string">'put'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">src</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(src.name, <span class="hljs-string">'downloaded'</span>)
+  })
+})
+</code></pre>
+<p>You should be able to run the module and see all our docs files in the <code>download</code> folder:</p>
+<pre><code class="hljs css language-bash">node index.js dat://&lt;readKey&gt;
+</code></pre>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 2020-02-06 by RangerMauve</em></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#getting-started">Getting Started</a></li><li><a href="#download-a-file">Download a File</a></li><li><a href="#download-all-files-to-computer">Download all files to computer</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/dat-logo-small.png" alt="Dat Docs" width="66"/></a><div><h5>Docs</h5><a href="/docs/intro">Getting Started</a><a href="https://datprotocol.com">Dat Protocol</a><a href="https://datprotocol.github.io/how-dat-works/">How Dat Works</a></div><div><h5>Community</h5><a href="https://dat.land">User Showcase</a><a href="https://gitter.im/datproject/discussions">Project Chat</a><a href="https://twitter.com/dat_project" target="_blank" rel="noreferrer noopener">@dat_project</a></div><div><h5>More</h5><a href="https://blog.datproject.org">Blog</a><a href="https://github.com/datproject">GitHub</a><a class="github-button" href="https://github.com/datproject/dat" data-icon="octicon-star" data-count-href="/datporoject/dat/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://datproject.org" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/dat-logo.png" alt="Dat Project"/></a><section class="copyright">Copyright © 2021 Dat Project Contributors</section></footer></div></body></html>

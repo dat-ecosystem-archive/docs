@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Sharing files over HTTP · Dat Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;The Dat command line comes with a built in HTTP server.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Sharing files over HTTP · Dat Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://docs.datproject.org/index.html"/><meta property="og:description" content="&lt;p&gt;The Dat command line comes with a built in HTTP server.&lt;/p&gt;
+"/><meta property="og:image" content="https://docs.datproject.org/img/dat-logo-small.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://docs.datproject.org/img/dat-logo-small.png"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/dat-logo-small.png" alt="Dat Docs"/><h2 class="headerTitleWithLogo">Dat Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/intro" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/docs/install" target="_self">Install</a></li><li class=""><a href="/help" target="_self">Help</a></li><li class=""><a href="https://blog.datproject.org" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Using Dat</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/intro">Intro to Dat</a></li><li class="navListItem"><a class="navItem" href="/docs/install">Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/faq">Dat FAQ</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Learning More</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/dat-protocol">The Hypercore Protocol</a></li><li class="navListItem"><a class="navItem" href="/docs/dat-ecosystem">Open Source Ecosystem</a></li><li class="navListItem"><a class="navItem" href="/docs/terms">Dat Terminology</a></li><li class="navListItem"><a class="navItem" href="/docs/concepts">Key Dat Concepts</a></li><li class="navListItem"><a class="navItem" href="/docs/security-faq">Understanding Dat Privacy</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Using Dat</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/cli-intro">Command Line</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/cli-more">Sharing files over HTTP</a></li><li class="navListItem"><a class="navItem" href="/docs/dat-sdk">Using the Dat SDK</a></li><li class="navListItem"><a class="navItem" href="/docs/dat-server">Dats on a Server</a></li><li class="navListItem"><a class="navItem" href="/docs/troubleshooting">Troubleshooting Dat</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Cookbook</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/kappa">A Simple Chat Application</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/datproject/docs/edit/master/docs/usingdat-cli2.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 class="postHeaderTitle">Sharing files over HTTP</h1></header><article><div><span><p>The Dat command line comes with a built in HTTP server.
+This is a cool demo because we can also see how version history works!
+The <code>--http</code> option works for files you are sharing <em>or</em> downloading.</p>
+<p>(If you don't have dat command line installed, run <code>npm install -g dat</code>, or <a href="/docs/install">see more info</a>.)</p>
+<h2><a class="anchor" aria-hidden="true" id="serve-over-http"></a><a href="#serve-over-http" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Serve over HTTP</h2>
+<p>Serve dat files on http by adding the <code>--http</code> option. For example, you can sync an existing dat:</p>
+<pre><code class="hljs">❯ dat sync --http
+dat:<span class="hljs-comment">//778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639</span>
+Sharing dat: <span class="hljs-number">2</span> files (<span class="hljs-number">1.4</span> MB)
+Serving files over http at http:<span class="hljs-comment">//localhost:8080</span>
+
+<span class="hljs-number">2</span> connections | Download <span class="hljs-number">0</span> B/s Upload <span class="hljs-number">0</span> B/s
+</code></pre>
+<p>Now visit <code>http://localhost:8080</code> to see the files in your browser!
+The default http port is 8080. You should see a directory listing:</p>
+<p><img src="/assets/cli-http.png" alt="Dat HTTP viewer"/></p>
+<p>If your dat has an <code>index.html</code> page, that will be shown instead.</p>
+<p>You can combine Dat's http support with our server tools to create a live updating website or place to share files publicly.</p>
+<h2><a class="anchor" aria-hidden="true" id="built-in-versioning"></a><a href="#built-in-versioning" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Built-in Versioning</h2>
+<p>As you may know, Dat automatically versions all files.
+The HTTP display is an easy way to view version history:</p>
+<p><strong>Use <code>localhost:8080/?version=2</code> to view a specific version.</strong></p>
+<h2><a class="anchor" aria-hidden="true" id="live-reloading"></a><a href="#live-reloading" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Live reloading</h2>
+<p>The Dat http viewer also comes with live reloading.
+If it detects a new version it will automatically reload with the new directory listing or page (as long as you aren't viewing a specific version in the url).</p>
+<h2><a class="anchor" aria-hidden="true" id="sparse-downloading"></a><a href="#sparse-downloading" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Sparse Downloading</h2>
+<p>Dat supports <em>sparse</em>, or partial downloads, of datasets.
+This is really useful if you only want a single file from a large dat.
+Unfortunately, we haven't quite built a user interface for this into our applications.
+So you can hack around it!</p>
+<p>This will allow you to download a single file from a larger dat, without downloading metadata or any other files.</p>
+<p>First, start downloading our demo dat, make sure you include both the flags (<code>--http</code>, <code>--sparse</code>).</p>
+<pre><code class="hljs">❯ dat dat:<span class="hljs-comment">//778f8d955175c92e4ced5e4f5563f69bfec0c86cc6f670352c457943666fe639 ./demo --http --sparse</span>
+Cloning: <span class="hljs-number">2</span> files (<span class="hljs-number">1.4</span> MB)
+Serving files over http at http:<span class="hljs-comment">//localhost:8080</span>
+
+<span class="hljs-number">3</span> connections | Download <span class="hljs-number">0</span> B/s Upload <span class="hljs-number">0</span> B/s
+</code></pre>
+<p>The <code>--sparse</code> option tells Dat to only download files you specifically request.
+See how it works:</p>
+<ol>
+<li>Check out your <code>./demo</code> folder, it should be empty.</li>
+<li>Open the Dat in your browser.</li>
+<li>Click on a file to download.</li>
+<li>It should be in your folder now!</li>
+</ol>
+<p>Pretty cool! You can use this hack to download only specific files or even older versions of files (if they've been saved somewhere).</p>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 2019-10-24 by Kevin Faaborg</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/cli-intro"><span class="arrow-prev">← </span><span>Command Line</span></a><a class="docs-next button" href="/docs/dat-sdk"><span>Using the Dat SDK</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#serve-over-http">Serve over HTTP</a></li><li><a href="#built-in-versioning">Built-in Versioning</a></li><li><a href="#live-reloading">Live reloading</a></li><li><a href="#sparse-downloading">Sparse Downloading</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/dat-logo-small.png" alt="Dat Docs" width="66"/></a><div><h5>Docs</h5><a href="/docs/intro">Getting Started</a><a href="https://datprotocol.com">Dat Protocol</a><a href="https://datprotocol.github.io/how-dat-works/">How Dat Works</a></div><div><h5>Community</h5><a href="https://dat.land">User Showcase</a><a href="https://gitter.im/datproject/discussions">Project Chat</a><a href="https://twitter.com/dat_project" target="_blank" rel="noreferrer noopener">@dat_project</a></div><div><h5>More</h5><a href="https://blog.datproject.org">Blog</a><a href="https://github.com/datproject">GitHub</a><a class="github-button" href="https://github.com/datproject/dat" data-icon="octicon-star" data-count-href="/datporoject/dat/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://datproject.org" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/dat-logo.png" alt="Dat Project"/></a><section class="copyright">Copyright © 2021 Dat Project Contributors</section></footer></div></body></html>

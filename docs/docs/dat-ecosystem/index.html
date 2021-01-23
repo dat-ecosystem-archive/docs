@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Open Source Ecosystem · Dat Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;We have built and contributed to a variety of modules that support our work on Dat as well as the larger data and code ecosystem.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Open Source Ecosystem · Dat Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://docs.datproject.org/index.html"/><meta property="og:description" content="&lt;p&gt;We have built and contributed to a variety of modules that support our work on Dat as well as the larger data and code ecosystem.&lt;/p&gt;
+"/><meta property="og:image" content="https://docs.datproject.org/img/dat-logo-small.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://docs.datproject.org/img/dat-logo-small.png"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/dat-logo-small.png" alt="Dat Docs"/><h2 class="headerTitleWithLogo">Dat Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/intro" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/docs/install" target="_self">Install</a></li><li class=""><a href="/help" target="_self">Help</a></li><li class=""><a href="https://blog.datproject.org" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Learning More</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/intro">Intro to Dat</a></li><li class="navListItem"><a class="navItem" href="/docs/install">Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/faq">Dat FAQ</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Learning More</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/dat-protocol">The Hypercore Protocol</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/dat-ecosystem">Open Source Ecosystem</a></li><li class="navListItem"><a class="navItem" href="/docs/terms">Dat Terminology</a></li><li class="navListItem"><a class="navItem" href="/docs/concepts">Key Dat Concepts</a></li><li class="navListItem"><a class="navItem" href="/docs/security-faq">Understanding Dat Privacy</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Using Dat</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/cli-intro">Command Line</a></li><li class="navListItem"><a class="navItem" href="/docs/cli-more">Sharing files over HTTP</a></li><li class="navListItem"><a class="navItem" href="/docs/dat-sdk">Using the Dat SDK</a></li><li class="navListItem"><a class="navItem" href="/docs/dat-server">Dats on a Server</a></li><li class="navListItem"><a class="navItem" href="/docs/troubleshooting">Troubleshooting Dat</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Cookbook</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/kappa">A Simple Chat Application</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/datproject/docs/edit/master/docs/learn-more-ecosystem.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 class="postHeaderTitle">Open Source Ecosystem</h1></header><article><div><span><p>We have built and contributed to a variety of modules that support our work on Dat as well as the larger data and code ecosystem.
+Feel free to go deeper and see the implementations we are using in the <a href="https://github.com/datproject/dat">Dat command-line tool</a> and the <a href="https://github.com/datproject/dat-desktop">Dat Desktop</a>.</p>
+<p>Dat embraces the Unix philosophy: a modular design with composable parts.
+All of the pieces can be replaced with alternative implementations as long as they implement the abstract API.
+We believe this creates better end-user software, but more importantly, will create more sustainable and impactful open source tools.</p>
+<h2><a class="anchor" aria-hidden="true" id="user-software"></a><a href="#user-software" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>User Software</h2>
+<ul>
+<li><a href="https://github.com/datproject/dat">dat</a> - The Dat command line interface.</li>
+<li><a href="https://github.com/datproject/dat-desktop">Dat Desktop</a> - Desktop application similar to a torrent client.</li>
+<li><a href="https://beakerbrowser.com">Beaker</a> - A web browser for exploring and building Dat websites.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="specifications"></a><a href="#specifications" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Specifications</h2>
+<ul>
+<li><a href="https://datprotocol.github.io/how-dat-works/">How Dat Works</a> - Visual explanation of the Dat protocol.</li>
+<li><a href="https://github.com/datprotocol/DEPs">Dat Enhancement Proposals</a> - Contains all specs for the Dat protocol, including drafts.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="core-modules"></a><a href="#core-modules" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Core Modules</h2>
+<p>These modules form the backbone of Dat software:</p>
+<ul>
+<li><a href="https://github.com/mafintosh/hypercore">hypercore</a> - A secure, distributed append-only log.</li>
+<li><a href="https://github.com/mafintosh/hyperdrive">hyperdrive</a> - A secure, real time distributed file system (built on hypercore).</li>
+<li><a href="https://github.com/karissa/hyperdiscovery">hyperdiscovery</a> - Defaults for networking discovery and connection management.</li>
+<li><a href="https://github.com/datproject/sdk">dat-sdk</a> - High-level module for building Dat applications in Node and the browser.</li>
+</ul>
+<p>View <a href="https://github.com/search?utf8=%E2%9C%93&amp;q=topic%3Adat&amp;type=Repositories">more on Github</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="related-modules"></a><a href="#related-modules" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Related modules</h2>
+<p>These modules are community-driven and can be used to implement a variety of distributed web applications with Dat.</p>
+<ul>
+<li><a href="https://github.com/kappa-db">kappa-db</a> - Small core database for multiwriter kappa architectures.</li>
+<li><a href="https://github.com/automerge/hypermerge#readme">hypermerge</a> - CRDT for merging multiple hypercore feeds.</li>
+<li><a href="https://github.com/mafintosh/mirror-folder">mirror-folder</a> - Mirror a folder to another folder, supports hyperdrive and live file watching.</li>
+</ul>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 2020-02-06 by RangerMauve</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/dat-protocol"><span class="arrow-prev">← </span><span>The Hypercore Protocol</span></a><a class="docs-next button" href="/docs/terms"><span>Dat Terminology</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#user-software">User Software</a></li><li><a href="#specifications">Specifications</a></li><li><a href="#core-modules">Core Modules</a></li><li><a href="#related-modules">Related modules</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/dat-logo-small.png" alt="Dat Docs" width="66"/></a><div><h5>Docs</h5><a href="/docs/intro">Getting Started</a><a href="https://datprotocol.com">Dat Protocol</a><a href="https://datprotocol.github.io/how-dat-works/">How Dat Works</a></div><div><h5>Community</h5><a href="https://dat.land">User Showcase</a><a href="https://gitter.im/datproject/discussions">Project Chat</a><a href="https://twitter.com/dat_project" target="_blank" rel="noreferrer noopener">@dat_project</a></div><div><h5>More</h5><a href="https://blog.datproject.org">Blog</a><a href="https://github.com/datproject">GitHub</a><a class="github-button" href="https://github.com/datproject/dat" data-icon="octicon-star" data-count-href="/datporoject/dat/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://datproject.org" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/dat-logo.png" alt="Dat Project"/></a><section class="copyright">Copyright © 2021 Dat Project Contributors</section></footer></div></body></html>

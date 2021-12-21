@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charSet="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <title>Key Dat Concepts · Dat Docs</title>
+      <meta name="viewport" content="width=device-width"/>
+      <meta name="generator" content="Docusaurus"/>
+      <meta name="description" content="&lt;h2&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; id=&quot;in-place-archiving&quot;&gt;&lt;/a&gt;&lt;a href=&quot;#in-place-archiving&quot; aria-hidden=&quot;true&quot; class=&quot;hash-link&quot;&gt;&lt;svg class=&quot;hash-link-icon&quot; aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;In Place Archiving&lt;/h2&gt;"/>
+      <meta name="docsearch:language" content="en"/>
+      <meta property="og:title" content="Key Dat Concepts · Dat Docs"/>
+      <meta property="og:type" content="website"/>
+      <meta property="og:description" content="&lt;h2&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; id=&quot;in-place-archiving&quot;&gt;&lt;/a&gt;&lt;a href=&quot;#in-place-archiving&quot; aria-hidden=&quot;true&quot; class=&quot;hash-link&quot;&gt;&lt;svg class=&quot;hash-link-icon&quot; aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;In Place Archiving&lt;/h2&gt;"/>
+      <meta property="og:url" content="https://dat-ecosystem.github.io/docs" />
+      <meta property="og:image" content="https://dat-ecosystem.github.io/docs/img/dat-logo-small.png" />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:image" content="https://dat-ecosystem.github.io/docs/img/dat-logo-small.png" />
+      <link rel="shortcut icon" href="/docs/img/favicon.ico" />
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" />
+      <script type="text/javascript" src="https://buttons.github.io/buttons.js"></script>
+      <link rel="stylesheet" href="/docs/css/main.css" />
+      <script src="/docs/js/codetabs.js"></script>
+   </head>
+   <body class="sideNavVisible separateOnPageNav">
+      <div class="fixedHeaderContainer">
+         <div class="headerWrapper wrapper">
+            <header>
+               <a href="/docs">
+                  <img class="logo" src="/docs/img/dat-logo-small.png" alt="Dat Docs"/>
+                  <h2 class="headerTitleWithLogo">Dat Docs</h2>
+               </a>
+               <div class="navigationWrapper navigationSlider">
+                  <nav class="slidingNav">
+                     <ul class="nav-site nav-site-internal">
+                        <li class="siteNavGroupActive"><a href="/docs/docs/intro" target="_self">Docs</a></li>
+                        <li class="siteNavGroupActive"><a href="/docs/docs/install" target="_self">Install</a></li>
+                        <li class=""><a href="/docs/help" target="_self">Help</a></li>
+                        <li class=""><a href="https://dat-ecosystem.github.io/blog" target="_self">Blog</a></li>
+                     </ul>
+                  </nav>
+               </div>
+            </header>
+         </div>
+      </div>
+      <div class="navPusher">
+         <div class="docMainWrapper wrapper">
+            <div class="container docsNavContainer" id="docsNav">
+               <nav class="toc">
+                  <div class="toggleNav">
+                     <section class="navWrapper wrapper">
+                        <div class="navBreadcrumb wrapper">
+                           <div class="navToggle" id="navToggler"><i></i></div>
+                           <h2><i>›</i><span>Cookbook</span></h2>
+                           <div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div>
+                        </div>
+                        <div class="navGroups">
+                           <div class="navGroup">
+                              <h3 class="navGroupCategoryTitle">Getting Started</h3>
+                              <ul class="">
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/intro">Intro to Dat</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/install">Installation</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/faq">Dat FAQ</a></li>
+                              </ul>
+                           </div>
+                           <div class="navGroup">
+                              <h3 class="navGroupCategoryTitle">Learning More</h3>
+                              <ul class="">
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/dat-protocol">The Hypercore Protocol</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/dat-ecosystem">Open Source Ecosystem</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/terms">Dat Terminology</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/concepts">Key Dat Concepts</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/security-faq">Understanding Dat Privacy</a></li>
+                              </ul>
+                           </div>
+                           <div class="navGroup">
+                              <h3 class="navGroupCategoryTitle">Using Dat</h3>
+                              <ul class="">
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/cli-intro">Command Line</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/cli-more">Sharing files over HTTP</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/dat-sdk">Using the Dat SDK</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/dat-server">Dats on a Server</a></li>
+                                 <li class="navListItem"><a class="navItem" href="/docs/docs/troubleshooting">Troubleshooting Dat</a></li>
+                              </ul>
+                           </div>
+                           <div class="navGroup">
+                              <h3 class="navGroupCategoryTitle">Cookbook</h3>
+                              <ul class="">
+                                 <li class="navListItem navListItemActive"><a class="navItem" href="/docs/docs/kappa">A Simple Chat Application</a></li>
+                              </ul>
+                           </div>
+                        </div>
+                     </section>
+                  </div>
+                  <script>
+                     var coll = document.getElementsByClassName('collapsible');
+                     var checkActiveCategory = true;
+                     for (var i = 0; i < coll.length; i++) {
+                       var links = coll[i].nextElementSibling.getElementsByTagName('*');
+                       if (checkActiveCategory){
+                         for (var j = 0; j < links.length; j++) {
+                           if (links[j].classList.contains('navListItemActive')){
+                             coll[i].nextElementSibling.classList.toggle('hide');
+                             coll[i].childNodes[1].classList.toggle('rotate');
+                             checkActiveCategory = false;
+                             break;
+                           }
+                         }
+                       }
+                     
+                       coll[i].addEventListener('click', function() {
+                         var arrow = this.childNodes[1];
+                         arrow.classList.toggle('rotate');
+                         var content = this.nextElementSibling;
+                         content.classList.toggle('hide');
+                       });
+                     }
+                     
+                     document.addEventListener('DOMContentLoaded', function() {
+                       createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+                       createToggler('#tocToggler', 'body', 'tocActive');
+                     
+                       const headings = document.querySelector('.toc-headings');
+                       headings && headings.addEventListener('click', function(event) {
+                         if (event.target.tagName === 'A') {
+                           document.body.classList.remove('tocActive');
+                         }
+                       }, false);
+                     
+                       function createToggler(togglerSelector, targetSelector, className) {
+                         var toggler = document.querySelector(togglerSelector);
+                         var target = document.querySelector(targetSelector);
+                     
+                         if (!toggler) {
+                           return;
+                         }
+                     
+                         toggler.onclick = function(event) {
+                           event.preventDefault();
+                     
+                           target.classList.toggle(className);
+                         };
+                       }
+                     });
+                  </script>
+               </nav>
+            </div>
+            <div class="container mainContainer">
+               <div class="wrapper">
+                  <div class="post">
+                     <header class="postHeader">
+                        <!-- <a class="edit-page-link button" href="https://github.com/dat-ecosystem/docs/edit/master/docs/learn-more-concepts.md" target="_blank" rel="noreferrer noopener">Edit</a> -->
+                        <h1 class="postHeaderTitle">Key Dat Concepts</h1>
+                     </header>
+                     <article>
+                        <div>
+                           <span>
+                              <h2>
+                                 <a class="anchor" aria-hidden="true" id="in-place-archiving"></a>
+                                 <a href="#in-place-archiving" aria-hidden="true" class="hash-link">
+                                    <svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                                       <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+                                    </svg>
+                                 </a>
+                                 In Place Archiving
+                              </h2>
+                              <p>You can turn any folder on your computer into <em>a dat</em>.
+                                 We call this <em>in place archiving</em>.
+                                 A dat is a regular folder with some magic attached.
+                                 The magic is a set of metadata files, in a <code>.dat</code> folder.
+                                 Dat uses the metadata to track file history and securely share your files.
+                                 Your files and the <code>.dat</code> folder can be instantly synced to anywhere.
+                              </p>
+                              <p>Once you have installed Dat, you can use a single command to live sync your files to friends, backup to an external drive, and publish to a website (so people can download over http too!).
+                                 The cool part is this all happens at the same time.
+                                 If you go offline for a bit, no worries.
+                                 Dat shares the latest files and any saved history once you are back online.
+                                 These data transfers happen between the computers, forgoing any centralized source.
+                              </p>
+                              <p>In place archiving in Dat really means <strong>any place</strong>.
+                                 Dat seamlessly syncs your files where you want and when you want.
+                                 Dat's decentralized technology and automatic versioning will improve data availability and data quality without sacrificing ease of use.
+                              </p>
+                              <h2>
+                                 <a class="anchor" aria-hidden="true" id="distributed-network"></a>
+                                 <a href="#distributed-network" aria-hidden="true" class="hash-link">
+                                    <svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                                       <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+                                    </svg>
+                                 </a>
+                                 Distributed Network
+                              </h2>
+                              <p>Dat goes beyond regular archiving through its <em>distributed network</em>.
+                                 When you share data, Dat sends data to many download locations at once, and they can sync the same data with each other!
+                                 By connecting users directly Dat transfers files faster, especially sharing on a local network.
+                                 Distributed syncing allows robust global archiving for public data.
+                              </p>
+                              <p>The Dat read key controls access to your data.
+                                 Any data shared in the network is encrypted using your read key.
+                                 Learn more about Dat's security and privacy below or in <a href="/docs/docs/faq">the faqs</a>.
+                                 We are also investigating ways to improve <a href="https://blog.datproject.org/2016/12/12/reader-privacy-on-the-p2p-web/">reader privacy</a> for public data.
+                              </p>
+                              <h2>
+                                 <a class="anchor" aria-hidden="true" id="version-history"></a>
+                                 <a href="#version-history" aria-hidden="true" class="hash-link">
+                                    <svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                                       <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+                                    </svg>
+                                 </a>
+                                 Version History
+                              </h2>
+                              <p>Dat automatically maintains a built-in version history whenever files are added.
+                                 Dat uses this history to allow partial downloads of files, for example only getting the latest files.
+                                 There are two types of versioning performed automatically by Dat.
+                                 Metadata is stored in a folder called <code>.dat</code> in the main folder of a repository, and data is stored as normal files in the main folder.
+                              </p>
+                              <p>Dat uses append-only registers to store version history.
+                                 This means all changes are written to the end of the file, growing over time.
+                              </p>
+                              <h3>
+                                 <a class="anchor" aria-hidden="true" id="metadata-versioning"></a>
+                                 <a href="#metadata-versioning" aria-hidden="true" class="hash-link">
+                                    <svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                                       <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+                                    </svg>
+                                 </a>
+                                 Metadata Versioning
+                              </h3>
+                              <p>Dat acts as a one-to-one mirror of the state of a folder and all its contents.
+                                 When importing files, Dat grabs the filesystem metadata for each file and checks if there is already an entry for this filename.
+                                 If the file with this metadata matches exactly the newest version of the file metadata stored in Dat, then this file will be skipped (no change).
+                              </p>
+                              <p>If the metadata differs or does not exist, then this new metadata entry will be appended as the new 'latest' version for this file in the append-only SLEEP metadata content register.</p>
+                              <h3>
+                                 <a class="anchor" aria-hidden="true" id="content-versioning"></a>
+                                 <a href="#content-versioning" aria-hidden="true" class="hash-link">
+                                    <svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                                       <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+                                    </svg>
+                                 </a>
+                                 Content Versioning
+                              </h3>
+                              <p>The metadata only tells you if or when a file is changed, not how it changed.
+                                 In addition to the metadata, Dat tracks changes in the content in a similar manner.
+                              </p>
+                              <p>The default storage system used in Dat stores the files as files.
+                                 This has the advantage of being very straightforward for users to understand, but the downside of not storing old versions of content by default.
+                              </p>
+                              <p>In contrast to other version control systems, like Git, Dat only stores the current set of files, not older versions.
+                                 Git, for example, stores all previous content versions and all previous metadata versions in the <code>.git</code> folder. But Dat is designed for larger datasets.
+                              </p>
+                              <p>Storing all history on content could easily fill up the users' hard drive.
+                                 Dat has multiple storage modes based on usage.
+                                 With Dat's dynamic storage, you can store the content history on a local external hard drive or on a remote server (or both!).
+                              </p>
+                              <h2>
+                                 <a class="anchor" aria-hidden="true" id="dat-privacy"></a>
+                                 <a href="#dat-privacy" aria-hidden="true" class="hash-link">
+                                    <svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                                       <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+                                    </svg>
+                                 </a>
+                                 Dat Privacy
+                              </h2>
+                              <p>Files shared with Dat are encrypted (using the read key) so <em>only</em> users with your unique read key can access your files.
+                                 The read key acts as a kind of password meaning, generally, you should assume <em>anyone</em> with the read key will have access to your files.
+                              </p>
+                              <p>The read key allows users to download, and re-share, your files, whether you intended them to have the read key or not (with some hand waiving assumptions about them being able to connect to you, which can be limited, see more in <a href="faq#security-and-privacy">security &amp; privacy faq</a>).</p>
+                              <p>Make sure you are thoughtful about who you share read keys with and how.
+                                 Dat ensures read key cannot be intercepted through the Dat network.
+                                 If you share your read key over other channels, ensure the privacy &amp; security matches or exceeds your data security needs.
+                                 We try to limit times when Dat displays full read key to avoid accidental sharing.
+                              </p>
+                              <h2>
+                                 <a class="anchor" aria-hidden="true" id="dat-read-keys"></a>
+                                 <a href="#dat-read-keys" aria-hidden="true" class="hash-link">
+                                    <svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                                       <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+                                    </svg>
+                                 </a>
+                                 dat:// read keys
+                              </h2>
+                              <p>Dat read keys have some special properties that are helpful to understand.</p>
+                              <p>Traditionally, http links point to a specific server, e.g. datproject.org's server, and/or a specific resource on that server.
+                                 Unfortunately, links often break or the content changes without notification (this makes it impossible to cite <code>nytimes.com</code>, for example, because the link is meaningless without a reference to what content was there at citation time).
+                                 Dat read keys, on the other hand, never change.
+                                 You can update data in a dat and use the same link to download the changes.
+                              </p>
+                              <p>Here is an example dat read key:</p>
+                              <pre><code class="hljs"><span class="hljs-symbol">dat:</span><span class="hljs-comment">//ff34725120b2f3c5bd5028e4f61d14a45a22af48a7b12126d5d588becde88a93</span>
+</code></pre>
+                              <p>What is with the weird long string of characters? Let's break it down!</p>
+                              <p><strong><code>dat://</code> - the protocol</strong></p>
+                              <p>The first part of the read key is the link protocol, Dat (read about the Dat protocol at <a href="http://dat-ecosystem.github.io/datprotocol.com">datprotocol.com</a>).
+                                 The protocol describes what &quot;language&quot; the read key is in and what type of applications can open it.
+                                 You do not always need this part with Dat but it is helpful context.
+                              </p>
+                              <p><strong><code>ff34725120b2f3c5bd5028e4f61d14a45a22af48a7b12126d5d588becde88a93</code> - the unique identifier</strong></p>
+                              <p>The second part of the read key is a 64-character hex strings (<a href="https://ed25519.cr.yp.to/">ed25519 public-keys</a> to be precise).
+                                 Each Dat archive gets a public read key to identify it.
+                                 With the hex string as a read key we can do a few things:
+                              </p>
+                              <ol>
+                                 <li>Encrypt the data transfer</li>
+                                 <li>Create a persistent identifier, an ID that never changes, even as file are updated (as opposed to a checksum which is based on the file contents).</li>
+                              </ol>
+                              <p><strong><code>dat://ff34725120b2f3c5bd5028e4f61d14a45a22af48a7b12126d5d588becde88a93</code></strong></p>
+                              <p>All together, the read keys can be thought of similarly to a web URL, as a place to get content, but with some extra special properties.
+                                 When you download a dat:
+                              </p>
+                              <ol>
+                                 <li>You do not have to worry about where the files are stored.</li>
+                                 <li>You can always get the latest files available.</li>
+                                 <li>You can view the version history or add version numbers to urls to get a permanent id to a specific version.</li>
+                              </ol>
+                              <p><a href="https://dat-ecosystem.github.io/how-dat-works/">Go here if you'd like to read more about how dat works.</a></p>
+                           </span>
+                        </div>
+                     </article>
+                  </div>
+                  <div class="docLastUpdate"><em>Last updated on 2019-10-24 by Kevin Faaborg</em></div>
+                  <div class="docs-prevnext"><a class="docs-prev button" href="/docs/docs/terms"><span class="arrow-prev">← </span><span>Dat Terminology</span></a><a class="docs-next button" href="/docs/docs/security-faq"><span>Understanding Dat Privacy</span><span class="arrow-next"> →</span></a></div>
+               </div>
+            </div>
+            <nav class="onPageNav">
+               <ul class="toc-headings">
+                  <li><a href="#in-place-archiving">In Place Archiving</a></li>
+                  <li><a href="#distributed-network">Distributed Network</a></li>
+                  <li>
+                     <a href="#version-history">Version History</a>
+                     <ul class="toc-headings">
+                        <li><a href="#metadata-versioning">Metadata Versioning</a></li>
+                        <li><a href="#content-versioning">Content Versioning</a></li>
+                     </ul>
+                  </li>
+                  <li><a href="#dat-privacy">Dat Privacy</a></li>
+                  <li><a href="#dat-read-keys">dat:// read keys</a></li>
+               </ul>
+            </nav>
+         </div>
+         <footer class="nav-footer" id="footer">
+            <section class="sitemap">
+               <a href="/docs" class="nav-home"><img src="/docs/img/dat-logo-small.png" alt="Dat Docs" width="66" /></a>
+               <div>
+                  <h5>Docs</h5>
+                  <a href="/docs/docs/intro">Getting Started</a><a href="https://dat-ecosystem.github.io/datprotocol.com">Dat Protocol</a><a
+                  href="https://dat-ecosystem.github.io/how-dat-works/">How Dat Works</a>
+               </div>
+               <div>
+                  <h5>Community</h5>
+                  <a href="https://dat-ecosystem.github.io/dat.land">User Showcase</a><a href="https://gitter.im/datproject/discussions">Project
+                  Chat</a><a href="https://twitter.com/dat_project" target="_blank" rel="noreferrer noopener">@dat_project</a>
+               </div>
+               <div>
+                  <h5>More</h5>
+                  <a href="https://dat-ecosystem.github.io/blog">Blog</a><a href="https://github.com/dat-ecosystem">GitHub</a><a
+                  class="github-button" href="https://github.com/dat-ecosystem/dat" data-icon="octicon-star"
+                  data-count-href="/datporoject/dat/stargazers" data-show-count="true"
+                  data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a>
+               </div>
+            </section>
+            <a href="https://dat-ecosystem.github.io/datproject.org" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img
+                  src="/docs/img/dat-logo.png" alt="Dat Project" /></a>
+            <section class="copyright">Copyright © 2021 Dat Project Contributors</section>
+         </footer>
+      </div>
+   </body>
+</html>

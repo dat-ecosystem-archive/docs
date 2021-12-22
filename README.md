@@ -1,7 +1,7 @@
+[![deprecated](http://badges.github.io/stability-badges/dist/deprecated.svg)](https://github.com/hypercore-protocol/new-website/tree/master/guides) See [hyp](https://github.com/hypercore-protocol/new-website/tree/master/guides) for similar functionality. 
+
+More info on active projects and modules at [dat-ecosystem.org](https://dat-ecosystem.org/) <img src="https://i.imgur.com/qZWlO1y.jpg" width="30" height="30" /> 
+
+--- 
+
 # Dat Project Documentation
-
-Repository for the documentation of the Dat Project ecosystem. View the docs at [dat-ecosystem.github.io/docs](http://dat-ecosystem.github.io/docs).
-
-[![#dat IRC channel on freenode](https://img.shields.io/badge/irc%20channel-%23dat%20on%20freenode-blue.svg)](http://webchat.freenode.net/?channels=dat)
-[![datproject/discussions](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/datproject/discussions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![docs](https://img.shields.io/badge/Dat%20Project-Docs-green.svg)](http://dat-ecosystem.github.io/docs)

@@ -367,7 +367,7 @@ Dat('/data', function (err, dat) {
 [Dat Desktop]: https://docs.datproject.org/install#desktop-application
 [Beaker Browser]: https://beakerbrowser.com
 [registry server]: https://github.com/datproject/datbase
-[Knight Foundation grant]: https://blog.datproject.org/2016/02/01/announcing-publicbits-org/
+[Knight Foundation grant]: https://blog.dat-ecosystem.org/2016/02/01/announcing-publicbits-org/
 [dat-node]: https://github.com/datproject/dat-node
 [dat-ignore]: https://github.com/joehand/dat-ignore
 [new-issue]: https://github.com/datproject/dat/issues/new

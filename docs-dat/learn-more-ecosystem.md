@@ -18,7 +18,7 @@ We believe this creates better end-user software, but more importantly, will cre
 
 ## Specifications
 
-* [How Dat Works](https://datprotocol.github.io/how-dat-works/) - Visual explanation of the Dat protocol.
+* [How Dat Works](https://dat-ecosystem-archive.github.io/how-dat-works/) - Visual explanation of the Dat protocol.
 * [Dat Enhancement Proposals](https://github.com/datprotocol/DEPs) - Contains all specs for the Dat protocol, including drafts.
 
 ## Core Modules

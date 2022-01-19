@@ -42,7 +42,7 @@ class Footer extends React.Component {
             <a href="https://datprotocol.com">
               Dat Protocol
             </a>
-            <a href="https://datprotocol.github.io/how-dat-works/">
+            <a href="https://dat-ecosystem-archive.github.io/how-dat-works/">
               How Dat Works
             </a>
           </div>
@@ -61,7 +61,7 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>More</h5>
-            <a href="https://blog.datproject.org">Blog</a>
+            <a href="https://blog.dat-ecosystem.org">Blog</a>
             <a href="https://github.com/datproject">GitHub</a>
             <a
               className="github-button"

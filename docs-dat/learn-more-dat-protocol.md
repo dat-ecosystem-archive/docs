@@ -11,4 +11,4 @@ Find more information about the specifications, Hypercore Protocol working group
 
 * [Hypercore Protocol Specifications](https://hypercore-protocol.org/)
 * [Governance](https://github.com/datproject/governance)
-* [How Dat Works](https://datprotocol.github.io/how-dat-works/) (outdated)
+* [How Dat Works](https://dat-ecosystem-archive.github.io/how-dat-works/) (outdated)

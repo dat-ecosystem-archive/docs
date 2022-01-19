@@ -32,7 +32,7 @@ Distributed syncing allows robust global archiving for public data.
 The Dat read key controls access to your data.
 Any data shared in the network is encrypted using your read key.
 Learn more about Dat's security and privacy below or in [the faqs](getting-started-faq.md).
-We are also investigating ways to improve [reader privacy](https://blog.datproject.org/2016/12/12/reader-privacy-on-the-p2p-web/) for public data.
+We are also investigating ways to improve [reader privacy](https://blog.dat-ecosystem.org/2016/12/12/reader-privacy-on-the-p2p-web/) for public data.
 
 ## Version History
 
@@ -120,4 +120,4 @@ When you download a dat:
 2. You can always get the latest files available.
 3. You can view the version history or add version numbers to urls to get a permanent id to a specific version.
 
-[Go here if you'd like to read more about how dat works.](https://datprotocol.github.io/how-dat-works/)
+[Go here if you'd like to read more about how dat works.](https://dat-ecosystem-archive.github.io/how-dat-works/)

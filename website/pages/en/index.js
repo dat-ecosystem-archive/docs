@@ -66,7 +66,7 @@ class HomeSplash extends React.Component {
           <PromoSection>
             <Button href={docUrl('intro')}>Get Started</Button>
             <Button href={docUrl('install')}>Install</Button>
-            <Button href="https://datprotocol.github.io/how-dat-works/">How Dat Works</Button>
+            <Button href="https://dat-ecosystem-archive.github.io/how-dat-works/">How Dat Works</Button>
           </PromoSection>
         </div>
       </SplashContainer>

@@ -9,7 +9,7 @@ Users only connect to other users with the same dat read key.
 Anyone with a dat read key can see other users that are sharing that read key and their IP addresses.
 
 We are thinking more about how to ensure reader privacy.
-See [this blog post](https://blog.datproject.org/2016/12/12/reader-privacy-on-the-p2p-web/) for more discussion.
+See [this blog post](https://blog.dat-ecosystem.org/2016/12/12/reader-privacy-on-the-p2p-web/) for more discussion.
 
 ### Is data shared over Dat encrypted?
 
@@ -64,4 +64,4 @@ As a peer to peer network, Dat faces similar privacy risks as Bittorrent.
 When you download a dataset, your IP address is exposed to the users sharing that dataset.
 This may lead to honeypot servers collecting IP addresses, as we've seen in Bittorrent.
 However, with dataset sharing we can create a web of trust model where specific institutions are trusted as primary sources for datasets, diminishing the sharing of IP addresses.
-[Read more](https://blog.datproject.org/2016/12/12/reader-privacy-on-the-p2p-web/) about reader privacy in the p2p web.
+[Read more](https://blog.dat-ecosystem.org/2016/12/12/reader-privacy-on-the-p2p-web/) about reader privacy in the p2p web.

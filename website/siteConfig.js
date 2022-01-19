@@ -35,7 +35,7 @@ const siteConfig = {
     {doc: 'intro', label: 'Docs'},
     {doc: 'install', label: 'Install'},
     {page: 'help', label: 'Help'},
-    {href: 'https://blog.datproject.org', label: 'Blog'}
+    {href: 'https://blog.dat-ecosystem.org', label: 'Blog'}
   ],
 
   // If you have users set above, you add it here:
